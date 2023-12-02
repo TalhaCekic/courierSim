@@ -954,6 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 0
+  interactImage: {fileID: 6706235280924315825}
 --- !u!114 &4308392531475506255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2307,7 +2308,7 @@ GameObject:
   - component: {fileID: 8176846531692529187}
   - component: {fileID: 6706235280924315825}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Cross
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
