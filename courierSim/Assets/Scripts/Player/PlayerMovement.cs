@@ -26,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
     public SkinnedMeshRenderer meshRenderer1;
     public SkinnedMeshRenderer meshRenderer2;
 
+    private Camera playerCamera;
+    private float rotationX = 0;
+
     // public override void OnStartLocalPlayer()
     // {
     //     Camera.main.transform.SetParent(headObj.transform);
@@ -37,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         // if(!isLocalPlayer)return;
+        playerCamera = GetComponentInChildren<Camera>();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -55,13 +59,45 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         isGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        // Karakterin hareketi
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(x, 0.0f, z);
-        movement = movement.normalized * speed * Time.deltaTime;
+        // Hareket vektörünü oluştur
+        Vector3 moveDirection = new Vector3(x, 0, z).normalized;
 
-        transform.Translate(movement);
+        // Kamera yönüne göre hareketi dönüştür
+        Vector3 move = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * moveDirection;
+
+        // Karakteri hareket ettir
+        float targetSpeed = speed * Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
+        Vector3 targetVelocity = move * targetSpeed;
+        velocity = Vector3.SmoothDamp(velocity, targetVelocity, ref velocity, 0.05f);
+
+        // Zamana bağlı hareket
+        transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
+
+        // Kamera hareketi
+        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+
+        rotationX -= mouseY;
+        rotationX = Mathf.Clamp(rotationX, -90f, 90f);
+
+        // Kamerayı döndür
+        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        transform.rotation *= Quaternion.Euler(0, mouseX, 0);
+
+        // Kamerayı döndür
+        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        transform.rotation *= Quaternion.Euler(0, mouseX, 0);
+        // float x = Input.GetAxis("Horizontal");
+        // float z = Input.GetAxis("Vertical");
+        //
+        // Vector3 movement = new Vector3(x, 0.0f, z);
+        // movement = movement.normalized * speed * Time.deltaTime;
+        //
+        // transform.Translate(movement);
 
         //animasyon işlemleri
         if (x > 0 || z > 0 || x < 0 || z < 0)
@@ -73,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
                 anims.SetBool("rightWalk", false);
                 anims.SetBool("leftWalk", false);
             }
-
+        
             if (z < 0)
             {
                 anims.SetBool("backWalk", true);
@@ -81,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
                 anims.SetBool("rightWalk", false);
                 anims.SetBool("leftWalk", false);
             }
-
+        
             if (x < 0 && z == 0)
             {
                 anims.SetBool("leftWalk", true);
@@ -89,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
                 anims.SetBool("walk", false);
                 anims.SetBool("backWalk", false);
             }
-
+        
             if (x > 0 && z == 0)
             {
                 anims.SetBool("rightWalk", true);
@@ -97,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
                 anims.SetBool("walk", false);
                 anims.SetBool("backWalk", false);
             }
-
+        
             if (runSpeed > 0)
             {
                 anims.SetBool("run", true);

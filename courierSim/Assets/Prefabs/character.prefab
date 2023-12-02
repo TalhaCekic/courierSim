@@ -811,6 +811,8 @@ GameObject:
   - component: {fileID: 5074812556765847086}
   - component: {fileID: 4881894182536096813}
   - component: {fileID: 6265623070040364014}
+  - component: {fileID: 7598832454017553375}
+  - component: {fileID: 4308392531475506255}
   m_Layer: 0
   m_Name: character
   m_TagString: Player
@@ -876,7 +878,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   jumpHeight: 2
-  sensitivity: 2
+  sensitivity: 1
   anims: {fileID: 4349308177588622909}
   gravity: -9.81
   isGround: 0
@@ -884,7 +886,7 @@ MonoBehaviour:
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   headObj: {fileID: 280310318349678251}
   meshRenderer1: {fileID: 7552812534107250883}
   meshRenderer2: {fileID: 8412135869855442082}
@@ -938,6 +940,50 @@ CapsuleCollider:
   m_Height: 1.6006055
   m_Direction: 1
   m_Center: {x: 0, y: 0.7923329, z: -0.0009777546}
+--- !u!114 &7598832454017553375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2675573690198371862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a8c14430ac48094abceceb1dc7ce6c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 0
+--- !u!114 &4308392531475506255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2675573690198371862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: f28108a17468bf64e8bb548ed4288f9f,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &2957827187690833163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1980,7 +2026,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5929951733284063536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbfa2b1c7007a20448f7f22686e33bce, type: 3}
   m_Name: 
