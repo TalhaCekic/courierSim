@@ -1,0 +1,187 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class PlayerMovement : MonoBehaviour
+{
+    public float speed = 1f;
+    private float runSpeed = 0;
+    public float jumpHeight = 2f;
+    public float sensitivity = 2.0f;
+    private float verticalRotation = 0.0f;
+    private float upDownRange = 60.0f;
+    public Animator anims;
+
+    Vector3 velocity;
+    public float gravity = -9.81f;
+    public bool isGround;
+
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+
+    public GameObject headObj;
+    public SkinnedMeshRenderer meshRenderer1;
+    public SkinnedMeshRenderer meshRenderer2;
+
+    // public override void OnStartLocalPlayer()
+    // {
+    //     Camera.main.transform.SetParent(headObj.transform);
+    //     Camera.main.transform.localPosition = new Vector3(0, 0, 0);
+    //     meshRenderer1.forceRenderingOff = true;
+    //     meshRenderer2.forceRenderingOff = true;
+    // }
+
+    private void Start()
+    {
+        // if(!isLocalPlayer)return;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void Update()
+    {
+        // if (isLocalPlayer)
+        // {
+        //
+        // }  
+
+        Move();
+        //  bend();
+        rotate();
+    }
+
+    private void Move()
+    {
+        isGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(x, 0.0f, z);
+        movement = movement.normalized * speed * Time.deltaTime;
+
+        transform.Translate(movement);
+
+        //animasyon işlemleri
+        if (x > 0 || z > 0 || x < 0 || z < 0)
+        {
+            if (z > 0)
+            {
+                anims.SetBool("walk", true);
+                anims.SetBool("backWalk", false);
+                anims.SetBool("rightWalk", false);
+                anims.SetBool("leftWalk", false);
+            }
+
+            if (z < 0)
+            {
+                anims.SetBool("backWalk", true);
+                anims.SetBool("walk", false);
+                anims.SetBool("rightWalk", false);
+                anims.SetBool("leftWalk", false);
+            }
+
+            if (x < 0 && z == 0)
+            {
+                anims.SetBool("leftWalk", true);
+                anims.SetBool("rightWalk", false);
+                anims.SetBool("walk", false);
+                anims.SetBool("backWalk", false);
+            }
+
+            if (x > 0 && z == 0)
+            {
+                anims.SetBool("rightWalk", true);
+                anims.SetBool("leftWalk", false);
+                anims.SetBool("walk", false);
+                anims.SetBool("backWalk", false);
+            }
+
+            if (runSpeed > 0)
+            {
+                anims.SetBool("run", true);
+            }
+            else
+            {
+                anims.SetBool("run", false);
+            }
+        }
+        else if (x == 0 && z == 0)
+        {
+            anims.SetBool("walk", false);
+            anims.SetBool("backWalk", false);
+            anims.SetBool("run", false);
+            anims.SetBool("rightWalk", false);
+            anims.SetBool("leftWalk", false);
+        }
+
+        //zemin kontrolü
+        // if (isGround == false)
+        // {
+        //     Vector3 move = transform.right * x + transform.forward * z;
+        //     CharacterController.Move(move * 2 * Time.deltaTime);
+        // }
+        //
+        // if (isGround == true)
+        // {
+        //     Vector3 move = transform.right * x + transform.forward * z;
+        //     runSpeed = Mathf.Lerp(runSpeed, 1f, Time.deltaTime);
+        //     CharacterController.Move(move * runSpeed * Time.deltaTime);
+        //     CharacterController.Move(move * speed * Time.deltaTime);
+        //
+        //
+        //     if (Input.GetKey(KeyCode.LeftShift))
+        //     {
+        //         runSpeed = Mathf.Lerp(runSpeed, 1f, Time.deltaTime);
+        //         CharacterController.Move(move * (runSpeed += Time.deltaTime * 2) * Time.deltaTime);
+        //     }
+        //     else
+        //     {
+        //         runSpeed = 0;
+        //     }
+        // }
+        //
+        // if (isGround && velocity.y < 0)
+        // {
+        //     velocity.y = -2f;
+        // }
+        //
+        // if (Input.GetButtonDown("Jump") && isGround)
+        // {
+        //     velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        // }
+        //
+        // velocity.y += gravity * Time.deltaTime;
+        // CharacterController.Move(velocity * Time.deltaTime);
+    }
+
+
+    void rotate()
+    {
+        // Mouse hareketleri
+        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+        float mouseY = -Input.GetAxis("Mouse Y") * sensitivity; // "-" ekleyerek ters yönde dönüşü sağlıyoruz
+
+        verticalRotation += mouseY;
+        verticalRotation = Mathf.Clamp(verticalRotation, -upDownRange, upDownRange);
+
+        transform.Rotate(Vector3.up * mouseX);
+        Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+    }
+
+    // private void bend()
+    // {
+    //     if (Input.GetKey(KeyCode.LeftControl))
+    //     {
+    //         CharacterController.height = 1f;
+    //     }
+    //     else if (!Input.GetKey(KeyCode.LeftControl))
+    //     {
+    //         if (CharacterController.height >= 1f && CharacterController.height < 2.52f)
+    //         {
+    //             CharacterController.height += Time.deltaTime * 10;
+    //         }
+    //     }
+    // }
+}
