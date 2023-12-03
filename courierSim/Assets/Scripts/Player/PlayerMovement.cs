@@ -15,19 +15,17 @@ public class PlayerMovement : MonoBehaviour
     public Animator anims;
 
     Vector3 velocity;
-    public float gravity = -9.81f;
     public bool isGround;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-
-    public GameObject headObj;
-    public SkinnedMeshRenderer meshRenderer1;
-    public SkinnedMeshRenderer meshRenderer2;
+    
 
     private Camera playerCamera;
     private float rotationX = 0;
+
+    private Rigidbody rb;
 
     // public override void OnStartLocalPlayer()
     // {
@@ -39,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         // if(!isLocalPlayer)return;
         playerCamera = GetComponentInChildren<Camera>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -51,9 +50,16 @@ public class PlayerMovement : MonoBehaviour
         //
         // }  
 
-        Move();
-        //  bend();
-        rotate();
+        if (!interact.instance.isMotor)
+        {
+            Move();
+        }
+        else
+        {
+            anims.SetBool("drive",interact.instance.isMotor);
+            rb.useGravity = false;
+        }
+   
     }
 
     private void Move()
@@ -190,20 +196,6 @@ public class PlayerMovement : MonoBehaviour
         //
         // velocity.y += gravity * Time.deltaTime;
         // CharacterController.Move(velocity * Time.deltaTime);
-    }
-
-
-    void rotate()
-    {
-        // Mouse hareketleri
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
-        float mouseY = -Input.GetAxis("Mouse Y") * sensitivity; // "-" ekleyerek ters yönde dönüşü sağlıyoruz
-
-        verticalRotation += mouseY;
-        verticalRotation = Mathf.Clamp(verticalRotation, -upDownRange, upDownRange);
-
-        transform.Rotate(Vector3.up * mouseX);
-        Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
     }
 
     // private void bend()

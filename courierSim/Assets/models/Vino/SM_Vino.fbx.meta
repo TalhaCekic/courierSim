@@ -3,7 +3,37 @@ guid: 9640901ff9dcacf40a0eaf94d1e1ae5f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: 480ccdc9c6cd8e84ca8e6f867dccd147, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lamp & Glass
+    second: {fileID: 2100000, guid: 856f2cff3944b154fbab4d27f3be5b05, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Main Body
+    second: {fileID: 2100000, guid: 308fa0538e7fed34196bbafd2536564d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SmallParts
+    second: {fileID: 2100000, guid: 0a189367d63004943bda510204f52f5e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Sticker
+    second: {fileID: 2100000, guid: ab8aa088269774348867039e3c04fac7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tire
+    second: {fileID: 2100000, guid: fae43b570af847049be959ccdc36d8ed, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

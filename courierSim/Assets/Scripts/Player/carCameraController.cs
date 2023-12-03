@@ -23,27 +23,30 @@ public class carCameraController : MonoBehaviour
     private void Start()
     {
        // if(!isLocalPlayer)return;
-        Cursor.lockState = CursorLockMode.Locked;
+      //  Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
+        if (interact.instance.isMotor)
+        {
+            // if(!isLocalPlayer)return;
+            // Rotate the camera based on player input
+            currentX += Input.GetAxis("Mouse X") * rotationSpeed;
+            currentY -= Input.GetAxis("Mouse Y") * rotationSpeed;
 
-       // if(!isLocalPlayer)return;
-        // Rotate the camera based on player input
-        currentX += Input.GetAxis("Mouse X") * rotationSpeed;
-        currentY -= Input.GetAxis("Mouse Y") * rotationSpeed;
+            currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
 
-        currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
+            // Calculate rotation and position
+            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+            Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+            Vector3 position = rotation * negDistance + this.transform.position;
 
-        // Calculate rotation and position
-        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-        Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-        Vector3 position = rotation * negDistance + this.transform.position;
-
-        //Apply rotation and position to the camera
-        Camera.main.transform.rotation = rotation;
-        Camera.main.transform.position = position;
+            //Apply rotation and position to the camera
+            Camera.main.transform.rotation = rotation;
+            Camera.main.transform.position = position;
+        }
+      
     }
 
 }
