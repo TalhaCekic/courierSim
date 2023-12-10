@@ -11,8 +11,6 @@ public class PlayerMovement : MonoBehaviour
     private float runSpeed = 0;
     public float jumpHeight = 2f;
     public float sensitivity = 2.0f;
-    private float verticalRotation = 0.0f;
-    private float upDownRange = 60.0f;
     public Animator anims;
 
     Vector3 velocity;

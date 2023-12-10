@@ -14,17 +14,20 @@ public class interact : MonoBehaviour
     [SerializeField] public int maxDistance;
     private PlayerInput playerInput;
 
-     public Image interactImage; 
-     public bool isMotor;
-     
-     public LayerMask CarLayer;
-     private CapsuleCollider cap;
-     private GameObject obj;
-     private GameObject altObje;
-     private GameObject altObje2;
+    public Image interactImage;
+    public bool isMotor;
 
-     public TMP_Text speedText;
-     
+    public LayerMask CarLayer;
+    private CapsuleCollider cap;
+    private GameObject obj;
+    private GameObject altObje;
+    private GameObject altObje2;
+
+    public TMP_Text speedText;
+
+    float resetDelay = 0.5f;
+    public float lastResetTime = -1f;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -52,7 +55,7 @@ public class interact : MonoBehaviour
         }
         else
         {
-             interactImage.color = Color.black;
+            interactImage.color = Color.black;
         }
 
         if (isMotor)
@@ -64,34 +67,39 @@ public class interact : MonoBehaviour
         }
         else
         {
-             interactImage.gameObject.SetActive(true);
-             speedText.gameObject.SetActive(false);
+            interactImage.gameObject.SetActive(true);
+            speedText.gameObject.SetActive(false);
         }
-       
     }
 
     public void Interact(InputAction.CallbackContext context)
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, maxDistance,CarLayer) && !isMotor)
+        if (Time.time - lastResetTime > resetDelay)
         {
-            cap.enabled = false;
-            obj = hit.transform.gameObject;
-            altObje = obj.transform.Find("Plane").gameObject;
-            altObje2 = altObje.transform.Find("stay").gameObject;
-            //altObje = hit.transform.gameObject;
-            this.transform.SetParent(hit.transform);
-            this.transform.position = hit.transform.position;
-            
-            isMotor = !isMotor;
+            if (isMotor)
+            {
+                obj = null;
+                isMotor = false;
+                cap.enabled = true;
+                this.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
+            if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
+            {
+                cap.enabled = false;
+                obj = hit.transform.gameObject;
+                altObje = obj.transform.Find("Plane").gameObject;
+                altObje2 = altObje.transform.Find("stay").gameObject;
+                //altObje = hit.transform.gameObject;
+                this.transform.SetParent(hit.transform);
+                this.transform.position = hit.transform.position;
+
+                isMotor = !isMotor;
+            }
         }
-        if(Physics.Raycast(ray, out hit, maxDistance,CarLayer) &&isMotor)
-        {
-            obj = null;
-            isMotor = false;
-             cap.enabled = true;
-            this.transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
+
+     
     }
 }

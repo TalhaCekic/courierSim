@@ -7,11 +7,14 @@ using Unity.VisualScripting;
 
 public class carMovement : MonoBehaviour
 {
+    public float speed;
+    public float rotationSpeed = 10;
     public float rotationAmount;
     public GameObject streetWheel;
     public GameObject fender;
     public GameObject stay;
     public TMP_Text speedText;
+
     public enum ControlMode
     {
         Keyboard,
@@ -51,7 +54,7 @@ public class carMovement : MonoBehaviour
 
     private Rigidbody carRb;
 
- 
+
     //  public TMPro.TMP_Text speedText;
 // private CarLights carLights;
 
@@ -69,9 +72,10 @@ public class carMovement : MonoBehaviour
             GetInputs();
             AnimateWheels();
             WheelEffects();
-            float speed = carRb.velocity.magnitude * 3.6f;
 
-            speedText.text =  Mathf.Round(speed) + " km/h";
+            speed = carRb.velocity.magnitude * 3.6f;
+
+            speedText.text = Mathf.Round(speed) + " km/h";
         }
     }
 
@@ -119,13 +123,26 @@ public class carMovement : MonoBehaviour
             {
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
-                
-                rotationAmount = wheel.wheelCollider.steerAngle *2f;
-                float rotationSpeed = 10;
- 
-                streetWheel.transform.localRotation = Quaternion.Euler(0f, rotationAmount/2, 0f);
-                fender.transform.localRotation = Quaternion.Euler(0f, rotationAmount/2f, 0f);
-                stay.transform.localRotation=Quaternion.Lerp(stay.transform.localRotation, Quaternion.Euler(0f, 0f, -rotationAmount / 2f), Time.deltaTime * rotationSpeed);
+
+                if (speed > 1)
+                {
+                    rotationAmount = wheel.wheelCollider.steerAngle * 2f;
+                    
+                    streetWheel.transform.localRotation = Quaternion.Euler(0f, rotationAmount / 2, 0f);
+                    fender.transform.localRotation = Quaternion.Euler(0f, rotationAmount / 2f, 0f);
+                    stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
+                        Quaternion.Euler(0f, 0f, -rotationAmount / 2f), Time.deltaTime * rotationSpeed);
+                }
+                else
+                {
+                    Quaternion currentRotation = this.transform.rotation;
+                    float zRotation = 0; 
+                    
+                    Quaternion newRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, zRotation);
+                    Quaternion newRotation2 = Quaternion.Lerp(currentRotation, newRotation, Time.deltaTime * rotationSpeed);   
+                    this.transform.rotation = newRotation2;
+                    stay.transform.rotation = newRotation2;
+                }
             }
         }
     }
@@ -183,6 +200,13 @@ public class carMovement : MonoBehaviour
             {
                 //  wheel.wheelEffectObj.GetComponentInChildren<TrailRenderer>().emitting = false;
             }
+        }
+    }
+
+    public void MotoPosition()
+    {
+        if (speed == 0)
+        {
         }
     }
 }
