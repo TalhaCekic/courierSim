@@ -124,7 +124,7 @@ public class carMovement : MonoBehaviour
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
 
-                if (speed > 1)
+                if (speed > 3 && steerInput != 0)
                 {
                     rotationAmount = wheel.wheelCollider.steerAngle * 2f;
                     
@@ -139,9 +139,10 @@ public class carMovement : MonoBehaviour
                     float zRotation = 0; 
                     
                     Quaternion newRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, zRotation);
-                    Quaternion newRotation2 = Quaternion.Lerp(currentRotation, newRotation, Time.deltaTime * rotationSpeed);   
-                    this.transform.rotation = newRotation2;
-                    stay.transform.rotation = newRotation2;
+                  //  Quaternion newRotation2 = 
+                    this.transform.localRotation =Quaternion.Lerp(this.transform.localRotation, newRotation, Time.deltaTime * rotationSpeed);   
+                    stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
+                        Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
                 }
             }
         }
