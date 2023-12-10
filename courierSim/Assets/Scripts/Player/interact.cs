@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -18,6 +20,11 @@ public class interact : MonoBehaviour
      public LayerMask CarLayer;
      private CapsuleCollider cap;
      private GameObject obj;
+     private GameObject altObje;
+     private GameObject altObje2;
+
+     public TMP_Text speedText;
+     
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -38,11 +45,7 @@ public class interact : MonoBehaviour
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-
-       
         RaycastHit hit;
-
-
         if (Physics.Raycast(ray, out hit, maxDistance))
         {
             interactImage.color = Color.green;
@@ -54,25 +57,41 @@ public class interact : MonoBehaviour
 
         if (isMotor)
         {
-            this.transform.transform.position = obj.transform.position;
-            this.transform.transform.rotation = obj.transform.rotation;
+            this.transform.transform.position = altObje2.transform.position;
+            this.transform.transform.rotation = altObje2.transform.rotation;
+            interactImage.gameObject.SetActive(false);
+            speedText.gameObject.SetActive(true);
         }
+        else
+        {
+             interactImage.gameObject.SetActive(true);
+             speedText.gameObject.SetActive(false);
+        }
+       
     }
 
     public void Interact(InputAction.CallbackContext context)
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, maxDistance,CarLayer))
+        if (Physics.Raycast(ray, out hit, maxDistance,CarLayer) && !isMotor)
         {
-           
-            Debug.Log("İşlenen Nesne: " + hit.transform.name);
             cap.enabled = false;
             obj = hit.transform.gameObject;
+            altObje = obj.transform.Find("Plane").gameObject;
+            altObje2 = altObje.transform.Find("stay").gameObject;
+            //altObje = hit.transform.gameObject;
             this.transform.SetParent(hit.transform);
             this.transform.position = hit.transform.position;
-
+            
             isMotor = !isMotor;
+        }
+        if(Physics.Raycast(ray, out hit, maxDistance,CarLayer) &&isMotor)
+        {
+            obj = null;
+            isMotor = false;
+             cap.enabled = true;
+            this.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }

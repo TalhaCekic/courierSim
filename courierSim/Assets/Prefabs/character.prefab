@@ -2135,8 +2135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8b15707b46f0c4ea9c4818f09e5fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 5
-  rotationSpeed: 5
+  distance: 0
+  rotationSpeed: 4
   resetSpeed: 2
   rotationLimits: {x: -80, y: 80}
 --- !u!1 &6176337895462691170

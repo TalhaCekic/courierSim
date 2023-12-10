@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject headObj;
     public float speed = 1f;
     private float runSpeed = 0;
     public float jumpHeight = 2f;
@@ -15,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator anims;
 
     Vector3 velocity;
+    public float gravity = -9f;
     public bool isGround;
 
     public Transform groundCheck;
@@ -26,17 +28,28 @@ public class PlayerMovement : MonoBehaviour
     private float rotationX = 0;
 
     private Rigidbody rb;
+    
+    public float distance = 5.0f; // Distance between the player and camera
+    public float rotationSpeed = 5.0f; // Speed at which the camera rotates
+    public float resetSpeed = 2.0f; // Speed at which the camera resets its rotation
+    public Vector2 rotationLimits = new Vector2(-80f, 80f); // Vertical rotation limits
+
+    private float currentX = 0.0f;
+    private float currentY = 0.0f;
 
     // public override void OnStartLocalPlayer()
     // {
     //     Camera.main.transform.SetParent(headObj.transform);
     //     Camera.main.transform.localPosition = new Vector3(0, 0, 0);
-    //     meshRenderer1.forceRenderingOff = true;
-    //     meshRenderer2.forceRenderingOff = true;
+    //     // meshRenderer1.forceRenderingOff = true;
+    //     // meshRenderer2.forceRenderingOff = true;
     // }
 
     private void Start()
     {
+        Camera.main.transform.SetParent(headObj.transform);
+        Camera.main.transform.localPosition = new Vector3(0, 0, 0);
+        
         rb = GetComponent<Rigidbody>();
         // if(!isLocalPlayer)return;
         playerCamera = GetComponentInChildren<Camera>();
@@ -53,13 +66,37 @@ public class PlayerMovement : MonoBehaviour
         if (!interact.instance.isMotor)
         {
             Move();
+            this.transform.SetParent(null);
+            anims.SetBool("drive",false);
+            Camera.main.transform.SetParent(headObj.transform);
+           
+            Camera.main.transform.localPosition = new Vector3(0, 0, 0);
+           // this.transform.rotation = Quaternion.Euler(0, 0, 0);
+           rb.useGravity = true;
         }
         else
         {
+            
+            // if(!isLocalPlayer)return;
+            // Rotate the camera based on player input
+            currentX += Input.GetAxis("Mouse X") * rotationSpeed;
+            currentY -= Input.GetAxis("Mouse Y") * rotationSpeed;
+
+            currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
+
+            // Calculate rotation and position
+            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+            Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+            Vector3 position = rotation * negDistance + this.transform.position;
+
+            //Apply rotation and position to the camera
+            Camera.main.transform.rotation = rotation;
+            Camera.main.transform.position = position;
             anims.SetBool("drive",interact.instance.isMotor);
             rb.useGravity = false;
         }
    
+  
     }
 
     private void Move()
@@ -79,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
         float targetSpeed = speed * Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
         Vector3 targetVelocity = move * targetSpeed;
         velocity = Vector3.SmoothDamp(velocity, targetVelocity, ref velocity, 0.05f);
+        
 
         // Zamana bağlı hareket
         transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
@@ -97,13 +135,6 @@ public class PlayerMovement : MonoBehaviour
         // Kamerayı döndür
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, mouseX, 0);
-        // float x = Input.GetAxis("Horizontal");
-        // float z = Input.GetAxis("Vertical");
-        //
-        // Vector3 movement = new Vector3(x, 0.0f, z);
-        // movement = movement.normalized * speed * Time.deltaTime;
-        //
-        // transform.Translate(movement);
 
         //animasyon işlemleri
         if (x > 0 || z > 0 || x < 0 || z < 0)

@@ -1,11 +1,17 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 
 public class carMovement : MonoBehaviour
 {
+    public float rotationAmount;
+    public GameObject streetWheel;
+    public GameObject fender;
+    public GameObject stay;
+    public TMP_Text speedText;
     public enum ControlMode
     {
         Keyboard,
@@ -65,10 +71,7 @@ public class carMovement : MonoBehaviour
             WheelEffects();
             float speed = carRb.velocity.magnitude * 3.6f;
 
-            //    speedText.text =  Mathf.Round(speed) + " km/h";
-
-
-            //   speedText.gameObject.SetActive(false);
+            speedText.text =  Mathf.Round(speed) + " km/h";
         }
     }
 
@@ -116,6 +119,13 @@ public class carMovement : MonoBehaviour
             {
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
+                
+                rotationAmount = wheel.wheelCollider.steerAngle *2f;
+                float rotationSpeed = 10;
+ 
+                streetWheel.transform.localRotation = Quaternion.Euler(0f, rotationAmount/2, 0f);
+                fender.transform.localRotation = Quaternion.Euler(0f, rotationAmount/2f, 0f);
+                stay.transform.localRotation=Quaternion.Lerp(stay.transform.localRotation, Quaternion.Euler(0f, 0f, -rotationAmount / 2f), Time.deltaTime * rotationSpeed);
             }
         }
     }
