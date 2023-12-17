@@ -54,6 +54,14 @@ public class carMovement : MonoBehaviour
 
     private Rigidbody carRb;
 
+    public float distance = 5.0f; // Distance between the player and camera
+
+    // public float rotationSpeed = 5.0f; // Speed at which the camera rotates
+    public float resetSpeed = 2.0f; // Speed at which the camera resets its rotation
+    public Vector2 rotationLimits = new Vector2(-80f, 80f); // Vertical rotation limits
+
+    private float currentX = 0.0f;
+    private float currentY = 0.0f;
 
     //  public TMPro.TMP_Text speedText;
 // private CarLights carLights;
@@ -73,8 +81,25 @@ public class carMovement : MonoBehaviour
             AnimateWheels();
             WheelEffects();
 
-            speed = carRb.velocity.magnitude * 3.6f;
+            if (!interact.instance.isChangeCameraPov)
+            {
+                // Rotate the camera based on player input
+                currentX += Input.GetAxis("Mouse X") * rotationSpeed / 2;
+                currentY -= Input.GetAxis("Mouse Y") * rotationSpeed / 2;
 
+                currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
+                // Calculate rotation and position
+                Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+                Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+                Vector3 position = rotation * negDistance + this.transform.position;
+
+                //Apply rotation and position to the camera
+                Camera.main.transform.rotation = rotation;
+                Camera.main.transform.position = position;
+            }
+ 
+
+            speed = carRb.velocity.magnitude * 3.6f;
             speedText.text = Mathf.Round(speed) + " km/h";
         }
     }
@@ -111,7 +136,11 @@ public class carMovement : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+            if (wheel.axel == Axel.Rear)
+            {
+                wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+                //print("sadece arkayı it");
+            }
         }
     }
 
@@ -124,10 +153,10 @@ public class carMovement : MonoBehaviour
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
 
-                if (speed > 3 && steerInput != 0)
+                if (steerInput != 0)
                 {
                     rotationAmount = wheel.wheelCollider.steerAngle * 2f;
-                    
+
                     streetWheel.transform.localRotation = Quaternion.Euler(0f, rotationAmount / 2, 0f);
                     fender.transform.localRotation = Quaternion.Euler(0f, rotationAmount / 2f, 0f);
                     stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
@@ -136,21 +165,26 @@ public class carMovement : MonoBehaviour
                 else
                 {
                     Quaternion currentRotation = this.transform.rotation;
-                    float zRotation = 0; 
-                    
-                    Quaternion newRotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, zRotation);
-                  //  Quaternion newRotation2 = 
-                    this.transform.localRotation =Quaternion.Lerp(this.transform.localRotation, newRotation, Time.deltaTime * rotationSpeed);   
+                    float zRotation = 0;
+
+                    Quaternion newRotation = Quaternion.Euler(currentRotation.eulerAngles.x,
+                        currentRotation.eulerAngles.y, zRotation);
+                    this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, newRotation,
+                        Time.deltaTime * rotationSpeed);
                     stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
                         Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
                 }
+                
+                // hıza göre direksiyon sertliği
+                float speedLimit = 35;
+                maxSteerAngle = Mathf.Lerp(30, 15, Mathf.InverseLerp(0, speedLimit, speed));
             }
         }
     }
 
     void Brake()
     {
-        if (Input.GetKey(KeyCode.Space) || moveInput == 0)
+        if (Input.GetKey(KeyCode.S) && moveInput != 0)
         {
             foreach (var wheel in wheels)
             {
@@ -166,7 +200,6 @@ public class carMovement : MonoBehaviour
             {
                 wheel.wheelCollider.brakeTorque = 0;
             }
-
             //   carLights.isBackLightOn = false;
             //   carLights.OperateBackLights();
         }
@@ -201,13 +234,6 @@ public class carMovement : MonoBehaviour
             {
                 //  wheel.wheelEffectObj.GetComponentInChildren<TrailRenderer>().emitting = false;
             }
-        }
-    }
-
-    public void MotoPosition()
-    {
-        if (speed == 0)
-        {
         }
     }
 }

@@ -16,8 +16,11 @@ public class interact : MonoBehaviour
 
     public Image interactImage;
     public bool isMotor;
+    public bool isBoxOpen;
+    public bool isChangeCameraPov;
 
     public LayerMask CarLayer;
+    public LayerMask CarBoxLayer;
     private CapsuleCollider cap;
     private GameObject obj;
     private GameObject altObje;
@@ -42,9 +45,10 @@ public class interact : MonoBehaviour
 
         playerInput.currentActionMap["interact"].Enable();
         playerInput.currentActionMap["interact"].performed += Interact;
+        
+        playerInput.currentActionMap["cameraChange"].Enable();
+        playerInput.currentActionMap["cameraChange"].performed += CameraChange;
     }
-
-    // Update is called once per frame
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
@@ -64,6 +68,10 @@ public class interact : MonoBehaviour
             this.transform.transform.rotation = altObje2.transform.rotation;
             interactImage.gameObject.SetActive(false);
             speedText.gameObject.SetActive(true);
+            if (!isChangeCameraPov)
+            {
+                Camera.main.transform.SetParent(obj.transform);
+            }
         }
         else
         {
@@ -86,20 +94,27 @@ public class interact : MonoBehaviour
                 this.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
 
-            if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
+            if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
+            {
+                isBoxOpen = !isBoxOpen;
+            }
+
+            else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 cap.enabled = false;
                 obj = hit.transform.gameObject;
                 altObje = obj.transform.Find("Plane").gameObject;
                 altObje2 = altObje.transform.Find("stay").gameObject;
-                //altObje = hit.transform.gameObject;
                 this.transform.SetParent(hit.transform);
                 this.transform.position = hit.transform.position;
-
                 isMotor = !isMotor;
             }
         }
+    }
 
-     
+    public void CameraChange(InputAction.CallbackContext context)
+    {
+        isChangeCameraPov = !isChangeCameraPov;
+        print(isChangeCameraPov);
     }
 }

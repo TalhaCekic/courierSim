@@ -6,6 +6,9 @@ TagManager:
   tags:
   - ground
   - motor1
+  - BurgerShop
+  - PizzaShop
+  - DeliveryPosition
   layers:
   - Default
   - TransparentFX
@@ -14,7 +17,7 @@ TagManager:
   - Water
   - UI
   - motor
-  - 
+  - motorBox
   - 
   - 
   - 
