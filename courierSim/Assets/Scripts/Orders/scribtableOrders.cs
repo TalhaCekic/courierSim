@@ -6,8 +6,11 @@ using UnityEngine;
 public class scribtableOrders :ScriptableObject
 {
     public string[] CustomerNames;
+    public string[] order;
     public GameObject BurgerPositionObj;
     public GameObject PizzaPositionObj;
     public GameObject DeliveryPositionObj;
+
+    public GameObject OrderPrefab;
 
 }
