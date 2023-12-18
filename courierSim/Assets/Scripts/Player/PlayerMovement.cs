@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         playerCamera = GetComponentInChildren<Camera>();
-        Cursor.lockState = CursorLockMode.Locked;
+       
     }
 
     void Update()
@@ -50,7 +50,10 @@ public class PlayerMovement : MonoBehaviour
         if (!interact.instance.isMotor)
         {
             Move();
-            cameraRotation();
+            if (!phoneMenu.instance.isPhoneActive || phoneMenu.instance.isMapActive)
+            {
+                cameraRotation();
+            }
             this.transform.SetParent(null);
             anims.SetBool("drive", false);
             rb.useGravity = true;
@@ -64,11 +67,15 @@ public class PlayerMovement : MonoBehaviour
             
             anims.SetBool("drive", interact.instance.isMotor);
             rb.useGravity = false;
-            if (interact.instance.isChangeCameraPov)
+            if (interact.instance.isChangeCameraPov )
             {
-                cameraRotation();
-                Camera.main.transform.SetParent(headObj.transform);
-                Camera.main.transform.localPosition = new Vector3(0, 0, 0);
+                if (!phoneMenu.instance.isPhoneActive)
+                {
+                    cameraRotation();
+                    Camera.main.transform.SetParent(headObj.transform);
+                    Camera.main.transform.localPosition = new Vector3(0, 0, 0);
+                }
+        
             }
         }
     }
