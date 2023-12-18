@@ -18,7 +18,7 @@ public class OrderManager : MonoBehaviour
     public GameObject selectedDeliveryPosition;
 
     private float minInterval = 10f; //10
-    private float maxInterval = 15f; //20
+    private float maxInterval = 20f; //20
     public float nextOrderTime = 0f;
 
     public bool isSpawn;
@@ -35,11 +35,12 @@ public class OrderManager : MonoBehaviour
         DeliveryPositions = GameObject.FindGameObjectsWithTag("DeliveryPosition");
         selectedBurgerPosition = BurgerPositions[0];
         selectedPizzaPosition = PizzaPositions[0];
+        timeOrderSpawn();
     }
 
     void Update()
     {
-        if (Time.time >= nextOrderTime)
+        if (Time.time >= nextOrderTime && !isOrder)
         {
             timeOrderSpawn();
             spawnOrderPosition();
@@ -48,12 +49,7 @@ public class OrderManager : MonoBehaviour
 
     public void timeOrderSpawn()
     {
-        if (!isOrder)
-        {
-            nextOrderTime = Time.time + Random.Range(minInterval, maxInterval);
-            isOrder = true;
-        }
-       
+        nextOrderTime = Time.time + Random.Range(minInterval, maxInterval);
     }
 
     public void spawnOrderPosition()
@@ -64,6 +60,7 @@ public class OrderManager : MonoBehaviour
         print(orderName);
         print(Order);
         print(selectedDeliveryPosition);
+        isOrder = true;
     }
 
     //randomize aray sistemi
