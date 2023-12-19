@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OrderManager : MonoBehaviour
 {
     public static OrderManager instance;
 
     public scribtableOrders scribtableOrders;
+  
     public string Order;
     public string orderName;
     public GameObject[] BurgerPositions;
     public GameObject[] PizzaPositions;
     public GameObject[] DeliveryPositions;
-
+    
     public GameObject selectedBurgerPosition;
     public GameObject selectedPizzaPosition;
     public GameObject selectedDeliveryPosition;
@@ -54,6 +56,7 @@ public class OrderManager : MonoBehaviour
 
     public void spawnOrderPosition()
     {
+        //pp = GetRandomElement(scribtableOrders.photo);
         Order = GetRandomElement(scribtableOrders.order);
         orderName = GetRandomElement(scribtableOrders.CustomerNames);
         selectedDeliveryPosition = GetRandomElement(DeliveryPositions);
