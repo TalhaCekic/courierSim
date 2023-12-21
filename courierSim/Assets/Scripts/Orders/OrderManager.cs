@@ -12,7 +12,7 @@ public class OrderManager : MonoBehaviour
     public string Order;
     public string orderName;
     public int orderPrice;
-    public int orderPriceIndex;   
+    public int orderPriceIndex;
     public int tipPrice;
     public int orderTime;
     public GameObject[] BurgerPositions;
@@ -26,11 +26,13 @@ public class OrderManager : MonoBehaviour
     private float minInterval = 10f; //10
     private float maxInterval = 20f; //20
     public float nextOrderTime = 0f;
+    private float delay=3;
 
     public bool isSearchingOrder;
+    public bool isOrderFound;
     public bool isSpawn;
     public bool isOrder;
-    
+
     void Start()
     {
         instance = this;
@@ -49,7 +51,17 @@ public class OrderManager : MonoBehaviour
         if (Time.time >= nextOrderTime && !isOrder && isSearchingOrder)
         {
             timeOrderSpawn();
-            spawnOrderPosition();
+            isOrderFound = true;
+        }
+
+        if (isOrderFound)
+        {
+            delay -= Time.deltaTime;
+            if (delay <= 0)
+            {
+                delay = 0;
+                spawnOrderPosition();
+            }
         }
     }
 
@@ -57,7 +69,6 @@ public class OrderManager : MonoBehaviour
     {
         nextOrderTime = Time.time + Random.Range(minInterval, maxInterval);
     }
-
     public void spawnOrderPosition()
     {
         Order = GetRandomElement(scribtableOrders.order);
@@ -70,6 +81,10 @@ public class OrderManager : MonoBehaviour
         isOrder = true;
         isSpawn = true;
         isSearchingOrder = false;
+        isOrderFound = false;
+        delay = 3;
+        phoneMenu.instance.isNotification = false;
+        phoneMenu.instance.isSubBar = true;
     }
 
     //randomize aray sistemi

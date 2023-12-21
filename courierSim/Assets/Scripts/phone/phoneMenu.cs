@@ -15,7 +15,7 @@ public class phoneMenu : MonoBehaviour
     private PlayerInput playerInput;
     public GameObject phoneCanvas;
     public GameObject subBarButtonObj;
-    private bool isSubBar;
+    public bool isSubBar;
     public GameObject map;
     public bool isPhoneActive;
     public bool isMapActive;
@@ -110,6 +110,12 @@ public class phoneMenu : MonoBehaviour
             notification.transform.localPosition = Vector3.Lerp(notification.transform.localPosition,
                 new Vector3(0, 90, 0), phoneLerpSpeed * Time.deltaTime);
         }
+
+        if (OrderManager.instance.isOrderFound)
+        {
+            notificationText.text = " sipariş bulundu ";
+        }
+        
     }
 
     public void PhoneButton(InputAction.CallbackContext context)
