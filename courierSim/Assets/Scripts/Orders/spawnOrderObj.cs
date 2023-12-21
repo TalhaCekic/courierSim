@@ -11,7 +11,6 @@ using Random = UnityEngine.Random;
 public class spawnOrderObj : MonoBehaviour
 {
     public Image[] pp;
-    // public Image selectedPP;
 
     public string CustomerName;
     public TMP_Text CustomerNameText;

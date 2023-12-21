@@ -19,8 +19,13 @@ public class interact : MonoBehaviour
     public bool isBoxOpen;
     public bool isChangeCameraPov;
 
+    public bool isHasBurger;
+    public bool isHasPizza;
+
     public LayerMask CarLayer;
     public LayerMask CarBoxLayer;
+    public LayerMask BurgerShop;
+    public LayerMask PizzaShop;
     private CapsuleCollider cap;
     private GameObject obj;
     private GameObject altObje;
@@ -98,7 +103,20 @@ public class interact : MonoBehaviour
             {
                 isBoxOpen = !isBoxOpen;
             }
-
+            if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop))
+            {
+                if (OrderManager.instance.isBurger && OrderManager.instance.isOrder)
+                {
+                    isHasBurger = true;
+                }
+            }   
+            if (Physics.Raycast(ray, out hit, maxDistance, PizzaShop))
+            {
+                if (OrderManager.instance.isPizza && OrderManager.instance.isOrder)
+                {
+                    isHasPizza = true;
+                }
+            }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 cap.enabled = false;
@@ -112,9 +130,15 @@ public class interact : MonoBehaviour
         }
     }
 
+    public void itemInteract()
+    {
+  
+        
+   
+    }
+
     public void CameraChange(InputAction.CallbackContext context)
     {
         isChangeCameraPov = !isChangeCameraPov;
-        print(isChangeCameraPov);
     }
 }

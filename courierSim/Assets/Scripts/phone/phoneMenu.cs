@@ -28,6 +28,7 @@ public class phoneMenu : MonoBehaviour
     float phoneLerpSpeed = 10f;
 
     private GameObject mapCam;
+    private GameObject cam;
 
     private void Awake()
     {
@@ -56,6 +57,12 @@ public class phoneMenu : MonoBehaviour
         }
 
         mapCam.transform.position = new Vector3(this.transform.position.x,35,this.transform.position.z);
+        if (interact.instance.isMotor)
+        {
+            
+        }
+        mapCam.transform.rotation = Quaternion.Euler(90,this.transform.rotation.eulerAngles.y,0);
+     
     }
     
     // telefon etkileşimi
@@ -153,13 +160,11 @@ public class phoneMenu : MonoBehaviour
 
     public void a()
     {
-        //map.SetActive(true);
         isMapActive = true;
     }
 
     public void back()
     {
-        //map.SetActive(false);
         isMapActive = false;
     }
 }

@@ -32,6 +32,8 @@ public class OrderManager : MonoBehaviour
     public bool isOrderFound;
     public bool isSpawn;
     public bool isOrder;
+    public bool isBurger;
+    public bool isPizza;
 
     void Start()
     {
@@ -85,6 +87,15 @@ public class OrderManager : MonoBehaviour
         delay = 3;
         phoneMenu.instance.isNotification = false;
         phoneMenu.instance.isSubBar = true;
+
+        if (Order == "Burger")
+        {
+            isBurger = true;
+        }
+        if (Order == "Pizza")
+        {
+            isPizza = true;
+        }
     }
 
     //randomize aray sistemi
