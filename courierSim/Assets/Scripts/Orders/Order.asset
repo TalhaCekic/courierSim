@@ -12,10 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b0de939ac53a34bb18eca5c7551905, type: 3}
   m_Name: Order
   m_EditorClassIdentifier: 
-  photo:
-  - {fileID: 21300000, guid: 7bb82b48d879af646ad8b9903fb27e27, type: 3}
-  - {fileID: 21300000, guid: 2158a74180f62844c816b85cbe15404b, type: 3}
-  - {fileID: 21300000, guid: 5046fa292db4ba5419d70223801c9376, type: 3}
   CustomerNames:
   - "talo\u015F"
   - "Taha Tarhanac\u0131k"
@@ -29,6 +25,8 @@ MonoBehaviour:
   BurgerPositionObj: {fileID: 0}
   PizzaPositionObj: {fileID: 0}
   DeliveryPositionObj: {fileID: 0}
-  orderPrice: 0f00000012000000170000001d0000001e000000230000002500000028000000
+  orderPrice: 0f00000012000000170000001d0000001e0000002300000025000000280000002c00000030000000
   tipPrice: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
-  OrderPrefab: {fileID: 0}
+  orderTimes: b4000000f00000002c01000068010000
+  OrderPrefab: {fileID: 5137049509651091902, guid: bf72a3b0f34bc624ebb62ee15ddfe2a7,
+    type: 3}

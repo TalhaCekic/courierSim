@@ -8,13 +8,17 @@ public class OrderManager : MonoBehaviour
     public static OrderManager instance;
 
     public scribtableOrders scribtableOrders;
-  
+
     public string Order;
     public string orderName;
+    public int orderPrice;
+    public int orderPriceIndex;   
+    public int tipPrice;
+    public int orderTime;
     public GameObject[] BurgerPositions;
     public GameObject[] PizzaPositions;
     public GameObject[] DeliveryPositions;
-    
+
     public GameObject selectedBurgerPosition;
     public GameObject selectedPizzaPosition;
     public GameObject selectedDeliveryPosition;
@@ -23,10 +27,10 @@ public class OrderManager : MonoBehaviour
     private float maxInterval = 20f; //20
     public float nextOrderTime = 0f;
 
+    public bool isSearchingOrder;
     public bool isSpawn;
     public bool isOrder;
-
-
+    
     void Start()
     {
         instance = this;
@@ -42,7 +46,7 @@ public class OrderManager : MonoBehaviour
 
     void Update()
     {
-        if (Time.time >= nextOrderTime && !isOrder)
+        if (Time.time >= nextOrderTime && !isOrder && isSearchingOrder)
         {
             timeOrderSpawn();
             spawnOrderPosition();
@@ -56,14 +60,16 @@ public class OrderManager : MonoBehaviour
 
     public void spawnOrderPosition()
     {
-        //pp = GetRandomElement(scribtableOrders.photo);
         Order = GetRandomElement(scribtableOrders.order);
         orderName = GetRandomElement(scribtableOrders.CustomerNames);
+        orderPrice = GetRandomElement(scribtableOrders.orderPrice);
+        tipPrice = GetRandomElement(scribtableOrders.tipPrice);
+        orderTime = GetRandomElement(scribtableOrders.orderTimes);
+        orderPriceIndex = GetIndexInArray(orderPrice, scribtableOrders.orderPrice);
         selectedDeliveryPosition = GetRandomElement(DeliveryPositions);
-        print(orderName);
-        print(Order);
-        print(selectedDeliveryPosition);
         isOrder = true;
+        isSpawn = true;
+        isSearchingOrder = false;
     }
 
     //randomize aray sistemi
@@ -78,5 +84,19 @@ public class OrderManager : MonoBehaviour
         {
             return default(T);
         }
+    }
+
+    // Verilen değerin dizideki indeksini bulan fonksiyon
+    private int GetIndexInArray<T>(T value, T[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (EqualityComparer<T>.Default.Equals(value, array[i]))
+            {
+                return i;
+            }
+        }
+
+        return -1; // Eğer bulunamazsa -1 döndür
     }
 }

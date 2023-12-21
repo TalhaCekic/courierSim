@@ -13,6 +13,7 @@ public class scribtableOrders :ScriptableObject
     public GameObject DeliveryPositionObj;
     public int[] orderPrice;
     public int[] tipPrice;
+    public int[] orderTimes;
 
     public GameObject OrderPrefab;
 

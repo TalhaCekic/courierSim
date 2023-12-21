@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class OrderSpawner : MonoBehaviour
 {
-    public Texture pp;
     public scribtableOrders ScribtableOrders;
     public Transform parentTransform;
-
-    void Start()
-    {
-    }
 
     void Update()
     {

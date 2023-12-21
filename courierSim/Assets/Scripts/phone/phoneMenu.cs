@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 using Cursor = UnityEngine.Cursor;
 
 public class phoneMenu : MonoBehaviour
@@ -18,6 +20,12 @@ public class phoneMenu : MonoBehaviour
     public bool isPhoneActive;
     public bool isMapActive;
 
+    public bool isNotification;
+    public GameObject notification;
+    public TMP_Text notificationText;
+
+    public Button GoButton;
+
     float phoneLerpSpeed = 10f;
 
     private void Awake()
@@ -28,6 +36,7 @@ public class phoneMenu : MonoBehaviour
     void Start()
     {
         instance = this;
+        isSubBar = false;
         phoneCanvas.transform.localPosition = new Vector3(0, -850, 0);
 
         playerInput.currentActionMap["phone"].Enable();
@@ -36,10 +45,23 @@ public class phoneMenu : MonoBehaviour
 
     private void Update()
     {
+        Notification();
+        phone();
+
+        if (!OrderManager.instance.isSearchingOrder && !OrderManager.instance.isOrder)
+        {
+            GoButton.gameObject.SetActive(true);
+        }
+    }
+    
+    // telefon etkileşimi
+    private void phone()
+    {
         if (isPhoneActive)
         {
             phoneCanvas.transform.localPosition = Vector3.Lerp(phoneCanvas.transform.localPosition,
                 new Vector3(0, 0, 0), phoneLerpSpeed * Time.deltaTime);
+
             if (isMapActive)
             {
                 Cursor.lockState = CursorLockMode.Locked;
@@ -51,12 +73,19 @@ public class phoneMenu : MonoBehaviour
         }
         else
         {
-            phoneCanvas.transform.localPosition = Vector3.Lerp(phoneCanvas.transform.localPosition,
-                new Vector3(0, -850, 0), phoneLerpSpeed * Time.deltaTime);
+            if (isNotification)
+            {
+                phoneCanvas.transform.localPosition = Vector3.Lerp(phoneCanvas.transform.localPosition,
+                    new Vector3(0, -600, 0), phoneLerpSpeed * Time.deltaTime);
+            }
+            else
+            {
+                phoneCanvas.transform.localPosition = Vector3.Lerp(phoneCanvas.transform.localPosition,
+                    new Vector3(0, -850, 0), phoneLerpSpeed * Time.deltaTime);
+            }
+
             Cursor.lockState = CursorLockMode.Locked;
         }
-
-
         if (isSubBar)
         {
             subBarButtonObj.transform.localPosition = Vector3.Lerp(subBarButtonObj.transform.localPosition,
@@ -66,6 +95,20 @@ public class phoneMenu : MonoBehaviour
         {
             subBarButtonObj.transform.localPosition = Vector3.Lerp(subBarButtonObj.transform.localPosition,
                 new Vector3(0, -250, 0), phoneLerpSpeed * Time.deltaTime);
+        }
+    }
+    // notification ayarları 
+    private void Notification()
+    {
+        if (isNotification)
+        {
+            notification.transform.localPosition = Vector3.Lerp(notification.transform.localPosition,
+                new Vector3(0, 0, 0), phoneLerpSpeed * Time.deltaTime);
+        }
+        else
+        {
+            notification.transform.localPosition = Vector3.Lerp(notification.transform.localPosition,
+                new Vector3(0, 90, 0), phoneLerpSpeed * Time.deltaTime);
         }
     }
 
@@ -83,7 +126,18 @@ public class phoneMenu : MonoBehaviour
 
     public void SubBarButton()
     {
-        isSubBar = !isSubBar;
+        if (OrderManager.instance.isOrder)
+        {
+            isSubBar = !isSubBar;
+        }
+    }
+
+    public void SearchForOrder()
+    {
+        GoButton.gameObject.SetActive(false);
+        OrderManager.instance.isSearchingOrder = true;
+        notificationText.text = " Sipariş aranıyor...";
+        isNotification = true;
     }
 
     public void a()
