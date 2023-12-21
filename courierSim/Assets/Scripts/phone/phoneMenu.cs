@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 using Cursor = UnityEngine.Cursor;
+using Image = UnityEngine.UI.Image;
 
 public class phoneMenu : MonoBehaviour
 {
@@ -22,6 +19,7 @@ public class phoneMenu : MonoBehaviour
 
     public bool isNotification;
     public GameObject notification;
+    public Image notificationBackground;
     public TMP_Text notificationText;
 
     public Button GoButton;
@@ -113,6 +111,7 @@ public class phoneMenu : MonoBehaviour
 
         if (OrderManager.instance.isOrderFound)
         {
+            notificationBackground.color = Color.green;
             notificationText.text = " sipariş bulundu ";
         }
         
