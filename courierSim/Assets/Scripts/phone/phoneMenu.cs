@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -26,9 +27,12 @@ public class phoneMenu : MonoBehaviour
 
     float phoneLerpSpeed = 10f;
 
+    private GameObject mapCam;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        mapCam = GameObject.FindGameObjectWithTag("mapCamera");
     }
 
     void Start()
@@ -50,6 +54,8 @@ public class phoneMenu : MonoBehaviour
         {
             GoButton.gameObject.SetActive(true);
         }
+
+        mapCam.transform.position = new Vector3(this.transform.position.x,35,this.transform.position.z);
     }
     
     // telefon etkileşimi
@@ -147,7 +153,7 @@ public class phoneMenu : MonoBehaviour
 
     public void a()
     {
-        map.SetActive(true);
+        //map.SetActive(true);
         isMapActive = true;
     }
 
