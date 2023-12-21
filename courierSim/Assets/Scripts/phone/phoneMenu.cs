@@ -159,7 +159,7 @@ public class phoneMenu : MonoBehaviour
 
     public void back()
     {
-        map.SetActive(false);
+        //map.SetActive(false);
         isMapActive = false;
     }
 }
