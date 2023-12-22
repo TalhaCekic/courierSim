@@ -86,7 +86,6 @@ public class OrderManager : MonoBehaviour
         {
             isOrderFound = true;  
         }
-       
     }
     public void spawnOrderPosition()
     {

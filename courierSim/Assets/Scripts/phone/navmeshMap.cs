@@ -36,13 +36,10 @@ public class navmeshMap : MonoBehaviour
                 target = OrderManager.instance.PizzaPositions[0].transform; 
             }
         }
-    
-        
         if (target != null && navMeshAgent.remainingDistance < 0.1f)
         {
             SetDestination();
         }
-
         // Yolu çiz
         DrawPath();
     }
