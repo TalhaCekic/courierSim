@@ -11,6 +11,7 @@ using Image = UnityEngine.UI.Image;
 public class interact : MonoBehaviour
 {
     public static interact instance;
+    private spawnOrderObj orderObj;
     [SerializeField] public int maxDistance;
     private PlayerInput playerInput;
 
@@ -26,6 +27,7 @@ public class interact : MonoBehaviour
     public LayerMask CarBoxLayer;
     public LayerMask BurgerShop;
     public LayerMask PizzaShop;
+    public LayerMask DeliveryPosition;
     private CapsuleCollider cap;
     private GameObject obj;
     private GameObject altObje;
@@ -35,6 +37,8 @@ public class interact : MonoBehaviour
 
     float resetDelay = 0.5f;
     public float lastResetTime = -1f;
+
+    public GameObject[] orders;
 
     private void Awake()
     {
@@ -50,10 +54,11 @@ public class interact : MonoBehaviour
 
         playerInput.currentActionMap["interact"].Enable();
         playerInput.currentActionMap["interact"].performed += Interact;
-        
+
         playerInput.currentActionMap["cameraChange"].Enable();
         playerInput.currentActionMap["cameraChange"].performed += CameraChange;
     }
+
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
@@ -99,23 +104,59 @@ public class interact : MonoBehaviour
                 this.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
 
+            //order detayları
+            orders = GameObject.FindGameObjectsWithTag("Order");
+            //eğer sipariş varsa
+            if (OrderManager.instance.isOrderStart)
+            {
+                if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop))
+                {
+                    if (OrderManager.instance.isBurger && OrderManager.instance.isOrder)
+                    {
+                        isHasBurger = true;
+                    }
+                }
+
+                if (Physics.Raycast(ray, out hit, maxDistance, PizzaShop))
+                {
+                    if (OrderManager.instance.isPizza && OrderManager.instance.isOrder)
+                    {
+                        isHasPizza = true;
+                    }
+                }
+
+                if (Physics.Raycast(ray, out hit, maxDistance, DeliveryPosition))
+                {
+                    if (OrderManager.instance.isPizza ||
+                        OrderManager.instance.isBurger && OrderManager.instance.isOrder)
+                    {
+                        if (OrderManager.instance.selectedDeliveryPosition.name == hit.transform.transform.name)
+                        {
+                            DeleteFirstChild(hit.transform);
+                            for (int i = 0; i < orders.Length; i++)
+                            {
+                                if (orders[i] != null)
+                                {
+                                    Destroy(orders[i]);
+                                    orders[i] = null;
+                                }
+                            }
+
+                            OrderManager.instance.isOrderStart = false;
+                            OrderManager.instance.isOrder = false;
+                            OrderManager.instance.isSpawn = false;
+                            OrderManager.instance.isBurger = false;
+                            OrderManager.instance.isPizza = false;
+                            OrderManager.instance.isSearchingOrder = false;
+                            OrderManager.instance.isdelivery = true;
+                        }
+                    }
+                }
+            }
+
             if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
             {
                 isBoxOpen = !isBoxOpen;
-            }
-            if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop))
-            {
-                if (OrderManager.instance.isBurger && OrderManager.instance.isOrder)
-                {
-                    isHasBurger = true;
-                }
-            }   
-            if (Physics.Raycast(ray, out hit, maxDistance, PizzaShop))
-            {
-                if (OrderManager.instance.isPizza && OrderManager.instance.isOrder)
-                {
-                    isHasPizza = true;
-                }
             }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
@@ -129,12 +170,21 @@ public class interact : MonoBehaviour
             }
         }
     }
-
+    void DeleteFirstChild(Transform parent)
+    {
+        // Eğer parent obje child'a sahipse ve en az bir child varsa
+        if (parent.childCount > 0)
+        {
+            // İlk child'ı bul ve sil
+            Destroy(parent.GetChild(0).gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("No child object to delete.");
+        }
+    }
     public void itemInteract()
     {
-  
-        
-   
     }
 
     public void CameraChange(InputAction.CallbackContext context)

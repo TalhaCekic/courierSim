@@ -12,9 +12,16 @@ public class BurgerShop : MonoBehaviour
 
     void Update()
     {
-        if (OrderManager.instance.isBurger)
+        if (OrderManager.instance.isBurger )
         {
-            selected.SetActive(true);
+            if (!interact.instance.isHasBurger)
+            {
+                selected.SetActive(true);
+            }
+            else
+            {
+                selected.SetActive(false);
+            }
         }
     }
 }

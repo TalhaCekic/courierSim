@@ -30,10 +30,12 @@ public class OrderManager : MonoBehaviour
 
     public bool isSearchingOrder;
     public bool isOrderFound;
+    public bool isOrderStart;
     public bool isSpawn;
     public bool isOrder;
     public bool isBurger;
     public bool isPizza;
+    public bool isdelivery;
 
     void Start()
     {
@@ -53,7 +55,7 @@ public class OrderManager : MonoBehaviour
         if (Time.time >= nextOrderTime && !isOrder && isSearchingOrder)
         {
             timeOrderSpawn();
-            isOrderFound = true;
+            
         }
 
         if (isOrderFound)
@@ -65,11 +67,26 @@ public class OrderManager : MonoBehaviour
                 spawnOrderPosition();
             }
         }
+
+        if (!isOrder && isdelivery)
+        {
+            isBurger = false;
+            isPizza = false;
+            isSpawn = false;
+            isOrderStart = false;
+            isSearchingOrder = false;
+            delay = 3;
+        }
     }
 
     public void timeOrderSpawn()
     {
         nextOrderTime = Time.time + Random.Range(minInterval, maxInterval);
+        if (isSearchingOrder)
+        {
+            isOrderFound = true;  
+        }
+       
     }
     public void spawnOrderPosition()
     {
@@ -87,7 +104,9 @@ public class OrderManager : MonoBehaviour
         delay = 3;
         phoneMenu.instance.isNotification = false;
         phoneMenu.instance.isSubBar = true;
-
+        
+        Instantiate(scribtableOrders.deliverySelectedIU, new Vector3(selectedDeliveryPosition.transform.position.x,30,selectedDeliveryPosition.transform.position.z),
+            Quaternion.Euler(90,0,90), selectedDeliveryPosition.transform);
         if (Order == "Burger")
         {
             isBurger = true;

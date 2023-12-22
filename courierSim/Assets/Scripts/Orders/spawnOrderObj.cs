@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,8 +23,7 @@ public class spawnOrderObj : MonoBehaviour
     public int OrderPrice;
     public int TipPrice;
     public TMP_Text orderPriceText;
-
-    public bool isOrderStart;
+    
 
     void Start()
     {
@@ -37,7 +32,7 @@ public class spawnOrderObj : MonoBehaviour
 
     private void Update()
     {
-        if (isOrderStart)
+        if (OrderManager.instance.isOrderStart )
         {
             orderTime -= Time.deltaTime;
             timeSlider.value = orderTime;
@@ -96,6 +91,6 @@ public class spawnOrderObj : MonoBehaviour
 
     public void StartOrder()
     {
-        isOrderStart = true;
+        OrderManager.instance.isOrderStart = true;
     }
 }

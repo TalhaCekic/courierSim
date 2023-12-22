@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Order", menuName = "OrderMenu")]
@@ -16,5 +13,6 @@ public class scribtableOrders :ScriptableObject
     public int[] orderTimes;
 
     public GameObject OrderPrefab;
+    public GameObject deliverySelectedIU;
 
 }

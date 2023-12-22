@@ -30,3 +30,5 @@ MonoBehaviour:
   orderTimes: b4000000f00000002c01000068010000
   OrderPrefab: {fileID: 5137049509651091902, guid: bf72a3b0f34bc624ebb62ee15ddfe2a7,
     type: 3}
+  deliverySelectedIU: {fileID: 7507315549290581269, guid: a390bacffa90df346b86742a8a831138,
+    type: 3}

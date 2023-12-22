@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/silinecekler/art.unity
-    guid: 5bde068bb2a709f49988cfbf0cd00e91
+    path: Assets/PolygonCity/Scenes/Demo.unity
+    guid: 35299a6a99d6dfe4bb709527ba95aab0
   m_configObjects: {}

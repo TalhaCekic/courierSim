@@ -10,6 +10,7 @@ TagManager:
   - PizzaShop
   - DeliveryPosition
   - mapCamera
+  - Order
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - map
   - BurgerShop
   - PizzaShop
-  - 
+  - DeliveryPosition
   - 
   - 
   - 

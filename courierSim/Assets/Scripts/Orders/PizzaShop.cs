@@ -14,7 +14,14 @@ public class PizzaShop : MonoBehaviour
     {
         if (OrderManager.instance.isPizza)
         {
-            selected.SetActive(true);
+            if (!interact.instance.isHasPizza)
+            {
+                selected.SetActive(true);
+            }
+            else
+            {
+                selected.SetActive(false);
+            }
         }
     }
 }

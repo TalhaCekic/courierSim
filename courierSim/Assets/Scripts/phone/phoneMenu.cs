@@ -56,12 +56,18 @@ public class phoneMenu : MonoBehaviour
             GoButton.gameObject.SetActive(true);
         }
 
-        mapCam.transform.position = new Vector3(this.transform.position.x,35,this.transform.position.z);
+        mapCam.transform.position = new Vector3(this.transform.position.x,120,this.transform.position.z);
         if (interact.instance.isMotor)
         {
             
         }
         mapCam.transform.rotation = Quaternion.Euler(90,this.transform.rotation.eulerAngles.y,0);
+
+        if (OrderManager.instance.isdelivery)
+        {
+            GoButton.gameObject.SetActive(true);
+            isSubBar = false;
+        }
      
     }
     
@@ -154,6 +160,7 @@ public class phoneMenu : MonoBehaviour
     {
         GoButton.gameObject.SetActive(false);
         OrderManager.instance.isSearchingOrder = true;
+        OrderManager.instance.isdelivery = false;
         notificationText.text = " Sipariş aranıyor...";
         isNotification = true;
     }
