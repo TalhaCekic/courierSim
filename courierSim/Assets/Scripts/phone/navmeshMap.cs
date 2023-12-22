@@ -61,5 +61,6 @@ public class navmeshMap : MonoBehaviour
         // LineRenderer'ı başlat
         lineRenderer.positionCount = navMeshAgent.path.corners.Length;
         lineRenderer.SetPositions(navMeshAgent.path.corners);
+        lineRenderer.enabled = true;
     }
 }
