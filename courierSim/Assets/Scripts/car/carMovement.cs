@@ -134,12 +134,15 @@ public class carMovement : MonoBehaviour
 
     void Move()
     {
-        foreach (var wheel in wheels)
+        if (speed < 55)
         {
-            if (wheel.axel == Axel.Rear)
+            foreach (var wheel in wheels)
             {
-                wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
-                //print("sadece arkayı it");
+                if (wheel.axel == Axel.Rear)
+                {
+                    print("ittirrrr");
+                    wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+                }
             }
         }
     }
