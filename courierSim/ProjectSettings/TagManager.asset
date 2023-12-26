@@ -11,6 +11,8 @@ TagManager:
   - DeliveryPosition
   - mapCamera
   - Order
+  - car
+  - turn
   layers:
   - Default
   - TransparentFX

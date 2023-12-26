@@ -4,176 +4,68 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using UnityEngine.Serialization;
 
 public class NPCcarMovement : MonoBehaviour
 {
-    public float speed;
-    public float rotationSpeed = 10;
-    public float rotationAmount;
-    public TMP_Text speedText;
+    public Transform Path;
+    public float maxSteerAngle = 50;
+    private float newSteer;
+    public WheelCollider wheelFl;
+    public WheelCollider wheelFr;
+    public GameObject wheelFlObj;
+    public GameObject wheelFrObj;
 
-    public enum ControlMode
+    public List<Transform> nodes;
+    public int currentNode = 0;
+
+    private void Start()
     {
-        Keyboard,
-        Buttons
-    };
-
-    public enum Axel
-    {
-        Front,
-        Rear
-    }
-
-    [Serializable]
-    public struct Wheel
-    {
-        public GameObject wheelModel;
-        public WheelCollider wheelCollider;
-        public GameObject wheelEffectObj;
-        public ParticleSystem smokeParticle;
-        public Axel axel;
-    }
-
-    public ControlMode control;
-
-    public float maxAcceleration = 30.0f;
-    public float brakeAcceleration = 50.0f;
-
-    public float turnSensitivity = 1.0f;
-    public float maxSteerAngle = 30.0f;
-
-    public Vector3 _centerOfMass;
-
-    public List<Wheel> wheels;
-
-    float moveInput;
-    float steerInput;
-
-    private Rigidbody carRb;
-    
-    //  public TMPro.TMP_Text speedText;
-// private CarLights carLights;
-
-    void Start()
-    {
-        carRb = GetComponent<Rigidbody>();
-        carRb.centerOfMass = _centerOfMass;
-        // carLights = GetComponent<CarLights>();
-    }
-
-    void Update()
-    {
-        if (interact.instance.isMotor)
+        Transform[] pathTransform = Path.GetComponentsInChildren<Transform>();
+        nodes = new List<Transform>();
+        for (int i = 0; i < pathTransform.Length; i++)
         {
-            GetInputs();
-            AnimateWheels();
-            WheelEffects();
-
-            speed = carRb.velocity.magnitude * 3.6f;
-            speedText.text = Mathf.Round(speed) + " km/h";
-        }
-    }
-
-    void LateUpdate()
-    {
-        Move();
-        Steer();
-        Brake();
-    }
-
-    public void MoveInput(float input)
-    {
-        moveInput = input;
-    }
-
-    public void SteerInput(float input)
-    {
-        steerInput = input;
-    }
-
-    void GetInputs()
-    {
-        if (control == ControlMode.Keyboard)
-        {
-            moveInput = Input.GetAxis("Vertical");
-            steerInput = Input.GetAxis("Horizontal");
-        }
-    }
-
-    void Move()
-    {
-        foreach (var wheel in wheels)
-        {
-            if (wheel.axel == Axel.Rear)
+            if (pathTransform[i] != Path.transform)
             {
-                wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+                nodes.Add(pathTransform[i]);
             }
         }
     }
 
-    void Steer()
+    private void FixedUpdate()
     {
-        foreach (var wheel in wheels)
-        {
-            if (wheel.axel == Axel.Front)
-            {
-                var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
-                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
-            }
-        }
+        ApplySteer();
+
+        CheckWayPointDistance();
+        Drive();
     }
 
-    void Brake()
+    private void ApplySteer()
     {
-        if (Input.GetKey(KeyCode.S) && moveInput != 0)
-        {
-            foreach (var wheel in wheels)
-            {
-                wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
-            }
-
-            //   carLights.isBackLightOn = true;
-            //   carLights.OperateBackLights();
-        }
-        else
-        {
-            foreach (var wheel in wheels)
-            {
-                wheel.wheelCollider.brakeTorque = 0;
-            }
-            //   carLights.isBackLightOn = false;
-            //   carLights.OperateBackLights();
-        }
+        Vector3 relativeVector = transform.InverseTransformPoint(nodes[currentNode].position);
+        newSteer = (relativeVector.x / relativeVector.magnitude) * maxSteerAngle;
+        wheelFl.steerAngle = newSteer;
+        // wheelFlObj.transform.rotation = wheelFl.transform.rotation;
+        // wheelFlObj.transform.position = wheelFl.transform.position;
+        // wheelFrObj.transform.rotation = wheelFr.transform.rotation;
+        // wheelFrObj.transform.position = wheelFr.transform.position;
+        wheelFr.steerAngle = newSteer;
     }
 
-    void AnimateWheels()
+    private void Drive()
     {
-        foreach (var wheel in wheels)
-        {
-            Quaternion rot;
-            Vector3 pos;
-            wheel.wheelCollider.GetWorldPose(out pos, out rot);
-            wheel.wheelModel.transform.position = pos;
-            wheel.wheelModel.transform.rotation = rot;
-        }
+        wheelFl.motorTorque = 100;
+        wheelFr.motorTorque = 100;
     }
 
-    // [Command(requiresAuthority = false)]
-    void WheelEffects()
+    private void CheckWayPointDistance()
     {
-        foreach (var wheel in wheels)
+        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 0.5f)
         {
-            //var dirtParticleMainSettings = wheel.smokeParticle.main;
-
-            if (Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded == true &&
-                carRb.velocity.magnitude >= 10.0f)
+            currentNode++;
+            if (currentNode >= nodes.Count)
             {
-                wheel.wheelEffectObj.GetComponentInChildren<TrailRenderer>().emitting = true;
-                wheel.smokeParticle.Emit(1);
-            }
-            else
-            {
-                //  wheel.wheelEffectObj.GetComponentInChildren<TrailRenderer>().emitting = false;
+                currentNode = 0;
             }
         }
     }

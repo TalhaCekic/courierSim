@@ -140,7 +140,6 @@ public class carMovement : MonoBehaviour
             {
                 if (wheel.axel == Axel.Rear)
                 {
-                    print("ittirrrr");
                     wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
                 }
             }
