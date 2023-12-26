@@ -9,6 +9,8 @@ using UnityEngine.Serialization;
 public class NPCcarMovement : MonoBehaviour
 {
     public Transform Path;
+    private Rigidbody rb;
+    public float speed;
     public float maxSteerAngle = 50;
     private float newSteer;
     public WheelCollider wheelFl;
@@ -21,6 +23,7 @@ public class NPCcarMovement : MonoBehaviour
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         Transform[] pathTransform = Path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
         for (int i = 0; i < pathTransform.Length; i++)
@@ -34,10 +37,31 @@ public class NPCcarMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        speed = rb.velocity.magnitude * 3.6f;
         ApplySteer();
 
         CheckWayPointDistance();
-        Drive();
+        
+        //print(Vector3.Distance(transform.position, nodes[currentNode].position));
+        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 10)
+        {
+            if (speed > 25)
+            {
+              dur();
+                print("frenle");
+            }
+            else
+            {
+              yavas();
+                print("yavaşça ilele");
+            }
+         
+        }
+        else if(speed <30)
+        {
+            Drive();
+            print("bass");
+        }
     }
 
     private void ApplySteer()
@@ -56,6 +80,16 @@ public class NPCcarMovement : MonoBehaviour
     {
         wheelFl.motorTorque = 100;
         wheelFr.motorTorque = 100;
+    } 
+    private void yavas()
+    {
+        wheelFl.motorTorque = 5;
+        wheelFr.motorTorque = 5;
+    } 
+    private void dur()
+    {
+        wheelFl.brakeTorque = 1000;
+        wheelFr.brakeTorque = 1000;
     }
 
     private void CheckWayPointDistance()

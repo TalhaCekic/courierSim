@@ -33,6 +33,8 @@ public class Path : MonoBehaviour
       {
         previousNode = nodes[nodes.Count - 1].position;
       }
+      //print(" previousnode "+previousNode);
+      // print(" curentNode "+currentNode);
       Gizmos.DrawLine(previousNode, currentNode);
       Gizmos.DrawWireSphere(currentNode, 0.3f);
 
