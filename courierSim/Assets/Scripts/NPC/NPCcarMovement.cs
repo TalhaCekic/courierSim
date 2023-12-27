@@ -14,6 +14,7 @@ public class NPCcarMovement : MonoBehaviour
     public float speed;
     public float maxSteerAngle = 50;
     private float newSteer;
+    public float deleteTime;
     public bool isStop;
     public bool isFrontRayClose;
     public bool isRightRayClose;
@@ -38,6 +39,7 @@ public class NPCcarMovement : MonoBehaviour
 
     private void Start()
     {
+        //deleteTime = 60;
         rb = GetComponent<Rigidbody>();
         Transform[] pathTransform = Path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
@@ -106,6 +108,7 @@ public class NPCcarMovement : MonoBehaviour
 
     private void Drive()
     {
+        deleteTime = 60;
         wheelFl.motorTorque = 30;
         wheelFr.motorTorque = 30;
         wheelFl.brakeTorque = 0;
@@ -114,6 +117,7 @@ public class NPCcarMovement : MonoBehaviour
 
     private void slowDrive()
     {
+        deleteTime = 60;
         wheelFl.motorTorque = 15;
         wheelFr.motorTorque = 15;
         wheelFl.brakeTorque = 0;
@@ -126,6 +130,15 @@ public class NPCcarMovement : MonoBehaviour
         wheelFr.motorTorque = 0;
         wheelFl.brakeTorque = 5000;
         wheelFr.brakeTorque = 5000;
+
+        if (deleteTime < 0)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            deleteTime -= Time.deltaTime;
+        }
     }
 
     private void CheckWayPointDistance()
@@ -162,6 +175,7 @@ public class NPCcarMovement : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10, layer) || Physics.Raycast(rayRight, out hit, 5, layer)|| Physics.Raycast(rayLeft, out hit, 5, layer))
         {
+            print(hit.transform.name);
             isStop = true;
         }
         else
