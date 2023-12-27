@@ -196,15 +196,12 @@ public class NpcCarMovement : MonoBehaviour
         {
             if (hit.transform == this.transform)
             {
-               isStop = false;
+                isStop = false;
             }
             else
             {
-                     isStop = true;
+                isStop = true;
             }
-           
-            
-          
         }
         else
         {
