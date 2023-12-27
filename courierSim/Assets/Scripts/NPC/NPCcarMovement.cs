@@ -7,8 +7,9 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine.Serialization;
 
-public class NPCcarMovement : MonoBehaviour
+public class NpcCarMovement : MonoBehaviour
 {
+    public scribtableNpcWay scribTableNpcWay;
     public Transform Path;
     private Rigidbody rb;
     public float speed;
@@ -31,7 +32,9 @@ public class NPCcarMovement : MonoBehaviour
     public LayerMask Backlayer;
     public Transform frontDetector;
     public Transform frontRightDetector;
+    public Transform frontRightDetector1;
     public Transform frontLeftDetector;
+    public Transform frontLeftDetector1;
 
     private Ray ray;
     private Ray rayRight;
@@ -39,7 +42,7 @@ public class NPCcarMovement : MonoBehaviour
 
     private void Start()
     {
-        //deleteTime = 60;
+        deleteTime = 60;
         rb = GetComponent<Rigidbody>();
         Transform[] pathTransform = Path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
@@ -91,14 +94,15 @@ public class NPCcarMovement : MonoBehaviour
             isRightRayClose = true;
             isLeftRayClose = false;
             isFrontRayClose = true;
-        }     
-        if (newSteer >5)
+        }
+
+        if (newSteer > 5)
         {
             isLeftRayClose = true;
             isRightRayClose = false;
             isFrontRayClose = true;
         }
-        else if(newSteer <5 && newSteer > -5)
+        else if (newSteer < 5 && newSteer > -5)
         {
             isFrontRayClose = false;
             isLeftRayClose = false;
@@ -157,8 +161,8 @@ public class NPCcarMovement : MonoBehaviour
     {
         if (!isFrontRayClose)
         {
-           ray = new Ray(frontDetector.position, frontDetector.forward); 
-           Debug.DrawLine(ray.origin, ray.origin + ray.direction * 10, Color.yellow);
+            ray = new Ray(frontDetector.position, frontDetector.forward);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 10, Color.yellow);
         }
 
         if (!isRightRayClose)
@@ -172,10 +176,16 @@ public class NPCcarMovement : MonoBehaviour
             rayLeft = new Ray(frontLeftDetector.position, frontLeftDetector.forward);
             Debug.DrawLine(rayLeft.origin, rayLeft.origin + rayLeft.direction * 5, Color.yellow);
         }
+
+        Ray rayRight1 = new Ray(frontRightDetector1.position, frontRightDetector1.forward);
+        Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 3, Color.yellow);
+        Ray rayLeft1 = new Ray(frontLeftDetector1.position, frontLeftDetector1.forward);
+        Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 3, Color.yellow);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10, layer) || Physics.Raycast(rayRight, out hit, 5, layer)|| Physics.Raycast(rayLeft, out hit, 5, layer))
+        if (Physics.Raycast(ray, out hit, 10, layer) || Physics.Raycast(rayRight, out hit, 5, layer) ||
+            Physics.Raycast(rayLeft, out hit, 5, layer) || Physics.Raycast(rayRight1, out hit, 3, layer) ||
+            Physics.Raycast(rayLeft1, out hit, 3, layer))
         {
-            print(hit.transform.name);
             isStop = true;
         }
         else
