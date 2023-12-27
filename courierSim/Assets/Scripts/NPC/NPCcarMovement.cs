@@ -16,8 +16,6 @@ public class NpcCarMovement : MonoBehaviour
     public bool isLeftRayClose;
     public WheelCollider wheelFl;
     public WheelCollider wheelFr;
-    public GameObject wheelFlObj;
-    public GameObject wheelFrObj;
 
     public List<Transform> nodes;
     public int currentNode = 0;
@@ -84,7 +82,6 @@ public class NpcCarMovement : MonoBehaviour
         {
             Drive();
         }
-
         if (isStop)
         {
             stop();
@@ -186,13 +183,13 @@ public class NpcCarMovement : MonoBehaviour
         }
 
         Ray rayRight1 = new Ray(frontRightDetector1.position, frontRightDetector1.forward);
-        Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 3, Color.yellow);
+        Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 8, Color.yellow);
         Ray rayLeft1 = new Ray(frontLeftDetector1.position, frontLeftDetector1.forward);
-        Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 3, Color.yellow);
+        Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 8, Color.yellow);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10, layer) || Physics.Raycast(rayRight, out hit, 5, layer) ||
-            Physics.Raycast(rayLeft, out hit, 5, layer) || Physics.Raycast(rayRight1, out hit, 3, layer) ||
-            Physics.Raycast(rayLeft1, out hit, 3, layer))
+            Physics.Raycast(rayLeft, out hit, 5, layer) || Physics.Raycast(rayRight1, out hit, 8, layer) ||
+            Physics.Raycast(rayLeft1, out hit, 8, layer))
         {
             if (hit.transform == this.transform)
             {
