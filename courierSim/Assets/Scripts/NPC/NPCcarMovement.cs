@@ -1,11 +1,5 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
-using TMPro;
-using UnityEngine.UI;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEngine.Serialization;
 
 public class NpcCarMovement : MonoBehaviour
 {
@@ -43,6 +37,7 @@ public class NpcCarMovement : MonoBehaviour
     private void Start()
     {
         deleteTime = 60;
+        Path = GetRandomElement(ways.instace.ways1).transform;
         rb = GetComponent<Rigidbody>();
         Transform[] pathTransform = Path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
@@ -52,6 +47,19 @@ public class NpcCarMovement : MonoBehaviour
             {
                 nodes.Add(pathTransform[i]);
             }
+        }
+    }
+
+    private T GetRandomElement<T>(T[] array)
+    {
+        if (array != null && array.Length > 0)
+        {
+            int randomIndex = Random.Range(0, array.Length);
+            return array[randomIndex];
+        }
+        else
+        {
+            return default(T);
         }
     }
 
@@ -186,7 +194,17 @@ public class NpcCarMovement : MonoBehaviour
             Physics.Raycast(rayLeft, out hit, 5, layer) || Physics.Raycast(rayRight1, out hit, 3, layer) ||
             Physics.Raycast(rayLeft1, out hit, 3, layer))
         {
-            isStop = true;
+            if (hit.transform == this.transform)
+            {
+               isStop = false;
+            }
+            else
+            {
+                     isStop = true;
+            }
+           
+            
+          
         }
         else
         {

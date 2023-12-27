@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd13b7031e9b54046b3e3ca86bc492d3, type: 3}
   m_Name: npcWay
   m_EditorClassIdentifier: 
-  way1: {fileID: 568700440435710148, guid: c93b50c5abd3ca148985006457944781, type: 3}
+  ways1:
+  - {fileID: 4245415704743197552, guid: c93b50c5abd3ca148985006457944781, type: 3}
+  - {fileID: 4942608985101197537, guid: fae3e4114523d7743867217e0d627ac5, type: 3}
+  - {fileID: 6219744886990784918, guid: e32d1a47ae086a849ba3d40ea64f1a6d, type: 3}
   car: {fileID: 6257612114972386048, guid: 7a47fd5160002df49a45f4f48ed1579b, type: 3}

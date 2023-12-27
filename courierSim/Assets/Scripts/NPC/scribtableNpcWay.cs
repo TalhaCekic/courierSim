@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "npcWay", menuName = "npc")]
 public class scribtableNpcWay : ScriptableObject
 {
-   public GameObject way1;
+   public Transform[] ways1;
    public GameObject car;
    
 }
