@@ -15,4 +15,7 @@ public class scribtableOrders :ScriptableObject
     public GameObject OrderPrefab;
     public GameObject deliverySelectedIU;
 
+    public GameObject BurgerOrderPrefabObj;
+    public GameObject PizzaOrderPrefabObj;
+
 }

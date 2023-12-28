@@ -203,26 +203,26 @@ public class NpcCarMovement : MonoBehaviour
         if (!isFrontRayClose)
         {
             ray = new Ray(frontDetector.position, frontDetector.forward);
-            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 8, Color.yellow);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 6, Color.yellow);
         }
 
         if (!isRightRayClose)
         {
             rayRight = new Ray(frontRightDetector.position, frontRightDetector.forward);
-            Debug.DrawLine(rayRight.origin, rayRight.origin + rayRight.direction * 5, Color.yellow);
+            Debug.DrawLine(rayRight.origin, rayRight.origin + rayRight.direction * 4, Color.yellow);
    
             rayRight1 = new Ray(frontRightDetector1.position, frontRightDetector1.forward);
-            Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 5, Color.yellow);
+            Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 4, Color.yellow);
             Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 4, Color.white);
         }
 
         if (!isLeftRayClose)
         {
             rayLeft = new Ray(frontLeftDetector.position, frontLeftDetector.forward);
-            Debug.DrawLine(rayLeft.origin, rayLeft.origin + rayLeft.direction * 5, Color.yellow);
+            Debug.DrawLine(rayLeft.origin, rayLeft.origin + rayLeft.direction * 4, Color.yellow);
      
             rayLeft1 = new Ray(frontLeftDetector1.position, frontLeftDetector1.forward);
-            Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 5, Color.yellow);
+            Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 4, Color.yellow);
             Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 4, Color.white);
         }
 
@@ -231,16 +231,14 @@ public class NpcCarMovement : MonoBehaviour
   
         rayRight2 = new Ray(rightDetector.position, rightDetector.forward);
         Debug.DrawLine(rayRight2.origin, rayRight2.origin + rayRight2.direction * 1, Color.white);
-      
-   
-
+        
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 8, layer) || Physics.Raycast(rayRight, out hit, 5, layer) ||
-            Physics.Raycast(rayLeft, out hit, 5, layer) || Physics.Raycast(rayRight1, out hit, 5, layer) ||
-            Physics.Raycast(rayLeft1, out hit, 5, layer) || Physics.Raycast(rayRight, out hit, 5, Backlayer) ||
-            Physics.Raycast(rayLeft, out hit, 5, Backlayer) ||
-            Physics.Raycast(rayLeft1, out hit, 5, Backlayer) || Physics.Raycast(rayRight1, out hit, 5, Backlayer) ||
-            Physics.Raycast(rayLeft1, out hit, 5, Backlayer) || Physics.Raycast(rayRight2, out hit, 1, Backlayer) ||
+        if (Physics.Raycast(ray, out hit, 6, layer) || Physics.Raycast(rayRight, out hit, 4, layer) ||
+            Physics.Raycast(rayLeft, out hit, 4, layer) || Physics.Raycast(rayRight1, out hit, 4, layer) ||
+            Physics.Raycast(rayLeft1, out hit, 4, layer) || Physics.Raycast(rayRight, out hit, 4, Backlayer) ||
+            Physics.Raycast(rayLeft, out hit, 4, Backlayer) ||
+            Physics.Raycast(rayLeft1, out hit, 4, Backlayer) || Physics.Raycast(rayRight1, out hit, 4, Backlayer) ||
+            Physics.Raycast(rayLeft1, out hit, 4, Backlayer) || Physics.Raycast(rayRight2, out hit, 1, Backlayer) ||
             Physics.Raycast(rayLeft2, out hit, 1, Backlayer))
         {
             if (hit.transform == this.transform)

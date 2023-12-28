@@ -12,6 +12,7 @@ public class interact : MonoBehaviour
 {
     public static interact instance;
     private spawnOrderObj orderObj;
+    public scribtableOrders ScribtableOrders;
     [SerializeField] public int maxDistance;
     private PlayerInput playerInput;
 
@@ -39,6 +40,7 @@ public class interact : MonoBehaviour
     public float lastResetTime = -1f;
 
     public GameObject[] orders;
+    public Transform hand;
 
     private void Awake()
     {
@@ -114,6 +116,7 @@ public class interact : MonoBehaviour
                     if (OrderManager.instance.isBurger && OrderManager.instance.isOrder)
                     {
                         isHasBurger = true;
+                        Instantiate(ScribtableOrders.BurgerOrderPrefabObj,hand.position,hand.rotation);
                     }
                 }
 
@@ -122,6 +125,7 @@ public class interact : MonoBehaviour
                     if (OrderManager.instance.isPizza && OrderManager.instance.isOrder)
                     {
                         isHasPizza = true;
+                        Instantiate(ScribtableOrders.PizzaOrderPrefabObj,hand.position,hand.rotation);
                     }
                 }
 
@@ -172,10 +176,8 @@ public class interact : MonoBehaviour
     }
     void DeleteFirstChild(Transform parent)
     {
-        // Eğer parent obje child'a sahipse ve en az bir child varsa
         if (parent.childCount > 0)
         {
-            // İlk child'ı bul ve sil
             Destroy(parent.GetChild(0).gameObject);
         }
         else
