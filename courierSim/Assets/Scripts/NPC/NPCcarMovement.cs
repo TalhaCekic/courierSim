@@ -27,15 +27,39 @@ public class NpcCarMovement : MonoBehaviour
     public Transform frontRightDetector1;
     public Transform frontLeftDetector;
     public Transform frontLeftDetector1;
+    public Transform LeftDetector;
+    public Transform rightDetector;
 
     private Ray ray;
     private Ray rayRight;
     private Ray rayLeft;
+    private Ray rayRight1;
+    private Ray rayLeft1;
+    private Ray rayRight2;
+    private Ray rayLeft2;
+
+    public int selectWayDec;
 
     private void Start()
     {
-        deleteTime = 60;
-        Path = GetRandomElement(ways.instace.ways1).transform;
+        deleteTime = 20;
+        if (selectWayDec == 1)
+        {
+            Path = GetRandomElement(ways.instace.ways1).transform;
+        }
+        if (selectWayDec == 2)
+        {
+            Path = GetRandomElement(ways.instace.ways2).transform;
+        }
+        if (selectWayDec == 3)
+        {
+            Path = GetRandomElement(ways.instace.ways3).transform;
+        }
+        if (selectWayDec == 4)
+        {
+            Path = GetRandomElement(ways.instace.ways4).transform;
+        }
+
         rb = GetComponent<Rigidbody>();
         Transform[] pathTransform = Path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
@@ -82,9 +106,23 @@ public class NpcCarMovement : MonoBehaviour
         {
             Drive();
         }
+
         if (isStop)
         {
             stop();
+        }
+        else
+        {
+            if (speed < 0)
+            {
+                isStop = true;
+                deleteTime -= Time.deltaTime;
+            }
+            else
+            {
+                deleteTime = 20;
+            }
+            
         }
     }
 
@@ -117,7 +155,6 @@ public class NpcCarMovement : MonoBehaviour
 
     private void Drive()
     {
-        deleteTime = 60;
         wheelFl.motorTorque = 30;
         wheelFr.motorTorque = 30;
         wheelFl.brakeTorque = 0;
@@ -126,7 +163,6 @@ public class NpcCarMovement : MonoBehaviour
 
     private void slowDrive()
     {
-        deleteTime = 60;
         wheelFl.motorTorque = 15;
         wheelFr.motorTorque = 15;
         wheelFl.brakeTorque = 0;
@@ -167,29 +203,45 @@ public class NpcCarMovement : MonoBehaviour
         if (!isFrontRayClose)
         {
             ray = new Ray(frontDetector.position, frontDetector.forward);
-            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 10, Color.yellow);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 8, Color.yellow);
         }
 
         if (!isRightRayClose)
         {
             rayRight = new Ray(frontRightDetector.position, frontRightDetector.forward);
             Debug.DrawLine(rayRight.origin, rayRight.origin + rayRight.direction * 5, Color.yellow);
+   
+            rayRight1 = new Ray(frontRightDetector1.position, frontRightDetector1.forward);
+            Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 5, Color.yellow);
+            Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 4, Color.white);
         }
 
         if (!isLeftRayClose)
         {
             rayLeft = new Ray(frontLeftDetector.position, frontLeftDetector.forward);
             Debug.DrawLine(rayLeft.origin, rayLeft.origin + rayLeft.direction * 5, Color.yellow);
+     
+            rayLeft1 = new Ray(frontLeftDetector1.position, frontLeftDetector1.forward);
+            Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 5, Color.yellow);
+            Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 4, Color.white);
         }
 
-        Ray rayRight1 = new Ray(frontRightDetector1.position, frontRightDetector1.forward);
-        Debug.DrawLine(rayRight1.origin, rayRight1.origin + rayRight1.direction * 8, Color.yellow);
-        Ray rayLeft1 = new Ray(frontLeftDetector1.position, frontLeftDetector1.forward);
-        Debug.DrawLine(rayLeft1.origin, rayLeft1.origin + rayLeft1.direction * 8, Color.yellow);
+        rayLeft2 = new Ray(LeftDetector.position, LeftDetector.forward);
+        Debug.DrawLine(rayLeft2.origin, rayLeft2.origin + rayLeft2.direction * 1, Color.white);
+  
+        rayRight2 = new Ray(rightDetector.position, rightDetector.forward);
+        Debug.DrawLine(rayRight2.origin, rayRight2.origin + rayRight2.direction * 1, Color.white);
+      
+   
+
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10, layer) || Physics.Raycast(rayRight, out hit, 5, layer) ||
-            Physics.Raycast(rayLeft, out hit, 5, layer) || Physics.Raycast(rayRight1, out hit, 8, layer) ||
-            Physics.Raycast(rayLeft1, out hit, 8, layer))
+        if (Physics.Raycast(ray, out hit, 8, layer) || Physics.Raycast(rayRight, out hit, 5, layer) ||
+            Physics.Raycast(rayLeft, out hit, 5, layer) || Physics.Raycast(rayRight1, out hit, 5, layer) ||
+            Physics.Raycast(rayLeft1, out hit, 5, layer) || Physics.Raycast(rayRight, out hit, 5, Backlayer) ||
+            Physics.Raycast(rayLeft, out hit, 5, Backlayer) ||
+            Physics.Raycast(rayLeft1, out hit, 5, Backlayer) || Physics.Raycast(rayRight1, out hit, 5, Backlayer) ||
+            Physics.Raycast(rayLeft1, out hit, 5, Backlayer) || Physics.Raycast(rayRight2, out hit, 1, Backlayer) ||
+            Physics.Raycast(rayLeft2, out hit, 1, Backlayer))
         {
             if (hit.transform == this.transform)
             {
