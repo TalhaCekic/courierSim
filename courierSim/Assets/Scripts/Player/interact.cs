@@ -70,9 +70,14 @@ public class interact : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
+        
         if (Physics.Raycast(ray, out hit, maxDistance, layers))
         {
             interactImage.color = Color.green;
+        }
+        if(Physics.Raycast(ray, out hit, maxDistance, putLayer))
+        {
+            interactImage.color = Color.red;
         }
         else if(Physics.Raycast(ray, out hit, maxDistance, Orderlayers) && !isHasPizza &&!isHasBurger)
         {
