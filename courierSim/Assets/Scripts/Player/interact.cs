@@ -11,6 +11,7 @@ using Image = UnityEngine.UI.Image;
 public class interact : MonoBehaviour
 {
     public static interact instance;
+    private Animator anims;
     private spawnOrderObj orderObj;
     public scribtableOrders ScribtableOrders;
     [SerializeField] public int maxDistance;
@@ -24,6 +25,9 @@ public class interact : MonoBehaviour
     public bool isHasBurger;
     public bool isHasPizza;
 
+    public LayerMask layers;
+    public LayerMask putLayer;
+    public LayerMask Orderlayers;
     public LayerMask CarLayer;
     public LayerMask CarBoxLayer;
     public LayerMask BurgerShop;
@@ -48,6 +52,7 @@ public class interact : MonoBehaviour
         instance = this;
         isMotor = false;
         cap = GetComponent<CapsuleCollider>();
+        anims = GetComponent<Animator>();
     }
 
     void Start()
@@ -65,9 +70,13 @@ public class interact : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, maxDistance))
+        if (Physics.Raycast(ray, out hit, maxDistance, layers))
         {
             interactImage.color = Color.green;
+        }
+        else if(Physics.Raycast(ray, out hit, maxDistance, Orderlayers) && !isHasPizza &&!isHasBurger)
+        {
+            interactImage.color = Color.white;
         }
         else
         {
@@ -113,19 +122,21 @@ public class interact : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop))
                 {
-                    if (OrderManager.instance.isBurger && OrderManager.instance.isOrder)
+                    if (OrderManager.instance.isBurger && OrderManager.instance.isOrder&& !isHasPizza && !isHasBurger)
                     {
                         isHasBurger = true;
-                        Instantiate(ScribtableOrders.BurgerOrderPrefabObj,hand.position,hand.rotation);
+                        Instantiate(ScribtableOrders.BurgerOrderPrefabObj,hand.position,hand.rotation, hand);
+                        anims.SetBool("hold",isHasBurger);
                     }
                 }
 
                 if (Physics.Raycast(ray, out hit, maxDistance, PizzaShop))
                 {
-                    if (OrderManager.instance.isPizza && OrderManager.instance.isOrder)
+                    if (OrderManager.instance.isPizza && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger)
                     {
                         isHasPizza = true;
-                        Instantiate(ScribtableOrders.PizzaOrderPrefabObj,hand.position,hand.rotation);
+                        Instantiate(ScribtableOrders.PizzaOrderPrefabObj,hand.position,hand.rotation,hand);
+                        anims.SetBool("hold",isHasPizza);
                     }
                 }
 
@@ -143,9 +154,9 @@ public class interact : MonoBehaviour
                                 {
                                     Destroy(orders[i]);
                                     orders[i] = null;
+                                    anims.SetBool("hold",false);
                                 }
                             }
-
                             OrderManager.instance.isOrderStart = false;
                             OrderManager.instance.isOrder = false;
                             OrderManager.instance.isSpawn = false;
@@ -187,6 +198,7 @@ public class interact : MonoBehaviour
     }
     public void itemInteract()
     {
+       
     }
 
     public void CameraChange(InputAction.CallbackContext context)
