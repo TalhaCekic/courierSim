@@ -1,13 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
-using PenButton = UnityEngine.InputSystem.PenButton;
 
 public class interact : MonoBehaviour
 {
@@ -72,8 +66,10 @@ public class interact : MonoBehaviour
 
     void Update()
     {
+        // imleç renkleri ayarı
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * 2, Color.red);
 
         if (Physics.Raycast(ray, out hit, maxDistance, layers))
         {
@@ -88,6 +84,7 @@ public class interact : MonoBehaviour
             interactImage.color = Color.black;
         }
 
+        // motor binince kamera eşitlemesi
         if (isMotor)
         {
             this.transform.transform.position = altObje2.transform.position;
@@ -121,13 +118,15 @@ public class interact : MonoBehaviour
 
             //order detayları
             orders = GameObject.FindGameObjectsWithTag("Order");
-            //eğer sipariş varsa
+
+            //eğer sipariş varsa gidip almak için
             if (OrderManager.instance.isOrderStart)
             {
                 if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop))
                 {
                     if (OrderManager.instance.isBurger && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger)
                     {
+                        print("burger spawnla");
                         isHasBurger = true;
                         Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
@@ -139,13 +138,13 @@ public class interact : MonoBehaviour
                 {
                     if (OrderManager.instance.isPizza && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger)
                     {
+                        print("pizza spawnla");
                         isHasPizza = true;
                         Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
                         anims.SetBool("hold", isHasPizza);
                     }
                 }
-
                 if (Physics.Raycast(ray, out hit, maxDistance, DeliveryPosition))
                 {
                     if (OrderManager.instance.isPizza ||
@@ -163,6 +162,7 @@ public class interact : MonoBehaviour
                                     anims.SetBool("hold", false);
                                 }
                             }
+
                             OrderManager.instance.isOrderStart = false;
                             OrderManager.instance.isOrder = false;
                             OrderManager.instance.isSpawn = false;
@@ -175,39 +175,53 @@ public class interact : MonoBehaviour
                 }
             }
 
+            // motor arkasındaki kutuya gönderilen işlem
             if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
             {
                 if (isBoxOpen)
                 {
-                    //isHasOrder.transform.SetParent(hit.transform.GetChild(0));
-                    motorPut MotorPut = hit.transform.GetComponent<motorPut>();
-                    if (isHasBurger)
+                    Transform putpos1 = hit.transform.GetChild(0);
+                    putPosition = putpos1.GetChild(0);
+                    if (isHasOrder == null)
                     {
-                         MotorPut.isBurger = isHasBurger; 
+                        print("siparişi geri al");
+                        putPosition.GetChild(0).transform.SetParent(hand.transform);
+                        putPosition.GetChild(0).transform.position = hand.transform.position;
+                        anims.SetBool("hold", true);
+                        isHasOrder = hand.GetChild(0).gameObject;
                     }
-                    if (isHasPizza)
+                    else if (isHasOrder != null)
                     {
-                        MotorPut.isPizza = isHasPizza;
+                        print("siparişi koy");
+                        isHasOrder.transform.SetParent(putpos1.GetChild(0));
+                        isHasOrder.transform.position = putpos1.GetChild(0).position;
+                        isHasOrder.transform.rotation = putpos1.GetChild(0).rotation;
+                        isHasOrder.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+                        isHasBurger = false;
+                        isHasPizza = false;
+                        anims.SetBool("hold", false);
+                        isHasOrder = null;
                     }
-                    isHasBurger = false;
-                    isHasPizza = false;
-                    anims.SetBool("hold", false);
-                    Destroy(isHasOrder);
                 }
             }
 
-            if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer) && isHasOrder != null)
-            {
-                motorPut MotorPut = hit.transform.GetComponent<motorPut>();
-                if (MotorPut.isBurger)
-                {
-                    Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
-                } 
-                if (MotorPut.isPizza)
-                {
-                    Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
-                }
-            }
+            // if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
+            // {
+            //     
+            //     if (isHasOrder != null)
+            //     {
+            //         motorPut MotorPut = hit.transform.GetComponent<motorPut>();
+            //         if (MotorPut.isBurger)
+            //         {
+            //             Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
+            //         }
+            //     
+            //         if (MotorPut.isPizza)
+            //         {
+            //             Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
+            //         } 
+            //     }
+            // }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 obj = hit.transform.gameObject;
