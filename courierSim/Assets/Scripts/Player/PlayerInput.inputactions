@@ -42,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "interact2",
+                    "type": "Button",
+                    "id": "7b3eeea4-cb8e-408f-a2db-d9aeb69bf584",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "cameraChange",
                     "type": "Button",
                     "id": "2167552a-fd90-46f0-8deb-68e3ef0e8a20",
@@ -311,6 +320,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "phone",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "20bbe727-14a9-4799-91f7-0751421c088d",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "interact2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

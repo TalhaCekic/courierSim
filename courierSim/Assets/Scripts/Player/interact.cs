@@ -28,7 +28,6 @@ public class interact : MonoBehaviour
     public bool isHasPizza;
 
     public LayerMask layers;
-    public LayerMask putLayer;
     public LayerMask Orderlayers;
     public LayerMask CarLayer;
     public LayerMask CarBoxLayer;
@@ -47,6 +46,7 @@ public class interact : MonoBehaviour
 
     public GameObject[] orders;
     public Transform hand;
+    public Transform putPosition;
 
     private void Awake()
     {
@@ -63,6 +63,8 @@ public class interact : MonoBehaviour
 
         playerInput.currentActionMap["interact"].Enable();
         playerInput.currentActionMap["interact"].performed += Interact;
+        playerInput.currentActionMap["interact2"].Enable();
+        playerInput.currentActionMap["interact2"].performed += Interact2;
 
         playerInput.currentActionMap["cameraChange"].Enable();
         playerInput.currentActionMap["cameraChange"].performed += CameraChange;
@@ -73,11 +75,7 @@ public class interact : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, maxDistance, putLayer))
-        {
-            interactImage.color = Color.red;
-        }
-        else if (Physics.Raycast(ray, out hit, maxDistance, layers))
+        if (Physics.Raycast(ray, out hit, maxDistance, layers))
         {
             interactImage.color = Color.green;
         }
@@ -165,7 +163,6 @@ public class interact : MonoBehaviour
                                     anims.SetBool("hold", false);
                                 }
                             }
-
                             OrderManager.instance.isOrderStart = false;
                             OrderManager.instance.isOrder = false;
                             OrderManager.instance.isSpawn = false;
@@ -178,22 +175,28 @@ public class interact : MonoBehaviour
                 }
             }
 
-            if (isHasBurger || isHasPizza)
+            // if (isHasBurger || isHasPizza)
+            // {
+            //     if (Physics.Raycast(ray, out hit, maxDistance, putLayer))
+            //     {
+            //         isHasOrder.transform.SetParent(hit.transform);
+            //         print(hit.transform.name);
+            //         isHasBurger = false;
+            //         isHasPizza = false;
+            //         anims.SetBool("hold", false);
+            //     }
+            // }
+
+            if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
             {
-                if (Physics.Raycast(ray, out hit, maxDistance, putLayer))
+                if (isBoxOpen)
                 {
                     isHasOrder.transform.SetParent(hit.transform);
-                    print("koy");
+                    print(hit.transform.name);
                     isHasBurger = false;
                     isHasPizza = false;
                     anims.SetBool("hold", false);
                 }
-            }
-
-
-            if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
-            {
-                isBoxOpen = !isBoxOpen;
             }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
@@ -204,6 +207,16 @@ public class interact : MonoBehaviour
                 this.transform.position = hit.transform.position;
                 isMotor = !isMotor;
             }
+        }
+    }
+
+    public void Interact2(InputAction.CallbackContext context)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
+        {
+            isBoxOpen = !isBoxOpen;
         }
     }
 
@@ -221,6 +234,7 @@ public class interact : MonoBehaviour
 
     public void itemInteract()
     {
+        
     }
 
     public void CameraChange(InputAction.CallbackContext context)
