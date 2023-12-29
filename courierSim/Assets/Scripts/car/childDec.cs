@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class childDec : MonoBehaviour
 {
-    public Transform childOrder;
+    //public Transform childOrder;
     void Start()
     {
         
@@ -13,6 +13,9 @@ public class childDec : MonoBehaviour
 
     void Update()
     {
+        this.transform.position = new Vector3(0, 0, 0);
+        print(this.transform.position);
+        this.transform.rotation =  Quaternion.Euler(0, 0, 0);
         // childOrder = this.transform.GetChild(0);
         //          print("alsana");
         // if (childOrder != null)
@@ -21,6 +24,6 @@ public class childDec : MonoBehaviour
         //     childOrder.transform.rotation =  Quaternion.Euler(0, 0, 0);
         //     childOrder.transform.localScale =  new Vector3(0,0,0);
         // }
-  
+
     }
 }

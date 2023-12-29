@@ -175,27 +175,37 @@ public class interact : MonoBehaviour
                 }
             }
 
-            // if (isHasBurger || isHasPizza)
-            // {
-            //     if (Physics.Raycast(ray, out hit, maxDistance, putLayer))
-            //     {
-            //         isHasOrder.transform.SetParent(hit.transform);
-            //         print(hit.transform.name);
-            //         isHasBurger = false;
-            //         isHasPizza = false;
-            //         anims.SetBool("hold", false);
-            //     }
-            // }
-
             if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
             {
                 if (isBoxOpen)
                 {
-                    isHasOrder.transform.SetParent(hit.transform);
-                    print(hit.transform.name);
+                    //isHasOrder.transform.SetParent(hit.transform.GetChild(0));
+                    motorPut MotorPut = hit.transform.GetComponent<motorPut>();
+                    if (isHasBurger)
+                    {
+                         MotorPut.isBurger = isHasBurger; 
+                    }
+                    if (isHasPizza)
+                    {
+                        MotorPut.isPizza = isHasPizza;
+                    }
                     isHasBurger = false;
                     isHasPizza = false;
                     anims.SetBool("hold", false);
+                    Destroy(isHasOrder);
+                }
+            }
+
+            if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer) && isHasOrder != null)
+            {
+                motorPut MotorPut = hit.transform.GetComponent<motorPut>();
+                if (MotorPut.isBurger)
+                {
+                    Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
+                } 
+                if (MotorPut.isPizza)
+                {
+                    Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
                 }
             }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
@@ -230,11 +240,6 @@ public class interact : MonoBehaviour
         {
             Debug.LogWarning("No child object to delete.");
         }
-    }
-
-    public void itemInteract()
-    {
-        
     }
 
     public void CameraChange(InputAction.CallbackContext context)
