@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class PizzaShop : MonoBehaviour
 {
+    public static PizzaShop instance;
     public GameObject selected;
+    public bool isSelect;
     void Start()
     {
+        instance = this;
         selected.SetActive(false);
     }
 
@@ -17,10 +20,12 @@ public class PizzaShop : MonoBehaviour
             if (!interact.instance.isHasPizza)
             {
                 selected.SetActive(true);
+                isSelect = false;
             }
             else
             {
                 selected.SetActive(false);
+                isSelect = true;
             }
         }
     }

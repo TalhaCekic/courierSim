@@ -122,10 +122,8 @@ public class NpcCarMovement : MonoBehaviour
             {
                 deleteTime = 20;
             }
-            
         }
     }
-
     private void ApplySteer()
     {
         Vector3 relativeVector = transform.InverseTransformPoint(nodes[currentNode].position);
