@@ -188,14 +188,16 @@ public class interact : MonoBehaviour
                         isHasOrder = hand.GetChild(0).gameObject;
                         isHasOrder.transform.position = hand.transform.position;
                         isHasOrder.transform.rotation = hand.transform.rotation;
+                        isHasOrder.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
                         anims.SetBool("hold", true);
                     }
                     else if (isHasOrder != null)
                     {
-                        isHasOrder.transform.SetParent(putpos1.GetChild(0));
-                        isHasOrder.transform.position = putpos1.GetChild(0).position;
-                        isHasOrder.transform.rotation = putpos1.GetChild(0).rotation;
+                        isHasOrder.transform.SetParent(putPosition);
+                        isHasOrder.transform.position = putPosition.position;
+                        isHasOrder.transform.rotation = putPosition.rotation;
                         isHasOrder.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+                        //isHasOrder.transform.localScale = putPosition.localScale;
                         isHasBurger = false;
                         isHasPizza = false;
                         anims.SetBool("hold", false);
@@ -224,7 +226,8 @@ public class interact : MonoBehaviour
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 obj = hit.transform.gameObject;
-                altObje = obj.transform.Find("Plane").gameObject;
+                //altObje = obj.transform.Find("Plane").gameObject;
+                altObje = hit.transform.GetChild(0).gameObject;
                 altObje2 = altObje.transform.Find("stay").gameObject;
                 this.transform.SetParent(hit.transform);
                 this.transform.position = hit.transform.position;

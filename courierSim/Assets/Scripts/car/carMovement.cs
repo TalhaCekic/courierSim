@@ -97,8 +97,6 @@ public class carMovement : MonoBehaviour
                 Camera.main.transform.rotation = rotation;
                 Camera.main.transform.position = position;
             }
- 
-
             speed = carRb.velocity.magnitude * 3.6f;
             speedText.text = Mathf.Round(speed) + " km/h";
         }
@@ -144,6 +142,16 @@ public class carMovement : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            foreach (var wheel in wheels)
+            {
+                if (wheel.axel == Axel.Rear)
+                {
+                    wheel.wheelCollider.motorTorque = 0;
+                }
+            }
+        }
     }
 
     void Steer()
@@ -175,6 +183,7 @@ public class carMovement : MonoBehaviour
                         Time.deltaTime * rotationSpeed);
                     stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
                         Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
+                    
                 }
                 
                 // hıza göre direksiyon sertliği
@@ -192,7 +201,6 @@ public class carMovement : MonoBehaviour
             {
                 wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
             }
-
             //   carLights.isBackLightOn = true;
             //   carLights.OperateBackLights();
         }
