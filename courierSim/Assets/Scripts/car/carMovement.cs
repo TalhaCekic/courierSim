@@ -97,6 +97,7 @@ public class carMovement : MonoBehaviour
                 Camera.main.transform.rotation = rotation;
                 Camera.main.transform.position = position;
             }
+
             speed = carRb.velocity.magnitude * 3.6f;
             speedText.text = Mathf.Round(speed) + " km/h";
         }
@@ -111,13 +112,11 @@ public class carMovement : MonoBehaviour
 
     public void MoveInput(float input)
     {
-        // if (!isLocalPlayer) return;
         moveInput = input;
     }
 
     public void SteerInput(float input)
     {
-        // if (!isLocalPlayer) return;
         steerInput = input;
     }
 
@@ -163,32 +162,35 @@ public class carMovement : MonoBehaviour
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
 
+
                 if (steerInput != 0)
                 {
                     rotationAmount = wheel.wheelCollider.steerAngle * 2f;
 
+                    Quaternion currentRotation = stay.transform.localRotation;
+                    float newZRotationValue = currentRotation.eulerAngles.z + rotationAmount / 2f;
                     streetWheel.transform.localRotation = Quaternion.Euler(0f, rotationAmount / 2, 0f);
                     fender.transform.localRotation = Quaternion.Euler(0f, rotationAmount / 2f, 0f);
                     stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
-                        Quaternion.Euler(0f, 0f, -rotationAmount / 2f), Time.deltaTime * rotationSpeed);
+                        Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y,
+                            -rotationAmount / 2f), Time.deltaTime * rotationSpeed);
                 }
                 else
                 {
                     Quaternion currentRotation = this.transform.rotation;
                     float zRotation = 0;
-
                     Quaternion newRotation = Quaternion.Euler(currentRotation.eulerAngles.x,
                         currentRotation.eulerAngles.y, zRotation);
+                    
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, newRotation,
                         Time.deltaTime * rotationSpeed);
-                    stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
-                        Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
-                    
+                    //stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
+                        //Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
                 }
-                
+
                 // hıza göre direksiyon sertliği
-                float speedLimit = 35;
-                maxSteerAngle = Mathf.Lerp(30, 15, Mathf.InverseLerp(0, speedLimit, speed));
+                float speedLimit = 40;
+                maxSteerAngle = Mathf.Lerp(20, 10, Mathf.InverseLerp(0, speedLimit, speed));
             }
         }
     }

@@ -17,7 +17,7 @@ public class BurgerShop : MonoBehaviour
     {
         if (OrderManager.instance.isBurger )
         {
-            if (!interact.instance.isHasBurger)
+            if (!interact.instance.isBurgerYes)
             {
                 selected.SetActive(true);
                 isSelect = false;

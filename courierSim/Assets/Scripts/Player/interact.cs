@@ -1,4 +1,6 @@
 using TMPro;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Image = UnityEngine.UI.Image;
@@ -19,7 +21,9 @@ public class interact : MonoBehaviour
 
     public GameObject isHasOrder;
     public bool isHasBurger;
+    public bool isBurgerYes;
     public bool isHasPizza;
+    public bool isPizzaYes;
 
     public LayerMask layers;
     public LayerMask Orderlayers;
@@ -28,6 +32,7 @@ public class interact : MonoBehaviour
     public LayerMask BurgerShop;
     public LayerMask PizzaShop;
     public LayerMask DeliveryPosition;
+    public LayerMask tresh;
     private CapsuleCollider cap;
     private GameObject obj;
     private GameObject altObje;
@@ -93,7 +98,7 @@ public class interact : MonoBehaviour
             speedText.gameObject.SetActive(true);
             if (!isChangeCameraPov)
             {
-                Camera.main.transform.SetParent(obj.transform);
+                Camera.main.transform.SetParent(altObje2.transform);
             }
         }
         else
@@ -124,31 +129,48 @@ public class interact : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop))
                 {
-                    if (OrderManager.instance.isBurger && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger)
+                    if (OrderManager.instance.isBurger && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger && !isBurgerYes)
                     {
-                        print("burger spawnla");
                         isHasBurger = true;
+                        isBurgerYes = true;
                         Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
                         anims.SetBool("hold", isHasBurger);
+
+                        // eldeki obje sayısını ayarlama
+                        int handCount = hand.childCount;
+                        for (handCount = 0; handCount > 1; handCount++)
+                        {
+                            Destroy(hand.GetChild(handCount));
+                            print("silme işlemi yap");
+                        }
                     }
                 }
 
                 if (Physics.Raycast(ray, out hit, maxDistance, PizzaShop))
                 {
-                    if (OrderManager.instance.isPizza && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger)
+                    if (OrderManager.instance.isPizza && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger && !isPizzaYes)
                     {
-                        print("pizza spawnla");
                         isHasPizza = true;
+                        isPizzaYes = true;
                         Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
                         anims.SetBool("hold", isHasPizza);
+                        
+                        // eldeki obje sayısını ayarlama
+                        int handCount = hand.childCount;
+                        for (handCount = 0; handCount > 1; handCount++)
+                        {
+                            Destroy(hand.GetChild(handCount));
+                            print("silme işlemi yap");
+                        }
                     }
                 }
+
                 if (Physics.Raycast(ray, out hit, maxDistance, DeliveryPosition))
                 {
                     if (OrderManager.instance.isPizza ||
-                        OrderManager.instance.isBurger && OrderManager.instance.isOrder)
+                        OrderManager.instance.isBurger && OrderManager.instance.isOrder && isHasBurger || isHasPizza)
                     {
                         if (OrderManager.instance.selectedDeliveryPosition.name == hit.transform.transform.name)
                         {
@@ -157,9 +179,17 @@ public class interact : MonoBehaviour
                             {
                                 if (orders[i] != null)
                                 {
+                                    Destroy(hand.GetChild(0).gameObject);
                                     Destroy(orders[i]);
+                                    isHasOrder = null;
+                                    
+                                    print(hand.GetChild(0));
                                     orders[i] = null;
                                     anims.SetBool("hold", false);
+                                    isBurgerYes = false;
+                                    isPizzaYes = false;
+                                    isHasPizza = false;
+                                    isHasBurger = false;
                                 }
                             }
 
@@ -180,26 +210,47 @@ public class interact : MonoBehaviour
             {
                 if (isBoxOpen)
                 {
-                    Transform putpos1 = hit.transform.GetChild(0);
-                    putPosition = putpos1.GetChild(0);
+                    putPosition = hit.transform.GetChild(0);
+                    motorPut MotorPut = hit.transform.GetComponent<motorPut>();
                     if (isHasOrder == null)
                     {
                         putPosition.GetChild(0).transform.SetParent(hand.transform);
                         isHasOrder = hand.GetChild(0).gameObject;
                         isHasOrder.transform.position = hand.transform.position;
                         isHasOrder.transform.rotation = hand.transform.rotation;
-                        isHasOrder.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+                        isHasOrder.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                         anims.SetBool("hold", true);
+
+                        if (MotorPut.isBurger)
+                        {
+                            isHasBurger = true;
+                            MotorPut.isBurger = false;
+                        }
+
+                        if (MotorPut.isPizza)
+                        {
+                            isHasPizza = true;
+                            MotorPut.isPizza = false;
+                        }
                     }
                     else if (isHasOrder != null)
                     {
                         isHasOrder.transform.SetParent(putPosition);
                         isHasOrder.transform.position = putPosition.position;
                         isHasOrder.transform.rotation = putPosition.rotation;
-                        isHasOrder.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
-                        //isHasOrder.transform.localScale = putPosition.localScale;
-                        isHasBurger = false;
-                        isHasPizza = false;
+                        isHasOrder.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                        if (isHasPizza)
+                        {
+                            MotorPut.isPizza = true;
+                            isHasPizza = false;
+                        }
+
+                        if (isHasBurger)
+                        {
+                            MotorPut.isBurger = true;
+                            isHasBurger = false;
+                        }
+
                         anims.SetBool("hold", false);
                         isHasOrder = null;
                     }
@@ -225,13 +276,16 @@ public class interact : MonoBehaviour
             // }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
-                obj = hit.transform.gameObject;
-                //altObje = obj.transform.Find("Plane").gameObject;
-                altObje = hit.transform.GetChild(0).gameObject;
-                altObje2 = altObje.transform.Find("stay").gameObject;
-                this.transform.SetParent(hit.transform);
-                this.transform.position = hit.transform.position;
-                isMotor = !isMotor;
+                if (!isHasPizza || !isHasBurger)
+                {
+                    obj = hit.transform.gameObject;
+                    //altObje = obj.transform.Find("Plane").gameObject;
+                    altObje = hit.transform.gameObject;
+                    altObje2 = altObje.transform.Find("stay").gameObject;
+                    this.transform.SetParent(hit.transform);
+                    this.transform.position = hit.transform.position;
+                    isMotor = !isMotor;
+                }
             }
         }
     }
