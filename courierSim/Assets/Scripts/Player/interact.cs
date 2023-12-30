@@ -184,15 +184,14 @@ public class interact : MonoBehaviour
                     putPosition = putpos1.GetChild(0);
                     if (isHasOrder == null)
                     {
-                        print("siparişi geri al");
                         putPosition.GetChild(0).transform.SetParent(hand.transform);
-                        putPosition.GetChild(0).transform.position = hand.transform.position;
-                        anims.SetBool("hold", true);
                         isHasOrder = hand.GetChild(0).gameObject;
+                        isHasOrder.transform.position = hand.transform.position;
+                        isHasOrder.transform.rotation = hand.transform.rotation;
+                        anims.SetBool("hold", true);
                     }
                     else if (isHasOrder != null)
                     {
-                        print("siparişi koy");
                         isHasOrder.transform.SetParent(putpos1.GetChild(0));
                         isHasOrder.transform.position = putpos1.GetChild(0).position;
                         isHasOrder.transform.rotation = putpos1.GetChild(0).rotation;
