@@ -14,6 +14,7 @@ public class carMovement : MonoBehaviour
     public GameObject fender;
     public GameObject stay;
     public TMP_Text speedText;
+    public bool isSkid;
 
     public enum ControlMode
     {
@@ -80,7 +81,7 @@ public class carMovement : MonoBehaviour
             GetInputs();
             AnimateWheels();
             WheelEffects();
-
+            skid();
             if (!interact.instance.isChangeCameraPov)
             {
                 // Rotate the camera based on player input
@@ -105,9 +106,23 @@ public class carMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        Move();
-        Steer();
-        Brake();
+        if (interact.instance.isMotor)
+        {
+            Move();
+            Steer();
+            Brake();
+           
+               skid(); 
+            
+        }
+        else
+        {
+            foreach (var wheel in wheels)
+            {
+                wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
+                wheel.wheelCollider.motorTorque = 0;
+            }
+        }
     }
 
     public void MoveInput(float input)
@@ -131,23 +146,26 @@ public class carMovement : MonoBehaviour
 
     void Move()
     {
-        if (speed < 55)
+        if (!isSkid)
         {
-            foreach (var wheel in wheels)
+            if (speed < 55)
             {
-                if (wheel.axel == Axel.Rear)
+                foreach (var wheel in wheels)
                 {
-                    wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+                    if (wheel.axel == Axel.Rear)
+                    {
+                        wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+                    }
                 }
             }
-        }
-        else
-        {
-            foreach (var wheel in wheels)
+            else
             {
-                if (wheel.axel == Axel.Rear)
+                foreach (var wheel in wheels)
                 {
-                    wheel.wheelCollider.motorTorque = 0;
+                    if (wheel.axel == Axel.Rear)
+                    {
+                        wheel.wheelCollider.motorTorque = 0;
+                    }
                 }
             }
         }
@@ -161,7 +179,6 @@ public class carMovement : MonoBehaviour
             {
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
-
 
                 if (steerInput != 0)
                 {
@@ -181,11 +198,11 @@ public class carMovement : MonoBehaviour
                     float zRotation = 0;
                     Quaternion newRotation = Quaternion.Euler(currentRotation.eulerAngles.x,
                         currentRotation.eulerAngles.y, zRotation);
-                    
+
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, newRotation,
                         Time.deltaTime * rotationSpeed);
                     //stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
-                        //Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
+                    //Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
                 }
 
                 // hıza göre direksiyon sertliği
@@ -197,23 +214,74 @@ public class carMovement : MonoBehaviour
 
     void Brake()
     {
-        if (Input.GetKey(KeyCode.S) && moveInput != 0)
+        if (!isSkid)
         {
+            if (Input.GetKey(KeyCode.S) && moveInput != 0)
+            {
+                foreach (var wheel in wheels)
+                {
+                    wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
+                }
+                //   carLights.isBackLightOn = true;
+                //   carLights.OperateBackLights();
+            }
+            else
+            {
+                foreach (var wheel in wheels)
+                {
+                    wheel.wheelCollider.brakeTorque = 0;
+                }
+                //   carLights.isBackLightOn = false;
+                //   carLights.OperateBackLights();
+            }
+        }
+    }
+
+    void skid()
+    {
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+        {
+            isSkid = true;
             foreach (var wheel in wheels)
             {
-                wheel.wheelCollider.brakeTorque = 300 * brakeAcceleration * Time.deltaTime;
+                if (wheel.axel == Axel.Front)
+                {
+                    wheel.wheelCollider.brakeTorque = 30000;
+                    print("freni :" + wheel.wheelCollider.brakeTorque);
+                }
+
+                if (wheel.axel == Axel.Rear)
+                {
+                    wheel.wheelCollider.motorTorque = 30000;
+                    wheel.wheelCollider.sidewaysFriction.stiffness.Equals(0);
+                    print("motor torku :" + wheel.wheelCollider.motorTorque);
+                }
             }
-            //   carLights.isBackLightOn = true;
-            //   carLights.OperateBackLights();
         }
         else
         {
+            isSkid = false;
             foreach (var wheel in wheels)
             {
-                wheel.wheelCollider.brakeTorque = 0;
+                if (wheel.axel == Axel.Front && moveInput ==0)
+                {
+                    wheel.wheelCollider.brakeTorque = 0;
+                    print("freni :" + wheel.wheelCollider.brakeTorque);
+                }
+
+                if (wheel.axel == Axel.Rear && moveInput ==0)
+                {
+                    wheel.wheelCollider.motorTorque = 0;
+                    wheel.wheelCollider.sidewaysFriction.stiffness.Equals(100);
+                    print("motor torku :" + wheel.wheelCollider.motorTorque);
+                }  
+                // else if (wheel.axel == Axel.Rear && moveInput !=0)
+                // {
+                //     //wheel.wheelCollider.motorTorque = 0;
+                //     wheel.wheelCollider.sidewaysFriction.stiffness.Equals(2);
+                //     //print("motor torku :" + wheel.wheelCollider.motorTorque);
+                // }
             }
-            //   carLights.isBackLightOn = false;
-            //   carLights.OperateBackLights();
         }
     }
 
