@@ -1,0 +1,181 @@
+{
+  "main": {
+    "id": "860464d4ab2da944",
+    "type": "split",
+    "children": [
+      {
+        "id": "e495a24cc7a46795",
+        "type": "tabs",
+        "dimension": 68.23863636363636,
+        "children": [
+          {
+            "id": "4b8d1eb0765cf904",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "CourierSim Canvas.canvas",
+                "viewState": {
+                  "x": -300,
+                  "y": -200,
+                  "zoom": -0.8811637704901496
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "937f68bea89bdced",
+        "type": "tabs",
+        "dimension": 31.761363636363637,
+        "children": [
+          {
+            "id": "741afe2963e933b5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CourierSim Text.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8e43270e2161b39d",
+    "type": "split",
+    "children": [
+      {
+        "id": "5dbe2967babfe146",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "514e5e39aec41a1e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "6c23cea2b91e2950",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "cbac7b00d480b3c1",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "a26d58b4b097b2ff",
+    "type": "split",
+    "children": [
+      {
+        "id": "e17f4ae8ec0ea547",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "87ab1d095da94859",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "CourierSim Canvas.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a380b164d2503227",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "CourierSim Canvas.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "258d5f2ba9047042",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "8383d842c04294a0",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "CourierSim Canvas.canvas"
+              }
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Hızlı geçişi aç": false,
+      "graph:Grafik görünümünü aç": false,
+      "canvas:Yeni tuval oluşturun": false,
+      "daily-notes:Bugünün Notunu Aç": false,
+      "templates:Şablon ekle": false,
+      "command-palette:Komut paletini aç": false
+    }
+  },
+  "active": "4b8d1eb0765cf904",
+  "lastOpenFiles": [
+    "2024-01-01.md",
+    "Başlıksız.canvas",
+    "Başlıksız 1.canvas",
+    "CourierSim Canvas.canvas",
+    "CourierSim Text.md"
+  ]
+}
