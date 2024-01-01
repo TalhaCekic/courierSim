@@ -247,14 +247,14 @@ public class carMovement : MonoBehaviour
                 if (wheel.axel == Axel.Front)
                 {
                     wheel.wheelCollider.brakeTorque = 30000;
-                    print("freni :" + wheel.wheelCollider.brakeTorque);
+                    //print("freni :" + wheel.wheelCollider.brakeTorque);
                 }
 
                 if (wheel.axel == Axel.Rear)
                 {
                     wheel.wheelCollider.motorTorque = 30000;
                     wheel.wheelCollider.sidewaysFriction.stiffness.Equals(0);
-                    print("motor torku :" + wheel.wheelCollider.motorTorque);
+                    //print("motor torku :" + wheel.wheelCollider.motorTorque);
                 }
             }
         }
@@ -266,14 +266,14 @@ public class carMovement : MonoBehaviour
                 if (wheel.axel == Axel.Front && moveInput ==0)
                 {
                     wheel.wheelCollider.brakeTorque = 0;
-                    print("freni :" + wheel.wheelCollider.brakeTorque);
+                    //print("freni :" + wheel.wheelCollider.brakeTorque);
                 }
 
                 if (wheel.axel == Axel.Rear && moveInput ==0)
                 {
                     wheel.wheelCollider.motorTorque = 0;
                     wheel.wheelCollider.sidewaysFriction.stiffness.Equals(100);
-                    print("motor torku :" + wheel.wheelCollider.motorTorque);
+                    //print("motor torku :" + wheel.wheelCollider.motorTorque);
                 }  
                 // else if (wheel.axel == Axel.Rear && moveInput !=0)
                 // {

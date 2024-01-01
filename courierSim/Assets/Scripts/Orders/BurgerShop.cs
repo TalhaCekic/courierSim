@@ -5,6 +5,7 @@ using UnityEngine;
 public class BurgerShop : MonoBehaviour
 {
     public static BurgerShop instance;
+    public Transform Target;
     public GameObject selected;
     public bool isSelect;
     void Start()
