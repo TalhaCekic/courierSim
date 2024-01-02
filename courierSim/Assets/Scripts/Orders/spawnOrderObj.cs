@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 
 public class spawnOrderObj : MonoBehaviour
 {
+    public static spawnOrderObj instance;
     public Image[] pp;
 
     public string CustomerName;
@@ -27,6 +28,7 @@ public class spawnOrderObj : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         orderSpawn();
     }
 

@@ -1,11 +1,10 @@
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 using Cursor = UnityEngine.Cursor;
 using Image = UnityEngine.UI.Image;
+using DG.Tweening;
 
 public class phoneMenu : MonoBehaviour
 {
@@ -30,6 +29,15 @@ public class phoneMenu : MonoBehaviour
     private GameObject mapCam;
     private GameObject cam;
 
+    public bool isTruePay;
+    public TMP_Text CashPriceText;
+    public TMP_Text truePriceText;
+    public GameObject targetBase;
+    public GameObject target1;
+    public int price;
+    
+    float scaleSpeed = 3f; // Geçen süre
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -50,27 +58,49 @@ public class phoneMenu : MonoBehaviour
     {
         Notification();
         phone();
+        priceSettings();
 
         if (!OrderManager.instance.isSearchingOrder && !OrderManager.instance.isOrder)
         {
             GoButton.gameObject.SetActive(true);
         }
 
-        mapCam.transform.position = new Vector3(this.transform.position.x,120,this.transform.position.z);
+        mapCam.transform.position = new Vector3(this.transform.position.x, 120, this.transform.position.z);
         if (interact.instance.isMotor)
         {
-            
         }
-        mapCam.transform.rotation = Quaternion.Euler(90,this.transform.rotation.eulerAngles.y,0);
+
+        mapCam.transform.rotation = Quaternion.Euler(90, this.transform.rotation.eulerAngles.y, 0);
 
         if (OrderManager.instance.isdelivery)
         {
             GoButton.gameObject.SetActive(true);
             isSubBar = false;
         }
-     
     }
-    
+
+    public void priceSettings()
+    {
+        CashPriceText.text = price.ToString();
+        if (isTruePay)
+        {
+            truePriceText.transform.localScale = Vector3.Lerp(Vector3.one,Vector3.zero,scaleSpeed);
+            print(truePriceText.transform.localScale);
+            truePriceText.gameObject.SetActive(true);
+            truePriceText.gameObject.transform.DOMove(target1.transform.position, 2).OnComplete(() =>
+            {
+                truePriceText.gameObject.transform.DOMove(targetBase.transform.position, 1);
+                isTruePay = false; 
+            });
+        }
+        else
+        {
+            //truePriceText.gameObject.SetActive(false);
+            truePriceText.transform.localScale = Vector3.zero;
+            print("kapalı");
+        }
+    }
+
     // telefon etkileşimi
     private void phone()
     {
@@ -103,6 +133,7 @@ public class phoneMenu : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
         }
+
         if (isSubBar)
         {
             subBarButtonObj.transform.localPosition = Vector3.Lerp(subBarButtonObj.transform.localPosition,
@@ -114,6 +145,7 @@ public class phoneMenu : MonoBehaviour
                 new Vector3(0, -250, 0), phoneLerpSpeed * Time.deltaTime);
         }
     }
+
     // notification ayarları 
     private void Notification()
     {
@@ -133,7 +165,6 @@ public class phoneMenu : MonoBehaviour
             notificationBackground.color = Color.green;
             notificationText.text = " sipariş bulundu ";
         }
-        
     }
 
     public void PhoneButton(InputAction.CallbackContext context)

@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4250361391582515803
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1003,7 +1003,6 @@ MonoBehaviour:
   OrderPrice: 0
   TipPrice: 0
   orderPriceText: {fileID: 1661189153178771549}
-  isOrderStart: 0
 --- !u!1 &5674053588166805150
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1238,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15040bfd532775e4eb9a66b439dd1435, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 38df072e49c08d24e8f5a5bc5bf08b25, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

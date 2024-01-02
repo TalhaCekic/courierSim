@@ -1,10 +1,7 @@
 using TMPro;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Image = UnityEngine.UI.Image;
-
 public class interact : MonoBehaviour
 {
     public static interact instance;
@@ -129,40 +126,25 @@ public class interact : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop))
                 {
-                    if (OrderManager.instance.isBurger && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger && !isBurgerYes)
+                    if (OrderManager.instance.isBurger && OrderManager.instance.isOrder && !isBurgerYes)
                     {
-                        isHasBurger = true;
-                        isBurgerYes = true;
                         Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
-                        anims.SetBool("hold", isHasBurger);
-
-                        // eldeki obje sayısını ayarlama
-                        int handCount = hand.childCount;
-                        for (handCount = 0; handCount > 1; handCount++)
-                        {
-                            Destroy(hand.GetChild(handCount));
-                            print("silme işlemi yap");
-                        }
+                        anims.SetBool("hold", true);
+                        isHasBurger = true;
+                        isBurgerYes = true;
                     }
                 }
 
                 if (Physics.Raycast(ray, out hit, maxDistance, PizzaShop))
                 {
-                    if (OrderManager.instance.isPizza && OrderManager.instance.isOrder && !isHasPizza && !isHasBurger && !isPizzaYes)
+                    if (OrderManager.instance.isPizza && OrderManager.instance.isOrder && !isPizzaYes)
                     {
-                        isHasPizza = true;
-                        isPizzaYes = true;
                         Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
-                        anims.SetBool("hold", isHasPizza);
-                        
-                        // eldeki obje sayısını ayarlama
-                        int handCount = hand.childCount;
-                        for (handCount = 0; handCount > 1; handCount++)
-                        {
-                            Destroy(hand.GetChild(handCount));
-                        }
+                        anims.SetBool("hold", true);
+                        isHasPizza = true;
+                        isPizzaYes = true;
                     }
                 }
 
@@ -178,10 +160,14 @@ public class interact : MonoBehaviour
                             {
                                 if (orders[i] != null)
                                 {
+                                    // teslim etme sonraso para kazanma
+                                    phoneMenu.instance.price += spawnOrderObj.instance.OrderPrice;
+                                    phoneMenu.instance.isTruePay = true;
+                                    
                                     Destroy(hand.GetChild(0).gameObject);
                                     Destroy(orders[i]);
                                     isHasOrder = null;
-                                    
+
                                     print(hand.GetChild(0));
                                     orders[i] = null;
                                     anims.SetBool("hold", false);
