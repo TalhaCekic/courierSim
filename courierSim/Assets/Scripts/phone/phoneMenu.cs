@@ -36,7 +36,7 @@ public class phoneMenu : MonoBehaviour
     public GameObject target1;
     public int price;
     
-    float scaleSpeed = 3f; // Geçen süre
+    float scaleSpeed = 1f; // Geçen süre
 
     private void Awake()
     {
@@ -82,14 +82,17 @@ public class phoneMenu : MonoBehaviour
     public void priceSettings()
     {
         CashPriceText.text = price.ToString();
+        truePriceText.text = OrderManager.instance.orderPrice.ToString();
         if (isTruePay)
         {
-            truePriceText.transform.localScale = Vector3.Lerp(Vector3.one,Vector3.zero,scaleSpeed);
+           // truePriceText.transform.localScale = new Vector3(1,1,1);
+            //truePriceText.transform.localScale = Vector3.Lerp(new Vector3(2,2,2),Vector3.zero,scaleSpeed);
             print(truePriceText.transform.localScale);
-            truePriceText.gameObject.SetActive(true);
-            truePriceText.gameObject.transform.DOMove(target1.transform.position, 2).OnComplete(() =>
+            truePriceText.gameObject.transform.DOMove(target1.transform.position, 3).OnComplete(() =>
             {
+                truePriceText.transform.localScale = Vector3.Lerp(Vector3.zero,new Vector3(2,2,2),scaleSpeed);
                 truePriceText.gameObject.transform.DOMove(targetBase.transform.position, 1);
+               // truePriceText.transform.localScale = Vector3.zero;
                 isTruePay = false; 
             });
         }
