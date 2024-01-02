@@ -35,7 +35,7 @@ public class phoneMenu : MonoBehaviour
     public GameObject targetBase;
     public GameObject target1;
     public int price;
-    
+
     float scaleSpeed = 1f; // Geçen süre
 
     private void Awake()
@@ -82,25 +82,20 @@ public class phoneMenu : MonoBehaviour
     public void priceSettings()
     {
         CashPriceText.text = price.ToString();
-        truePriceText.text = OrderManager.instance.orderPrice.ToString();
+        truePriceText.text = "+"+""+"$" + "" + OrderManager.instance.orderPrice.ToString();
         if (isTruePay)
         {
-           // truePriceText.transform.localScale = new Vector3(1,1,1);
-            //truePriceText.transform.localScale = Vector3.Lerp(new Vector3(2,2,2),Vector3.zero,scaleSpeed);
-            print(truePriceText.transform.localScale);
-            truePriceText.gameObject.transform.DOMove(target1.transform.position, 3).OnComplete(() =>
+            truePriceText.gameObject.SetActive(true);
+            truePriceText.gameObject.transform.DOMove(target1.transform.position, 10).OnComplete(() =>
             {
-                truePriceText.transform.localScale = Vector3.Lerp(Vector3.zero,new Vector3(2,2,2),scaleSpeed);
+                truePriceText.gameObject.SetActive(false);
                 truePriceText.gameObject.transform.DOMove(targetBase.transform.position, 1);
-               // truePriceText.transform.localScale = Vector3.zero;
-                isTruePay = false; 
+                isTruePay = false;
             });
         }
         else
         {
-            //truePriceText.gameObject.SetActive(false);
-            truePriceText.transform.localScale = Vector3.zero;
-            print("kapalı");
+            truePriceText.gameObject.SetActive(false);
         }
     }
 

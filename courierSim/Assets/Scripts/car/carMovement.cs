@@ -8,12 +8,15 @@ using Unity.VisualScripting;
 public class carMovement : MonoBehaviour
 {
     public float speed;
+    public float Topspeed;
     public float rotationSpeed = 10;
     public float rotationAmount;
     public GameObject streetWheel;
     public GameObject fender;
     public GameObject stay;
     public TMP_Text speedText;
+    public Slider speedSlider;
+    private ColorBlock colors;
     public bool isSkid;
 
     public enum ControlMode
@@ -101,6 +104,18 @@ public class carMovement : MonoBehaviour
 
             speed = carRb.velocity.magnitude * 3.6f;
             speedText.text = Mathf.Round(speed) + " km/h";
+            speedSlider.value = speed;
+            colors = speedSlider.colors;
+            if (speed + 5 > Topspeed)
+            {
+                colors.normalColor = new Color(179 / 255f, 87 / 2055f, 87 / 2055f);
+            }
+            else
+            {
+                colors.normalColor = Color.white;
+            }          
+            speedSlider.colors = colors;
+
         }
     }
 
@@ -111,9 +126,7 @@ public class carMovement : MonoBehaviour
             Move();
             Steer();
             Brake();
-           
-               skid(); 
-            
+            skid();
         }
         else
         {
@@ -148,7 +161,7 @@ public class carMovement : MonoBehaviour
     {
         if (!isSkid)
         {
-            if (speed < 55)
+            if (speed < Topspeed)
             {
                 foreach (var wheel in wheels)
                 {
@@ -201,8 +214,6 @@ public class carMovement : MonoBehaviour
 
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, newRotation,
                         Time.deltaTime * rotationSpeed);
-                    //stay.transform.localRotation = Quaternion.Lerp(stay.transform.localRotation,
-                    //Quaternion.Euler(0f, 0f, zRotation), Time.deltaTime * rotationSpeed);
                 }
 
                 // hıza göre direksiyon sertliği
@@ -247,14 +258,12 @@ public class carMovement : MonoBehaviour
                 if (wheel.axel == Axel.Front)
                 {
                     wheel.wheelCollider.brakeTorque = 30000;
-                    //print("freni :" + wheel.wheelCollider.brakeTorque);
                 }
 
                 if (wheel.axel == Axel.Rear)
                 {
                     wheel.wheelCollider.motorTorque = 30000;
                     wheel.wheelCollider.sidewaysFriction.stiffness.Equals(0);
-                    //print("motor torku :" + wheel.wheelCollider.motorTorque);
                 }
             }
         }
@@ -263,18 +272,18 @@ public class carMovement : MonoBehaviour
             isSkid = false;
             foreach (var wheel in wheels)
             {
-                if (wheel.axel == Axel.Front && moveInput ==0)
+                if (wheel.axel == Axel.Front && moveInput == 0)
                 {
                     wheel.wheelCollider.brakeTorque = 0;
                     //print("freni :" + wheel.wheelCollider.brakeTorque);
                 }
 
-                if (wheel.axel == Axel.Rear && moveInput ==0)
+                if (wheel.axel == Axel.Rear && moveInput == 0)
                 {
                     wheel.wheelCollider.motorTorque = 0;
                     wheel.wheelCollider.sidewaysFriction.stiffness.Equals(100);
                     //print("motor torku :" + wheel.wheelCollider.motorTorque);
-                }  
+                }
                 // else if (wheel.axel == Axel.Rear && moveInput !=0)
                 // {
                 //     //wheel.wheelCollider.motorTorque = 0;

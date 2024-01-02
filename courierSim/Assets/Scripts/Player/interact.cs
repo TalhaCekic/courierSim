@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 public class interact : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class interact : MonoBehaviour
     private GameObject altObje2;
 
     public TMP_Text speedText;
+    public Slider speedSlider;
 
     float resetDelay = 0.5f;
     public float lastResetTime = -1f;
@@ -93,6 +95,7 @@ public class interact : MonoBehaviour
             this.transform.transform.rotation = altObje2.transform.rotation;
             interactImage.gameObject.SetActive(false);
             speedText.gameObject.SetActive(true);
+            speedSlider.gameObject.SetActive(true);
             if (!isChangeCameraPov)
             {
                 Camera.main.transform.SetParent(altObje2.transform);
@@ -102,6 +105,7 @@ public class interact : MonoBehaviour
         {
             interactImage.gameObject.SetActive(true);
             speedText.gameObject.SetActive(false);
+            speedSlider.gameObject.SetActive(false);
         }
     }
 
@@ -168,7 +172,6 @@ public class interact : MonoBehaviour
                                     Destroy(orders[i]);
                                     isHasOrder = null;
 
-                                    print(hand.GetChild(0));
                                     orders[i] = null;
                                     anims.SetBool("hold", false);
                                     isBurgerYes = false;
