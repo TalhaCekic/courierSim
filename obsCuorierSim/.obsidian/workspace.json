@@ -6,7 +6,6 @@
       {
         "id": "e495a24cc7a46795",
         "type": "tabs",
-        "dimension": 68.23863636363636,
         "children": [
           {
             "id": "4b8d1eb0765cf904",
@@ -16,29 +15,10 @@
               "state": {
                 "file": "CourierSim Canvas.canvas",
                 "viewState": {
-                  "x": -300,
-                  "y": -200,
-                  "zoom": -0.8811637704901496
+                  "x": -218.9771307427153,
+                  "y": -261.74282333003265,
+                  "zoom": -0.3333333333333332
                 }
-              }
-            }
-          }
-        ]
-      },
-      {
-        "id": "937f68bea89bdced",
-        "type": "tabs",
-        "dimension": 31.761363636363637,
-        "children": [
-          {
-            "id": "741afe2963e933b5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CourierSim Text.md",
-                "mode": "source",
-                "source": false
               }
             }
           }
@@ -170,7 +150,7 @@
       "command-palette:Komut paletini aç": false
     }
   },
-  "active": "514e5e39aec41a1e",
+  "active": "4b8d1eb0765cf904",
   "lastOpenFiles": [
     "test",
     "2024-01-01.md",

@@ -162,7 +162,6 @@ public class interact : MonoBehaviour
                         for (handCount = 0; handCount > 1; handCount++)
                         {
                             Destroy(hand.GetChild(handCount));
-                            print("silme işlemi yap");
                         }
                     }
                 }
