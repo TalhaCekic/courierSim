@@ -15,8 +15,8 @@
               "state": {
                 "file": "CourierSim Canvas.canvas",
                 "viewState": {
-                  "x": -299.6120779359874,
-                  "y": -147.09000778959927,
+                  "x": -231.57634124166418,
+                  "y": -104.79469770388401,
                   "zoom": -0.3333333333333332
                 }
               }
@@ -72,7 +72,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 214.5
   },
   "right": {
     "id": "a26d58b4b097b2ff",

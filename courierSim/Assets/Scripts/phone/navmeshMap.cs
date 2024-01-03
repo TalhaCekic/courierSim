@@ -47,6 +47,7 @@ public class navmeshMap : MonoBehaviour
         }
         else
         {
+            target = null;
             lineRenderer.enabled = false;
         }
     }
