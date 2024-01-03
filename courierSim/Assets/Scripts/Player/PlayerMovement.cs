@@ -64,11 +64,11 @@ public class PlayerMovement : MonoBehaviour
             rb.useGravity = false;
             if (interact.instance.isChangeCameraPov)
             {
-                cameraRotation();
                 if (!phoneMenu.instance.isPhoneActive)
                 {
+                    cameraRotation();
                     Camera.main.transform.SetParent(headObj.transform);
-                    Camera.main.transform.localPosition = new Vector3(0, 0, 0);
+                    Camera.main.transform.localPosition = new Vector3(0, -0.5f, -0.1f);
                 }
             }
         }
@@ -156,32 +156,33 @@ public class PlayerMovement : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
         rotationX -= mouseY;
-        rotationX = Mathf.Clamp(rotationX, -90f, 90f);
+        rotationX = Mathf.Clamp(rotationX, -80, 80);
         rotationY -= mouseX;
         rotationY = Mathf.Clamp(rotationY, -90f, 90f);
 
         if (!interact.instance.isChangeCameraPov)
         {
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
-            transform.rotation *= Quaternion.Euler(0, mouseX, 0);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.rotation = Quaternion.Euler(0, -rotationY, 0);
         }
         else
         {
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
         }
+
+        // rotationX -= mouseY;
+        // rotationX = Mathf.Clamp(rotationX, -90f, 90f);
+        // rotationY -= mouseX;
+        // rotationY = Mathf.Clamp(rotationY, -90f, 90f);
+        //
+        // if (!interact.instance.isChangeCameraPov)
+        // {
+        //     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, rotationY, 0);
+        //     transform.localRotation *= Quaternion.Euler(0, mouseX, 0);
+        // }
+        // else
+        // {
+        //     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
+        // }
     }
-    // private void bend()
-    // {
-    //     if (Input.GetKey(KeyCode.LeftControl))
-    //     {
-    //         CharacterController.height = 1f;
-    //     }
-    //     else if (!Input.GetKey(KeyCode.LeftControl))
-    //     {
-    //         if (CharacterController.height >= 1f && CharacterController.height < 2.52f)
-    //         {
-    //             CharacterController.height += Time.deltaTime * 10;
-    //         }
-    //     }
-    // }
 }
