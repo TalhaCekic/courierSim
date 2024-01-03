@@ -19,15 +19,16 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-    
+
     private Camera playerCamera;
     private float rotationX = 0;
+    private float rotationY = 0;
 
     private Rigidbody rb;
 
-    public float distance = 5.0f; 
-    public float rotationSpeed = 5.0f; 
-    public float resetSpeed = 2.0f; 
+    public float distance = 5.0f;
+    public float rotationSpeed = 5.0f;
+    public float resetSpeed = 2.0f;
     public Vector2 rotationLimits = new Vector2(-80f, 80f);
 
     private void Start()
@@ -37,7 +38,6 @@ public class PlayerMovement : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         playerCamera = GetComponentInChildren<Camera>();
-       
     }
 
     void Update()
@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 cameraRotation();
             }
+
             this.transform.SetParent(null);
             anims.SetBool("drive", false);
             rb.useGravity = true;
@@ -61,15 +62,14 @@ public class PlayerMovement : MonoBehaviour
         {
             anims.SetBool("drive", interact.instance.isMotor);
             rb.useGravity = false;
-            if (interact.instance.isChangeCameraPov )
+            if (interact.instance.isChangeCameraPov)
             {
+                cameraRotation();
                 if (!phoneMenu.instance.isPhoneActive)
                 {
-                    cameraRotation();
                     Camera.main.transform.SetParent(headObj.transform);
                     Camera.main.transform.localPosition = new Vector3(0, 0, 0);
                 }
-        
             }
         }
     }
@@ -90,12 +90,11 @@ public class PlayerMovement : MonoBehaviour
         // Karakteri hareket ettir
         float targetSpeed = speed * Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
         Vector3 targetVelocity = move * targetSpeed;
-        velocity = Vector3.Lerp(velocity, targetVelocity,speed);
-       // float speedd = rb.velocity.magnitude * 3.6f;
-       // print(speedd); 
-       
+        velocity = Vector3.Lerp(velocity, targetVelocity, speed);
+
         // Zamana bağlı hareket
         transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
+
         //animasyon işlemleri
         if (x > 0 || z > 0 || x < 0 || z < 0)
         {
@@ -148,45 +147,6 @@ public class PlayerMovement : MonoBehaviour
             anims.SetBool("rightWalk", false);
             anims.SetBool("leftWalk", false);
         }
-
-        //zemin kontrolü
-        // if (isGround == false)
-        // {
-        //     Vector3 move = transform.right * x + transform.forward * z;
-        //     CharacterController.Move(move * 2 * Time.deltaTime);
-        // }
-        //
-        // if (isGround == true)
-        // {
-        //     Vector3 move = transform.right * x + transform.forward * z;
-        //     runSpeed = Mathf.Lerp(runSpeed, 1f, Time.deltaTime);
-        //     CharacterController.Move(move * runSpeed * Time.deltaTime);
-        //     CharacterController.Move(move * speed * Time.deltaTime);
-        //
-        //
-        //     if (Input.GetKey(KeyCode.LeftShift))
-        //     {
-        //         runSpeed = Mathf.Lerp(runSpeed, 1f, Time.deltaTime);
-        //         CharacterController.Move(move * (runSpeed += Time.deltaTime * 2) * Time.deltaTime);
-        //     }
-        //     else
-        //     {
-        //         runSpeed = 0;
-        //     }
-        // }
-        //
-        // if (isGround && velocity.y < 0)
-        // {
-        //     velocity.y = -2f;
-        // }
-        //
-        // if (Input.GetButtonDown("Jump") && isGround)
-        // {
-        //     velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        // }
-        //
-        // velocity.y += gravity * Time.deltaTime;
-        // CharacterController.Move(velocity * Time.deltaTime);
     }
 
     private void cameraRotation()
@@ -197,15 +157,18 @@ public class PlayerMovement : MonoBehaviour
 
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -90f, 90f);
+        rotationY -= mouseX;
+        rotationY = Mathf.Clamp(rotationY, -90f, 90f);
 
-        // Kamerayı döndür
-        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, mouseX, 0);
-
-        // Kamerayı döndür
-        // playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-        // transform.rotation *= Quaternion.Euler(0, mouseX, 0);
-
+        if (!interact.instance.isChangeCameraPov)
+        {
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
+            transform.rotation *= Quaternion.Euler(0, mouseX, 0);
+        }
+        else
+        {
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
+        }
     }
     // private void bend()
     // {
