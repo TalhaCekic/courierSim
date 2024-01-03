@@ -14,14 +14,12 @@ public class PlayerMovement : MonoBehaviour
     public Animator anims;
 
     Vector3 velocity;
-    public float gravity = -9f;
     public bool isGround;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-
-
+    
     private Camera playerCamera;
     private float rotationX = 0;
 
@@ -44,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // araç modu ayarları
         if (!interact.instance.isMotor)
         {
             Move();
@@ -60,8 +59,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // if(!isLocalPlayer)return;
-            
             anims.SetBool("drive", interact.instance.isMotor);
             rb.useGravity = false;
             if (interact.instance.isChangeCameraPov )
@@ -93,9 +90,10 @@ public class PlayerMovement : MonoBehaviour
         // Karakteri hareket ettir
         float targetSpeed = speed * Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
         Vector3 targetVelocity = move * targetSpeed;
-        velocity = Vector3.SmoothDamp(velocity, targetVelocity, ref velocity, 0.05f);
-
-
+        velocity = Vector3.Lerp(velocity, targetVelocity,speed);
+       // float speedd = rb.velocity.magnitude * 3.6f;
+       // print(speedd); 
+       
         // Zamana bağlı hareket
         transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
         //animasyon işlemleri
