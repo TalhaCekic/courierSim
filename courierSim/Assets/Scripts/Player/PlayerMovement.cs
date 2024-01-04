@@ -169,20 +169,5 @@ public class PlayerMovement : MonoBehaviour
         {
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
         }
-
-        // rotationX -= mouseY;
-        // rotationX = Mathf.Clamp(rotationX, -90f, 90f);
-        // rotationY -= mouseX;
-        // rotationY = Mathf.Clamp(rotationY, -90f, 90f);
-        //
-        // if (!interact.instance.isChangeCameraPov)
-        // {
-        //     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, rotationY, 0);
-        //     transform.localRotation *= Quaternion.Euler(0, mouseX, 0);
-        // }
-        // else
-        // {
-        //     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
-        // }
     }
 }
