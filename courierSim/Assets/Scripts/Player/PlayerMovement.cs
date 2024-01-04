@@ -158,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -80, 80);
         rotationY -= mouseX;
-        rotationY = Mathf.Clamp(rotationY, -90f, 90f);
+        
 
         if (!interact.instance.isChangeCameraPov)
         {
@@ -166,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, -rotationY, 0);
         }
         else
-        {
+        { rotationY = Mathf.Clamp(rotationY, -150, 150);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
         }
     }

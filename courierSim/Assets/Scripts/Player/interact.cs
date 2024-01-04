@@ -121,6 +121,10 @@ public class interact : MonoBehaviour
                 isMotor = false;
                 this.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
+            else
+            {
+                interact.instance.isChangeCameraPov = false;
+            }
 
             //order detayları
             orders = GameObject.FindGameObjectsWithTag("Order");
@@ -302,6 +306,9 @@ public class interact : MonoBehaviour
 
     public void CameraChange(InputAction.CallbackContext context)
     {
-        isChangeCameraPov = !isChangeCameraPov;
+        if (isMotor)
+        {
+            isChangeCameraPov = !isChangeCameraPov;
+        }
     }
 }
