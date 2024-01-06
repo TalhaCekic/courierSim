@@ -152,22 +152,22 @@ public class PlayerMovement : MonoBehaviour
     private void cameraRotation()
     {
         // Kamera hareketi
-        // float mouseX = Input.GetAxis("Mouse X") * sensitivity;
-        // float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
-        //
-        // rotationX -= mouseY;
-        // rotationX = Mathf.Clamp(rotationX, -80, 80);
-        // rotationY -= mouseX;
-        //
-        //
-        // if (!interact.instance.isChangeCameraPov)
-        // {
-        //     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-        //     transform.rotation = Quaternion.Euler(0, -rotationY, 0);
-        // }
-        // else
-        // { rotationY = Mathf.Clamp(rotationY, -150, 150);
-        //     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
-        // }
+        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+        
+        rotationX -= mouseY;
+        rotationX = Mathf.Clamp(rotationX, -80, 80);
+        rotationY -= mouseX;
+        
+        
+        if (!interact.instance.isChangeCameraPov)
+        {
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.rotation = Quaternion.Euler(0, -rotationY, 0);
+        }
+        else
+        { rotationY = Mathf.Clamp(rotationY, -150, 150);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, -rotationY, 0);
+        }
     }
 }

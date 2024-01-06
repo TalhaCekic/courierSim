@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
@@ -10,22 +8,23 @@ public class CamManager : MonoBehaviour
     void Start()
     {
         cinema = GetComponent<CinemachineFreeLook>();
-        //cinema.enabled = false;
+        cinema.enabled = false;
     }
 
     void Update()
     {
-        // if (interact.instance.isMotor)
-        // {
-        //    // Camera.main.transform.SetParent(null);
-        //     if (!interact.instance.isChangeCameraPov)
-        //     {
-        //         cinema.enabled = true;
-        //     }
-        //     else
-        //     {
-        //         cinema.enabled = false;
-        //     }
-        // }
+        this.transform.position = Vector3.zero;
+        if (interact.instance.isMotor)
+        {
+           // Camera.main.transform.SetParent(null);
+            if (!interact.instance.isChangeCameraPov)
+            {
+                cinema.enabled = true;
+            }
+            else
+            {
+                cinema.enabled = false;
+            }
+        }
     }
 }
