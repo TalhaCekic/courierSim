@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
             rb.useGravity = true;
 
             Camera.main.transform.SetParent(headObj.transform);
-            Camera.main.transform.localPosition = new Vector3(0, -0.5f, -0.1f);
+            Camera.main.transform.localPosition = new Vector3(0, 0, 0);
         }
         else
         {
@@ -70,6 +70,10 @@ public class PlayerMovement : MonoBehaviour
                     Camera.main.transform.SetParent(headObj.transform);
                     Camera.main.transform.localPosition = new Vector3(0, -0.5f, -0.1f);
                 }
+            }
+            else
+            {
+                Camera.main.transform.SetParent(null);
             }
         }
     }

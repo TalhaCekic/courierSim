@@ -1,37 +1,105 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    public Transform target;  
-    public Vector3 offset = new Vector3(0f, 3f, -7f);  
+    public Transform target;
+    public Vector3 offset = new Vector3(0f, 3f, -7f);
 
-    [Range(0.1f, 10.0f)]
     public float rotationSpeed = 5.0f;
-    [Range(0.1f, 10.0f)]
-    public float followSpeed = 5.0f;
+    //public float followSpeed = 5.0f;
 
-    private void LateUpdate()
+    public float sensitivity = 2.0f; // Fare hassasiyeti
+    private float currentX = 0.0f;
+    private float currentY = 0.0f;
+
+    public float restTime;
+    public bool isReset;
+    public bool currentReset;
+
+    public float lerpSpeed;
+
+    float mouseX;
+    float mouseY;
+    private Quaternion rotation;
+
+    private void FixedUpdate()
     {
         if (interact.instance.isMotor)
         {
-            if (target == null)
+            mouseX = Input.GetAxis("Mouse X") * sensitivity;
+            mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+
+            if (mouseX == 0 && isReset || mouseY == 0 && isReset)
             {
-                Debug.LogWarning("Araç atanmamış!");
-                return;
+                if (target == null)
+                {
+                    Debug.LogWarning("Araç atanmamış!");
+                    return;
+                }
+
+                float horizontalInput = Input.GetAxis("Horizontal");
+                float desiredRotationAngle = target.eulerAngles.y + horizontalInput * rotationSpeed;
+                rotation = Quaternion.Euler(0, desiredRotationAngle, 0);
+                
+                // Yumuşak geçiş için SmoothDamp kullanma
+                transform.position = Vector3.Lerp(transform.position, target.position , lerpSpeed);
+
+                transform.LookAt(target);
+                if (mouseX < 0 || mouseX > 0 && mouseY < 0 || mouseY > 0)
+                {
+                    isReset = false;
+                }
             }
+            else if (!isReset)
+            {
+                currentX += mouseX;
+                currentY -= mouseY;
+                rotation = Quaternion.Euler(currentY, currentX, 0);
+                Vector3 desiredPosition = target.position - (rotation * Vector3.forward + (rotation * offset));
 
-            // Aracın etrafında dönme
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float desiredRotationAngle = target.eulerAngles.y + horizontalInput * rotationSpeed;
-            Quaternion rotation = Quaternion.Euler(0, desiredRotationAngle, 0);
-            transform.position = Vector3.Lerp(transform.position, target.position - (rotation * offset),
-                followSpeed * Time.deltaTime);
+                transform.position = Vector3.Lerp(transform.position,  desiredPosition , 1);
+                //transform.position = desiredPosition;
 
-            // Kameranın araca bakmasını sağlama
-            transform.LookAt(target); 
+                transform.LookAt(target);
+                currentReset = true;
+
+                // süreyi sıfırla
+                if (mouseX < 0 || mouseX > 0 && mouseY < 0 || mouseY > 0)
+                {
+                    restTime = 5;
+                }
+            }
+            else
+            {
+                isReset = false;
+                currentReset = true;
+            }
         }
-    
+    }
+
+    private void Update()
+    {
+        if (interact.instance.isMotor)
+        {
+            //reset hesapları
+            if (currentReset)
+            {
+                isReset = false;
+                restTime -= Time.deltaTime;
+                if (restTime < 0)
+                {
+                    isReset = true;
+                    currentReset = false;
+                }
+            }
+            else
+            {
+                restTime = 5;
+                isReset = true;
+            }
+        }
     }
 }
