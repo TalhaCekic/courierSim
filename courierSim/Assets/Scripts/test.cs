@@ -41,11 +41,18 @@ public class test : MonoBehaviour
                 }
 
                 float horizontalInput = Input.GetAxis("Horizontal");
-                float desiredRotationAngle = target.eulerAngles.y + horizontalInput * rotationSpeed;
-                rotation = Quaternion.Euler(0, desiredRotationAngle, 0);
+                transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
+
+                // Aracın pozisyonunu takip etme
+                Vector3 targetPosition = target.position + target.TransformDirection(offset);
+                transform.position = Vector3.Lerp(transform.position, targetPosition, lerpSpeed);
                 
-                // Yumuşak geçiş için SmoothDamp kullanma
-                transform.position = Vector3.Lerp(transform.position, target.position , lerpSpeed);
+                // float horizontalInput = Input.GetAxis("Horizontal");
+                // float desiredRotationAngle = target.eulerAngles.y + horizontalInput * rotationSpeed;
+                // rotation = Quaternion.Euler(0, desiredRotationAngle, 0);
+                //
+                // // Yumuşak geçiş için SmoothDamp kullanma
+                // transform.position = Vector3.Lerp(transform.position, target.position , lerpSpeed *Time.deltaTime);
 
                 transform.LookAt(target);
                 if (mouseX < 0 || mouseX > 0 && mouseY < 0 || mouseY > 0)
@@ -56,7 +63,7 @@ public class test : MonoBehaviour
             else if (!isReset)
             {
                 currentX += mouseX;
-                currentY -= mouseY;
+                currentY += mouseY;
                 rotation = Quaternion.Euler(currentY, currentX, 0);
                 Vector3 desiredPosition = target.position - (rotation * Vector3.forward + (rotation * offset));
 
