@@ -85,46 +85,46 @@ public class carMovement : MonoBehaviour
             AnimateWheels();
             WheelEffects();
             skid();
-            if (!interact.instance.isChangeCameraPov)
-            {
-                currentX += Input.GetAxis("Mouse X") * rotationSpeed / 2;
-                currentY -= Input.GetAxis("Mouse Y") * rotationSpeed / 2;
-
-                currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
-
-                Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-                Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-                Vector3 position = rotation * negDistance + this.transform.position;
-
-                Camera.main.transform.rotation = rotation;
-                Camera.main.transform.position = position;
-                // if (phoneMenu.instance.isMapActive)
-                // {
-                //     currentX += Input.GetAxis("Mouse X") * rotationSpeed / 2;
-                //     currentY -= Input.GetAxis("Mouse Y") * rotationSpeed / 2;
-                //
-                //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
-                //
-                //     Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-                //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-                //     Vector3 position = rotation * negDistance + this.transform.position;
-                //
-                //     Camera.main.transform.rotation = rotation;
-                //     Camera.main.transform.position = position;
-                // }
-                // else
-                // {
-                //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
-                //     // Calculate rotation and position
-                //     //Quaternion rotation = Quaternion.Euler(5, 5, 0);
-                //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-                //     Vector3 position =   negDistance + this.transform.position;
-                //     
-                //     //Apply rotation and position to the camera
-                //     Camera.main.transform.rotation = Quaternion.Euler(10,0,0);
-                //     Camera.main.transform.position = new Vector3(0,this.transform.position.y+5,0);
-                // }
-            }
+            // if (!interact.instance.isChangeCameraPov)
+            // {
+            //     currentX += Input.GetAxis("Mouse X") * rotationSpeed / 2;
+            //     currentY -= Input.GetAxis("Mouse Y") * rotationSpeed / 2;
+            //
+            //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
+            //
+            //     Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+            //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+            //     Vector3 position = rotation * negDistance + this.transform.position;
+            //
+            //     Camera.main.transform.rotation = rotation;
+            //     Camera.main.transform.position = position;
+            //     // if (phoneMenu.instance.isMapActive)
+            //     // {
+            //     //     currentX += Input.GetAxis("Mouse X") * rotationSpeed / 2;
+            //     //     currentY -= Input.GetAxis("Mouse Y") * rotationSpeed / 2;
+            //     //
+            //     //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
+            //     //
+            //     //     Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+            //     //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+            //     //     Vector3 position = rotation * negDistance + this.transform.position;
+            //     //
+            //     //     Camera.main.transform.rotation = rotation;
+            //     //     Camera.main.transform.position = position;
+            //     // }
+            //     // else
+            //     // {
+            //     //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
+            //     //     // Calculate rotation and position
+            //     //     //Quaternion rotation = Quaternion.Euler(5, 5, 0);
+            //     //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+            //     //     Vector3 position =   negDistance + this.transform.position;
+            //     //     
+            //     //     //Apply rotation and position to the camera
+            //     //     Camera.main.transform.rotation = Quaternion.Euler(10,0,0);
+            //     //     Camera.main.transform.position = new Vector3(0,this.transform.position.y+5,0);
+            //     // }
+            // }
 
             speed = carRb.velocity.magnitude * 3.6f;
             speedText.text = Mathf.Round(speed) + " km/h";

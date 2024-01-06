@@ -877,6 +877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdecdea9ec1401243be32bb177d8dca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headObj: {fileID: 0}
   speed: 3
   jumpHeight: 2
   sensitivity: 1
@@ -887,6 +888,10 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  distance: 5
+  rotationSpeed: 5
+  resetSpeed: 2
+  rotationLimits: {x: -80, y: 80}
 --- !u!54 &4881894182536096813
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -949,12 +954,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a8c14430ac48094abceceb1dc7ce6c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScribtableOrders: {fileID: 0}
   maxDistance: 0
   interactImage: {fileID: 6706235280924315825}
   isMotor: 0
+  isBoxOpen: 0
+  isChangeCameraPov: 0
+  isHasOrder: {fileID: 0}
+  isHasBurger: 0
+  isBurgerYes: 0
+  isHasPizza: 0
+  isPizzaYes: 0
+  layers:
+    serializedVersion: 2
+    m_Bits: 0
+  Orderlayers:
+    serializedVersion: 2
+    m_Bits: 0
   CarLayer:
     serializedVersion: 2
     m_Bits: 64
+  CarBoxLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  BurgerShop:
+    serializedVersion: 2
+    m_Bits: 0
+  PizzaShop:
+    serializedVersion: 2
+    m_Bits: 0
+  DeliveryPosition:
+    serializedVersion: 2
+    m_Bits: 0
+  tresh:
+    serializedVersion: 2
+    m_Bits: 0
+  speedText: {fileID: 0}
+  speedSlider: {fileID: 0}
+  lastResetTime: -1
+  orders: []
+  hand: {fileID: 0}
+  putPosition: {fileID: 0}
 --- !u!114 &4308392531475506255
 MonoBehaviour:
   m_ObjectHideFlags: 0

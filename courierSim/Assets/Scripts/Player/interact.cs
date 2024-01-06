@@ -91,18 +91,19 @@ public class interact : MonoBehaviour
         // motor binince kamera eşitlemesi
         if (isMotor)
         {
-            this.transform.transform.position = altObje2.transform.position;
-            this.transform.transform.rotation = altObje2.transform.rotation;
+            // this.transform.transform.position = altObje2.transform.position;
+            // this.transform.transform.rotation = altObje2.transform.rotation;
             interactImage.gameObject.SetActive(false);
             speedText.gameObject.SetActive(true);
             speedSlider.gameObject.SetActive(true);
-            if (!isChangeCameraPov)
-            {
-                Camera.main.transform.SetParent(altObje2.transform);
-            }
+            // if (!isChangeCameraPov)
+            // {
+            //     Camera.main.transform.SetParent(altObje2.transform);
+            // }
         }
         else
         {
+           
             interactImage.gameObject.SetActive(true);
             speedText.gameObject.SetActive(false);
             speedSlider.gameObject.SetActive(false);
@@ -271,12 +272,16 @@ public class interact : MonoBehaviour
                 if (!isHasPizza || !isHasBurger)
                 {
                     obj = hit.transform.gameObject;
-                    //altObje = obj.transform.Find("Plane").gameObject;
                     altObje = hit.transform.gameObject;
                     altObje2 = altObje.transform.Find("stay").gameObject;
                     this.transform.SetParent(hit.transform);
                     this.transform.position = hit.transform.position;
+                    this.transform.rotation = hit.transform.rotation;
                     isMotor = !isMotor;
+                    // if (isMotor)
+                    // {
+                    //       Camera.main.transform.SetParent(null);
+                    // }
                 }
             }
         }
