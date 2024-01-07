@@ -25,7 +25,9 @@ public class dayManager : MonoBehaviour
     void Start()
     {
         instance = this;
-        hour = 08;
+        // hour = 08;
+        // minute = 00;
+        hour = 21;
         minute = 00;
     }
 
@@ -94,6 +96,10 @@ public class dayManager : MonoBehaviour
 
     private void DirectionLight()
     {
+        if (hour > 23 && minute == 60)
+        {
+            hour = 0;
+        }
         switch (hour)
         {
             case <6:
@@ -111,7 +117,7 @@ public class dayManager : MonoBehaviour
             case <22:
                 directionLight.transform.Rotate(Vector3.right, 0.7f * Time.deltaTime);
                 directionLight.intensity = 1;
-                break;   
+                return;   
         }
     }
 }
