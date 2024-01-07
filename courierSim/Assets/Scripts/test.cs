@@ -47,13 +47,6 @@ public class test : MonoBehaviour
                 Vector3 targetPosition = target.position + target.TransformDirection(offset);
                 transform.position = Vector3.Lerp(transform.position, targetPosition, lerpSpeed);
                 
-                // float horizontalInput = Input.GetAxis("Horizontal");
-                // float desiredRotationAngle = target.eulerAngles.y + horizontalInput * rotationSpeed;
-                // rotation = Quaternion.Euler(0, desiredRotationAngle, 0);
-                //
-                // // Yumuşak geçiş için SmoothDamp kullanma
-                // transform.position = Vector3.Lerp(transform.position, target.position , lerpSpeed *Time.deltaTime);
-
                 transform.LookAt(target);
                 if (mouseX < 0 || mouseX > 0 && mouseY < 0 || mouseY > 0)
                 {

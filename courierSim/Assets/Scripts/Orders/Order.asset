@@ -22,9 +22,6 @@ MonoBehaviour:
   order:
   - Burger
   - Pizza
-  BurgerPositionObj: {fileID: 0}
-  PizzaPositionObj: {fileID: 0}
-  DeliveryPositionObj: {fileID: 0}
   orderPrice: 0f00000012000000170000001d0000001e0000002300000025000000280000002c00000030000000
   tipPrice: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
   orderTimes: b4000000f00000002c01000068010000
@@ -32,7 +29,7 @@ MonoBehaviour:
     type: 3}
   deliverySelectedIU: {fileID: 7507315549290581269, guid: a390bacffa90df346b86742a8a831138,
     type: 3}
-  BurgerOrderPrefabObj: {fileID: 819508841809106005, guid: 22582b39930fb7f429942d71055c2105,
+  BurgerOrderPrefabObj: {fileID: 919132149155446097, guid: 4ddb8963b0b8e8f47bb032f4315454f4,
     type: 3}
   PizzaOrderPrefabObj: {fileID: 8064836491523756446, guid: dc2a0e6e67f4a6744a75f84ba96477d9,
     type: 3}

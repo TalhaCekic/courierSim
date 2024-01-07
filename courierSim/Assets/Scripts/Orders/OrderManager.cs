@@ -67,7 +67,12 @@ public class OrderManager : MonoBehaviour
                 spawnOrderPosition();
             }
         }
-
+        if(!isOrder)
+        {
+            Order = null;
+            orderName = null;
+            selectedDeliveryPosition = null;
+        }
         if (!isOrder && isdelivery)
         {
             isBurger = false;

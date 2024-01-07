@@ -5,9 +5,6 @@ public class scribtableOrders :ScriptableObject
 {
     public string[] CustomerNames;
     public string[] order;
-    public GameObject BurgerPositionObj;
-    public GameObject PizzaPositionObj;
-    public GameObject DeliveryPositionObj;
     public int[] orderPrice;
     public int[] tipPrice;
     public int[] orderTimes;

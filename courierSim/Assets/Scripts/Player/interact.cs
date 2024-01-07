@@ -1,8 +1,12 @@
+using System.Diagnostics.Tracing;
 using TMPro;
+using Unity.Mathematics;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
+
 public class interact : MonoBehaviour
 {
     public static interact instance;
@@ -11,6 +15,8 @@ public class interact : MonoBehaviour
     public scribtableOrders ScribtableOrders;
     [SerializeField] public int maxDistance;
     private PlayerInput playerInput;
+
+    public TMP_Text KeyInputText;
 
     public Image interactImage;
     public bool isMotor;
@@ -30,7 +36,7 @@ public class interact : MonoBehaviour
     public LayerMask BurgerShop;
     public LayerMask PizzaShop;
     public LayerMask DeliveryPosition;
-    public LayerMask tresh;
+    public LayerMask trash;
     private CapsuleCollider cap;
     private GameObject obj;
     private GameObject altObje;
@@ -70,43 +76,35 @@ public class interact : MonoBehaviour
 
     void Update()
     {
-        // imleç renkleri ayarı
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        RaycastHit hit;
-        Debug.DrawLine(ray.origin, ray.origin + ray.direction * 2, Color.red);
-
-        if (Physics.Raycast(ray, out hit, maxDistance, layers))
-        {
-            interactImage.color = Color.green;
-        }
-        else if (Physics.Raycast(ray, out hit, maxDistance, Orderlayers) && !isHasPizza && !isHasBurger)
-        {
-            interactImage.color = Color.white;
-        }
-        else
-        {
-            interactImage.color = Color.black;
-        }
-
+        keyInteract();
         // motor binince kamera eşitlemesi
         if (isMotor)
         {
-            // this.transform.transform.position = altObje2.transform.position;
-            // this.transform.transform.rotation = altObje2.transform.rotation;
+            this.transform.transform.position = altObje2.transform.position;
+            this.transform.transform.rotation = altObje2.transform.rotation;
             interactImage.gameObject.SetActive(false);
             speedText.gameObject.SetActive(true);
             speedSlider.gameObject.SetActive(true);
-            // if (!isChangeCameraPov)
-            // {
-            //     Camera.main.transform.SetParent(altObje2.transform);
-            // }
+            if (isChangeCameraPov)
+            {
+                Camera.main.transform.SetParent(altObje2.transform);
+            }
         }
         else
         {
-           
             interactImage.gameObject.SetActive(true);
             speedText.gameObject.SetActive(false);
             speedSlider.gameObject.SetActive(false);
+        }
+
+        if (isHasBurger || isHasPizza)
+        {
+            anims.SetBool("hold", true);
+        }
+        else
+        {
+            anims.SetBool("hold", false);
+            ;
         }
     }
 
@@ -137,9 +135,10 @@ public class interact : MonoBehaviour
                 {
                     if (OrderManager.instance.isBurger && OrderManager.instance.isOrder && !isBurgerYes)
                     {
-                        Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
+                        Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
-                        anims.SetBool("hold", true);
+                        isHasOrder.transform.localPosition = new Vector3(-0.361f, 0.099f, 0.014f);
+                        isHasOrder.transform.localRotation = Quaternion.Euler(-30.133f, -83.883f, 141.323f);
                         isHasBurger = true;
                         isBurgerYes = true;
                     }
@@ -151,7 +150,8 @@ public class interact : MonoBehaviour
                     {
                         Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
-                        anims.SetBool("hold", true);
+                        //isHasOrder.transform.localPosition = new Vector3(-0.361f, 0.099f, 0.014f);
+                        //isHasOrder.transform.localRotation = Quaternion.Euler(-30.133f, -83.883f, 141.323f);
                         isHasPizza = true;
                         isPizzaYes = true;
                     }
@@ -172,13 +172,11 @@ public class interact : MonoBehaviour
                                     // teslim etme sonraso para kazanma
                                     phoneMenu.instance.price += spawnOrderObj.instance.OrderPrice;
                                     phoneMenu.instance.isTruePay = true;
-                                    
                                     Destroy(hand.GetChild(0).gameObject);
                                     Destroy(orders[i]);
                                     isHasOrder = null;
 
                                     orders[i] = null;
-                                    anims.SetBool("hold", false);
                                     isBurgerYes = false;
                                     isPizzaYes = false;
                                     isHasPizza = false;
@@ -209,9 +207,8 @@ public class interact : MonoBehaviour
                     {
                         putPosition.GetChild(0).transform.SetParent(hand.transform);
                         isHasOrder = hand.GetChild(0).gameObject;
-                        isHasOrder.transform.position = hand.transform.position;
-                        isHasOrder.transform.rotation = hand.transform.rotation;
-                        isHasOrder.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                        isHasOrder.transform.localPosition = new Vector3(-0.361f, 0.099f, 0.014f);
+                        isHasOrder.transform.localRotation = Quaternion.Euler(-30.133f, -83.883f, 141.323f);
                         anims.SetBool("hold", true);
 
                         if (MotorPut.isBurger)
@@ -229,9 +226,8 @@ public class interact : MonoBehaviour
                     else if (isHasOrder != null)
                     {
                         isHasOrder.transform.SetParent(putPosition);
-                        isHasOrder.transform.position = putPosition.position;
-                        isHasOrder.transform.rotation = putPosition.rotation;
-                        isHasOrder.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                        isHasOrder.transform.localPosition = new Vector3(0, 0, 0.1f);
+                        isHasOrder.transform.localRotation = Quaternion.Euler(0, 0, 180);
                         if (isHasPizza)
                         {
                             MotorPut.isPizza = true;
@@ -249,24 +245,6 @@ public class interact : MonoBehaviour
                     }
                 }
             }
-
-            // if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
-            // {
-            //     
-            //     if (isHasOrder != null)
-            //     {
-            //         motorPut MotorPut = hit.transform.GetComponent<motorPut>();
-            //         if (MotorPut.isBurger)
-            //         {
-            //             Instantiate(ScribtableOrders.BurgerOrderPrefabObj, hand.position, hand.rotation, hand);
-            //         }
-            //     
-            //         if (MotorPut.isPizza)
-            //         {
-            //             Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
-            //         } 
-            //     }
-            // }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 if (!isHasPizza || !isHasBurger)
@@ -278,11 +256,38 @@ public class interact : MonoBehaviour
                     this.transform.position = hit.transform.position;
                     this.transform.rotation = hit.transform.rotation;
                     isMotor = !isMotor;
-                    // if (isMotor)
-                    // {
-                    //       Camera.main.transform.SetParent(null);
-                    // }
                 }
+            }
+
+            if (Physics.Raycast(ray, out hit, maxDistance, trash))
+            {
+                Destroyer();
+                //     DeleteFirstChild(hit.transform);
+                //     Destroy(hand.GetChild(0).gameObject);
+                //     for (int i = 0; i < orders.Length; i++)
+                //     {
+                //         if (orders[i] != null)
+                //         {
+                //             
+                //             Destroy(orders[i]);
+                //             isHasOrder = null;
+                //
+                //             orders[i] = null;
+                //             isBurgerYes = false;
+                //             isPizzaYes = false;
+                //             isHasPizza = false;
+                //             isHasBurger = false;
+                //         }
+                //     }
+                //
+                //     OrderManager.instance.isOrderStart = false;
+                //     OrderManager.instance.isOrder = false;
+                //     OrderManager.instance.isSpawn = false;
+                //     OrderManager.instance.isBurger = false;
+                //     OrderManager.instance.isPizza = false;
+                //     OrderManager.instance.isSearchingOrder = false;
+                //     OrderManager.instance.isdelivery = true;
+                // }
             }
         }
     }
@@ -314,6 +319,124 @@ public class interact : MonoBehaviour
         if (isMotor)
         {
             isChangeCameraPov = !isChangeCameraPov;
+        }
+    }
+
+    public void Destroyer()
+    {
+        //DeleteFirstChild(hit.transform);
+        if (isHasBurger || isHasPizza)
+        {
+            Destroy(hand.GetChild(0).gameObject);
+        }
+
+        for (int i = 0; i < orders.Length; i++)
+        {
+            if (orders[i] != null)
+            {
+                Destroy(orders[i]);
+                isHasOrder = null;
+
+                orders[i] = null;
+                isBurgerYes = false;
+                isPizzaYes = false;
+                isHasPizza = false;
+                isHasBurger = false;
+            }
+        }
+
+        OrderManager.instance.isOrderStart = false;
+        OrderManager.instance.isOrder = false;
+        OrderManager.instance.isSpawn = false;
+        OrderManager.instance.isBurger = false;
+        OrderManager.instance.isPizza = false;
+        OrderManager.instance.isSearchingOrder = false;
+        OrderManager.instance.isdelivery = true;
+    }
+
+
+    // İNPUT TEXTE YAZDIRMAK İÇİN:
+    private void keyInteract()
+    {
+        // imleç renkleri ayarı
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        RaycastHit hit;
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * 2, Color.red);
+
+        if (Physics.Raycast(ray, out hit, maxDistance, layers))
+        {
+            interactImage.color = Color.green;
+        }
+        else
+        {
+            interactImage.color = Color.black;
+        }
+
+        if (OrderManager.instance.isOrderStart)
+        {
+            if (Physics.Raycast(ray, out hit, maxDistance, BurgerShop) && !isBurgerYes && !isHasBurger ||
+                Physics.Raycast(ray, out hit, maxDistance, PizzaShop) && !isBurgerYes && !isHasPizza)
+            {
+                KeyInputText.text = " Siparişi almak için 'E' Tuşuna Bas. ";
+                KeyInputText.color = Color.white;
+                interactImage.color = Color.white;
+            }
+
+            if (Physics.Raycast(ray, out hit, maxDistance, DeliveryPosition))
+            {
+                if (OrderManager.instance.selectedDeliveryPosition.name == hit.transform.transform.name)
+                {
+                    KeyInputText.text = " Siparişi Teslim etmek için 'E' Tuşuna Bas. ";
+                    KeyInputText.color = Color.green;
+                    interactImage.color = Color.green;
+                }
+                else
+                {
+                    KeyInputText.text = " Yanlış Adres ";
+                    KeyInputText.color = Color.red;
+                    interactImage.color = Color.red;
+                }
+            }
+
+            if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
+            {
+                KeyInputText.text = " Sepeti Açıp Kapatmak için 'F' Tuşuna Bas. ";
+                KeyInputText.color = Color.white;
+                interactImage.color = Color.white;
+            }
+            else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
+            {
+                KeyInputText.text = " Motora Binmek için 'E' Tuşuna Bas. ";
+                KeyInputText.color = Color.white;
+                interactImage.color = Color.white;
+            }
+            else if (!Physics.Raycast(ray, out hit, maxDistance, CarLayer) &&
+                     !Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer) &&
+                     !Physics.Raycast(ray, out hit, maxDistance, DeliveryPosition) &&
+                     !Physics.Raycast(ray, out hit, maxDistance, BurgerShop) &&
+                     !Physics.Raycast(ray, out hit, maxDistance, PizzaShop))
+            {
+                KeyInputText.text = " ";
+            }
+        }
+        else
+        {
+            if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
+            {
+                KeyInputText.text = " Sepeti Açıp Kapatmak için 'F' Tuşuna Bas. ";
+                KeyInputText.color = Color.white;
+                interactImage.color = Color.white;
+            }
+            else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
+            {
+                KeyInputText.text = " Motora Binmek için 'E' Tuşuna Bas. ";
+                KeyInputText.color = Color.white;
+                interactImage.color = Color.white;
+            }
+            else
+            {
+                KeyInputText.text = " ";
+            }
         }
     }
 }

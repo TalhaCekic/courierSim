@@ -24,12 +24,15 @@ public class spawnOrderObj : MonoBehaviour
     public int OrderPrice;
     public int TipPrice;
     public TMP_Text orderPriceText;
-    
+
+    public float selectionTime;
 
     void Start()
     {
         instance = this;
+        selectionTime = 15;
         orderSpawn();
+        timeSlider.maxValue = selectionTime;
     }
 
     private void Update()
@@ -45,6 +48,20 @@ public class spawnOrderObj : MonoBehaviour
             else
             {
                 acceptOrderImage.color = Color.green;
+            }
+            timeSlider.maxValue = SelectedOrderTime;
+            timeSlider.value = orderTime;
+        }
+        else
+        {
+            selectionTime -= Time.deltaTime;
+            //print(selectionTime);
+            timeSlider.value = selectionTime;
+            timeSlider.maxValue = 15;
+            if (selectionTime <= 0)
+            {
+                interact.instance.Destroyer();
+                Destroy(this.gameObject);
             }
         }
     }
@@ -70,11 +87,10 @@ public class spawnOrderObj : MonoBehaviour
         TipPrice = OrderManager.instance.tipPrice;
         orderPriceText.text = "$ " + OrderPrice.ToString();
         
+        
         // sipariş süresi seçimi
         SelectedOrderTime = OrderManager.instance.orderTime;
         orderTime = SelectedOrderTime;
-        timeSlider.maxValue = orderTime;
-        timeSlider.value = orderTime;
         orderTimeText.text = SelectedOrderTime.ToString() + " Second";
     }
     //randomize aray sistemi

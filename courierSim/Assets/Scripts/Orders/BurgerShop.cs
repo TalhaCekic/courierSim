@@ -29,5 +29,10 @@ public class BurgerShop : MonoBehaviour
                 isSelect = true;
             }
         }
+        else
+        {
+            selected.SetActive(false);
+            isSelect = false;
+        }
     }
 }
