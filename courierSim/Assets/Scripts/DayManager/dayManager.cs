@@ -96,16 +96,22 @@ public class dayManager : MonoBehaviour
     {
         switch (hour)
         {
+            case <6:
+                directionLight.transform.Rotate(Vector3.right, 0 * Time.deltaTime);
+                directionLight.intensity = 0;
+                break;
             case <12:
                 directionLight.transform.Rotate(Vector3.right, 0.7f * Time.deltaTime);
+                directionLight.intensity = 1.5f;
                 break;
-            case >18:
+            case <18:
+                directionLight.transform.Rotate(Vector3.right, 0 * Time.deltaTime);
+                directionLight.intensity = 1;
+                break;
+            case <22:
                 directionLight.transform.Rotate(Vector3.right, 0.7f * Time.deltaTime);
-                break; 
-            // case >22:
-            //     directionLight.transform.Rotate(Vector3.right, 0.7f * Time.deltaTime);
-            //     break;
-            
+                directionLight.intensity = 1;
+                break;   
         }
     }
 }
