@@ -37,25 +37,25 @@ public class dayManager : MonoBehaviour
             minuteF += Time.deltaTime * 2;
             minute = Mathf.RoundToInt(minuteF);
             
-                directionLight.transform.Rotate(Vector3.right, 0.05f * Time.deltaTime);
-                
+
             if (minuteF > 60)
             {
                 isHourOn = true;
             }
+
             if (isHourOn)
             {
                 minuteF = 0;
                 hour++;
                 isHourOn = false;
             }
-            HourText.text = hour.ToString();
-            MinuteText.text = minute.ToString();
+            
             DayOfCheck();
+            HourPrint();
+            DirectionLight();
         }
         else
         {
-            
         }
     }
 
@@ -65,6 +65,47 @@ public class dayManager : MonoBehaviour
         {
             isDayOn = false;
             isdayFinished = true;
+        }
+    }
+
+    // zaman yazdırmak için
+    private void HourPrint()
+    {
+        switch (minute)
+        {
+            case < 10:
+                MinuteText.text = "0" + minute.ToString();
+                break;
+            case >= 10:
+                MinuteText.text = minute.ToString();
+                break;
+        }
+
+        switch (hour)
+        {
+            case < 10:
+                HourText.text = "0" + hour.ToString();
+                break;
+            case >= 10:
+                HourText.text = hour.ToString();
+                break;
+        }
+    }
+
+    private void DirectionLight()
+    {
+        switch (hour)
+        {
+            case <12:
+                directionLight.transform.Rotate(Vector3.right, 0.7f * Time.deltaTime);
+                break;
+            case >18:
+                directionLight.transform.Rotate(Vector3.right, 0.7f * Time.deltaTime);
+                break; 
+            // case >22:
+            //     directionLight.transform.Rotate(Vector3.right, 0.7f * Time.deltaTime);
+            //     break;
+            
         }
     }
 }
