@@ -14,11 +14,12 @@ public class dayManager : MonoBehaviour
 
     [SerializeField] private float sunRotationSpeed;
 
-    [Header("LightingPreset")]
-    [SerializeField] private Gradient skyColor;
+    [Header("LightingPreset")] [SerializeField]
+    private Gradient skyColor;
+
     [SerializeField] private Gradient equatorColor;
     [SerializeField] private Gradient sunColor;
-    
+
     private float newRotation;
     private float currentRotation;
     private Quaternion startRotation;
@@ -28,21 +29,23 @@ public class dayManager : MonoBehaviour
 
     //public float Time;
     public bool isDayOn;
+    public bool isNightDay;
     public bool isHourOn;
     public bool isdayFinished;
     public int day;
-    [SerializeField,Range(0,24)] public float hour;
-    [SerializeField,Range(0,24)] public float timeOfDay;
+    [SerializeField, Range(0, 24)] public int hour;
+    [SerializeField, Range(0, 24)] public float timeOfDay;
     public int minute;
     public float minuteF;
 
     public TMP_Text HourText;
     public TMP_Text MinuteText;
-    
+
 
     void Start()
     {
         instance = this;
+        isNightDay = false;
         hour = 07;
         timeOfDay = 7;
         minute = 00;
@@ -52,8 +55,9 @@ public class dayManager : MonoBehaviour
     private void UpdateSunRotation()
     {
         float sunRotation = Mathf.Lerp(-90, 270, timeOfDay / 24);
-        sun.transform.rotation = Quaternion.Euler(sunRotation,sun.transform.rotation.y,sun.transform.rotation.z);
+        sun.transform.rotation = Quaternion.Euler(sunRotation, sun.transform.rotation.y, sun.transform.rotation.z);
     }
+
     private void OnValidate()
     {
         UpdateSunRotation();
@@ -67,6 +71,7 @@ public class dayManager : MonoBehaviour
         RenderSettings.ambientSkyColor = skyColor.Evaluate(timeFraction);
         sun.color = sunColor.Evaluate(timeFraction);
     }
+
     void Update()
     {
         TimeSettings();
@@ -74,10 +79,10 @@ public class dayManager : MonoBehaviour
         if (isDayOn)
         {
             //güneş için float değişkeni hesaplat
-            timeOfDay +=Time.deltaTime /30 *sunRotationSpeed;
+            timeOfDay += Time.deltaTime / 30 * sunRotationSpeed;
             UpdateSunRotation();
             UpdateLighting();
-            
+
             minuteF += Time.deltaTime * 2 * sunRotationSpeed;
             minute = Mathf.RoundToInt(minuteF);
 
@@ -110,10 +115,19 @@ public class dayManager : MonoBehaviour
             isDayOn = false;
             isdayFinished = true;
             hour = 0;
-            timeOfDay =0;
+            timeOfDay = 0;
             minuteF = 0;
             minute = 0;
             sunRotationSpeed = 0;
+        }
+
+        if (hour == 17)
+        {
+            isNightDay = true;
+        }
+        else
+        {
+            isNightDay = false;
         }
     }
 
@@ -223,13 +237,14 @@ public class dayManager : MonoBehaviour
             isdayFinished = false;
             isDayOn = true;
         }
-        
+
         if (Input.GetKey(KeyCode.Alpha3))
         {
             sunRotationSpeed = 3;
             isdayFinished = false;
             isDayOn = true;
-        } 
+        }
+
         if (Input.GetKey(KeyCode.Alpha4))
         {
             sunRotationSpeed = 6;
@@ -237,6 +252,4 @@ public class dayManager : MonoBehaviour
             isDayOn = true;
         }
     }
-
-    
 }
