@@ -8,7 +8,17 @@ using UnityEngine;
 public class dayManager : MonoBehaviour
 {
     public static dayManager instance;
-    public Light directionLight;
+    [SerializeField] private Light sun;
+
+    //[SerializeField, Range(0, 24)] private float timeOfDay;
+
+    [SerializeField] private float sunRotationSpeed;
+
+    [Header("LightingPreset")]
+    [SerializeField] private Gradient skyColor;
+    [SerializeField] private Gradient equatorColor;
+    [SerializeField] private Gradient sunColor;
+    
     private float newRotation;
     private float currentRotation;
     private Quaternion startRotation;
@@ -21,30 +31,51 @@ public class dayManager : MonoBehaviour
     public bool isHourOn;
     public bool isdayFinished;
     public int day;
+    [SerializeField,Range(0,24)]
     public int hour;
     public int minute;
     public float minuteF;
 
     public TMP_Text HourText;
     public TMP_Text MinuteText;
-
-    public float timeSpeed;
+    
 
     void Start()
     {
         instance = this;
         hour = 07;
         minute = 00;
-        timeSpeed = 1;
+        sunRotationSpeed = 1;
     }
 
+    private void UpdateSunRotation()
+    {
+        float sunRotation = Mathf.Lerp(-90, 270, hour / 24);
+        sun.transform.rotation = Quaternion.Euler(sunRotation,sun.transform.rotation.y,sun.transform.rotation.z);
+    }
+    private void OnValidate()
+    {
+        UpdateSunRotation();
+        UpdateLighting();
+    }
+
+    private void UpdateLighting()
+    {
+        float timeFraction = hour / 24;
+        RenderSettings.ambientEquatorColor = equatorColor.Evaluate(timeFraction);
+        RenderSettings.ambientSkyColor = skyColor.Evaluate(timeFraction);
+        sun.color = sunColor.Evaluate(timeFraction);
+    }
     void Update()
     {
         TimeSettings();
         // TR
         if (isDayOn)
         {
-            minuteF += Time.deltaTime * 2 * timeSpeed;
+            UpdateSunRotation();
+            UpdateLighting();
+            
+            minuteF += Time.deltaTime * 2 * sunRotationSpeed;
             minute = Mathf.RoundToInt(minuteF);
 
             if (minuteF > 60)
@@ -78,7 +109,7 @@ public class dayManager : MonoBehaviour
             hour = 0;
             minuteF = 0;
             minute = 0;
-            timeSpeed = 0;
+            sunRotationSpeed = 0;
         }
     }
 
@@ -108,134 +139,100 @@ public class dayManager : MonoBehaviour
 
     private void DirectionLight()
     {
-        switch (hour)
-        {
-            case 7:
-                ChangeRotate();
-                break;
-            case 8:
-                ChangeRotate();
-                break;
-            case 9:
-                ChangeRotate();
-                break;
-            case 10:
-                ChangeRotate();
-                break;
-            case 11:
-                ChangeRotate();
-                break;
-            case 12:
-                ChangeRotate();
-                break;
-            case 13:
-                ChangeRotate();
-                break;
-            case 14:
-                ChangeRotate();
-                break;
-            case 15:
-                ChangeRotate();
-                break;
-            case 16:
-                ChangeRotate();
-                break;
-            case 17:
-                ChangeRotate();
-                break;
-            case 18:
-                ChangeRotate();
-                break;
-            case 19:
-                ChangeRotate();
-                break;
-            case 20:
-                ChangeRotate();
-                break;
-            case 21:
-                ChangeRotate();
-                break;
-            case 22:
-                ChangeRotate();
-                break;
-            case 23:
-                ChangeRotate();
-                break;
-            case 00:
-                ChangeRotate();
-                break;
-        }
+        // switch (hour)
+        // {
+        //     case 7:
+        //         ChangeRotate();
+        //         break;
+        //     case 8:
+        //         ChangeRotate();
+        //         break;
+        //     case 9:
+        //         ChangeRotate();
+        //         break;
+        //     case 10:
+        //         ChangeRotate();
+        //         break;
+        //     case 11:
+        //         ChangeRotate();
+        //         break;
+        //     case 12:
+        //         ChangeRotate2();
+        //         break;
+        //     case 13:
+        //         ChangeRotate2();
+        //         break;
+        //     case 14:
+        //         ChangeRotate2();
+        //         break;
+        //     case 15:
+        //         ChangeRotate2();
+        //         break;
+        //     case 16:
+        //         ChangeRotate2();
+        //         break;
+        //     case 17:
+        //         ChangeRotate2();
+        //         break;
+        //     case 18:
+        //         directionLight2.intensity = 0;
+        //         //ChangeRotate2();
+        //         break;
+        //     // case 19:
+        //     //     ChangeRotate2();
+        //     //     break;
+        //     // case 20:
+        //     //     ChangeRotate2();
+        //     //     break;
+        //     // case 21:
+        //     //     ChangeRotate2();
+        //     //     break;
+        //     // case 22:
+        //     //     ChangeRotate2();
+        //     //     break;
+        //     // case 23:
+        //     //     ChangeRotate2();
+        //     //     break;
+        //     // case 00:
+        //     //     ChangeRotate2();
+        //     //     break;
+        // }
     }
 
     private void TimeSettings()
     {
         if (Input.GetKey(KeyCode.Alpha0))
         {
-            timeSpeed = 0;
+            sunRotationSpeed = 0;
         }
 
         if (Input.GetKey(KeyCode.Alpha1))
         {
-            timeSpeed = 1;
+            sunRotationSpeed = 1;
             isdayFinished = false;
             isDayOn = true;
         }
 
         if (Input.GetKey(KeyCode.Alpha2))
         {
-            timeSpeed = 2;
+            sunRotationSpeed = 2;
             isdayFinished = false;
             isDayOn = true;
         }
         
         if (Input.GetKey(KeyCode.Alpha3))
         {
-            timeSpeed = 3;
+            sunRotationSpeed = 3;
             isdayFinished = false;
             isDayOn = true;
         } 
         if (Input.GetKey(KeyCode.Alpha4))
         {
-            timeSpeed = 6;
+            sunRotationSpeed = 6;
             isdayFinished = false;
             isDayOn = true;
         }
     }
 
-    private void ChangeRotate()
-    {
-        // currentRotation = directionLight.transform.rotation.eulerAngles.x;
-        //
-        // if (!hasRotated)
-        // {
-        //     newRotation = currentRotation + 18f;
-        //     hasRotated = true;
-        //     print("current" + currentRotation);
-        //     print("newRotatin " + newRotation);
-        // }
-        //
-        // startRotation = Quaternion.Euler(currentRotation, 0f, 0f);
-        // endRotation = Quaternion.Euler(newRotation, 0f, 0f);
-        //
-        // directionLight.transform.rotation = Quaternion.Lerp(startRotation ,endRotation,Time.deltaTime/7 *timeSpeed);
-        
-        
-        //
-        
-        currentRotation = directionLight.transform.localRotation.eulerAngles.x;
-        if (!hasRotated)
-        {
-            newRotation = currentRotation + 18f;
-            hasRotated = true;
-            print("current: " + currentRotation);
-            print("newRotation: " + newRotation);
-            rotationTime = 0f;  
-        }
-        
-        startRotation = Quaternion.Euler(currentRotation, 0f, 0f);
-        endRotation = Quaternion.Euler(newRotation, 0f, 0f);
-        
-        rotationTime += Time.deltaTime / 7 * timeSpeed;  
-        directionLight.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, rotationTime);
-    }
+    
 }
