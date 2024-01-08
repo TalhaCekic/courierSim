@@ -31,8 +31,8 @@ public class dayManager : MonoBehaviour
     public bool isHourOn;
     public bool isdayFinished;
     public int day;
-    [SerializeField,Range(0,24)]
-    public int hour;
+    [SerializeField,Range(0,24)] public float hour;
+    [SerializeField,Range(0,24)] public float timeOfDay;
     public int minute;
     public float minuteF;
 
@@ -44,13 +44,14 @@ public class dayManager : MonoBehaviour
     {
         instance = this;
         hour = 07;
+        timeOfDay = 7;
         minute = 00;
         sunRotationSpeed = 1;
     }
 
     private void UpdateSunRotation()
     {
-        float sunRotation = Mathf.Lerp(-90, 270, hour / 24);
+        float sunRotation = Mathf.Lerp(-90, 270, timeOfDay / 24);
         sun.transform.rotation = Quaternion.Euler(sunRotation,sun.transform.rotation.y,sun.transform.rotation.z);
     }
     private void OnValidate()
@@ -61,7 +62,7 @@ public class dayManager : MonoBehaviour
 
     private void UpdateLighting()
     {
-        float timeFraction = hour / 24;
+        float timeFraction = timeOfDay / 24;
         RenderSettings.ambientEquatorColor = equatorColor.Evaluate(timeFraction);
         RenderSettings.ambientSkyColor = skyColor.Evaluate(timeFraction);
         sun.color = sunColor.Evaluate(timeFraction);
@@ -72,6 +73,8 @@ public class dayManager : MonoBehaviour
         // TR
         if (isDayOn)
         {
+            //güneş için float değişkeni hesaplat
+            timeOfDay +=Time.deltaTime /30 *sunRotationSpeed;
             UpdateSunRotation();
             UpdateLighting();
             
@@ -107,6 +110,7 @@ public class dayManager : MonoBehaviour
             isDayOn = false;
             isdayFinished = true;
             hour = 0;
+            timeOfDay =0;
             minuteF = 0;
             minute = 0;
             sunRotationSpeed = 0;
