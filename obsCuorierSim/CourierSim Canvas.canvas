@@ -10,7 +10,10 @@
 		{"id":"61f7cfb70b2b61b3","type":"text","text":"Motor Hareket Sistemi:\n+ Motor handling ayarları\n+ Motor kalkış duruş ayarları\n+ Motor yeri tutuş handlingleri\n+ Motor Lastik kaydırma mekaniği (ekstra - fixlenecek\n+ motor hud","x":200,"y":-422,"width":348,"height":230,"color":"4"},
 		{"id":"77fafd9b25d573c8","type":"text","text":"İlerleyiş:\n+ Gün sistemi olacak\n+ Gün sonu ekrana günün datası ekrana verilecek\n+ Hotel önü dinlenme yapılacak\n+ Gün sistemi şehir ışıklarına bağlanacak(belirli bir saatten sonra şehir ışıkları yanacak vb.)","x":-1179,"y":-171,"width":425,"height":280},
 		{"id":"cde01d9056121c3b","type":"text","text":"Telefon:\n---- Sipariş:\n + Siparişi haritada yol çizmesi\n + Siparişi dükkandan aldıktan sonra teslim etme noktasına yol çizimi\n \n--- Kamera:\n+ Telefonda map modunda değilken kamera kitlenmesi /FİXLENECEK (motorda çalışmıyor)","x":-524,"y":-1020,"width":399,"height":340,"color":"4"},
-		{"id":"70045e7fff0c3e0d","type":"text","text":"Kamera Sistemi:\n+ Motor sürme esnasında \"C\" tuşu ile kamera değiştirme eylemi. (FPP - TPP)+\n+ Motor sürme esnaında mouse inputu ile kamera döndüğü durumda belirli bir süre input almayınca rotasyonunu sıfırlama eylemi\n+ Kamera karakter child olarak değil harici olarak takip sağlayacak ( araç içi veya dışında farketmeksizin)\n+ Kamera collision eklenecek, zeminlerin içinden geçmemesi için\n+ Kamera konumu birazdaha üst eksen içerisine konacak daha rahat hissettirmesi açısından\n+ motor dışında hareket ederken kamera sarsıntısı eklenecek\n","x":-320,"y":-626,"width":440,"height":455,"color":"4"}
+		{"id":"70045e7fff0c3e0d","type":"text","text":"Kamera Sistemi:\n+ Motor sürme esnasında \"C\" tuşu ile kamera değiştirme eylemi. (FPP - TPP)+\n+ Motor sürme esnaında mouse inputu ile kamera döndüğü durumda belirli bir süre input almayınca rotasyonunu sıfırlama eylemi\n+ Kamera karakter child olarak değil harici olarak takip sağlayacak ( araç içi veya dışında farketmeksizin)\n+ Kamera collision eklenecek, zeminlerin içinden geçmemesi için\n+ Kamera konumu birazdaha üst eksen içerisine konacak daha rahat hissettirmesi açısından\n+ motor dışında hareket ederken kamera sarsıntısı eklenecek\n","x":-320,"y":-626,"width":440,"height":455,"color":"4"},
+		{"id":"46f74b565008feb7","x":-1092,"y":157,"width":250,"height":60,"type":"text","text":"Save sistemi:"},
+		{"id":"5b8a13ff782dcbb6","x":-1549,"y":-389,"width":250,"height":60,"type":"text","text":"motor geliştirmesi:"},
+		{"id":"b1708b6b7437fdcd","x":-1520,"y":-60,"width":250,"height":60,"type":"text","text":"uyku sistemi:"}
 	],
 	"edges":[
 		{"id":"293a9895797c37c0","fromNode":"242cb751c53468a8","fromSide":"right","toNode":"61f7cfb70b2b61b3","toSide":"left"},
@@ -25,6 +28,10 @@
 		{"id":"ca13ce5109ac19d6","fromNode":"70045e7fff0c3e0d","fromSide":"top","toNode":"cde01d9056121c3b","toSide":"bottom"},
 		{"id":"2eb216169d3e3664","fromNode":"e029b684c4968368","fromSide":"left","toNode":"9e4204b0d768546a","toSide":"right"},
 		{"id":"d903e2894eb649ce","fromNode":"70045e7fff0c3e0d","fromSide":"right","toNode":"61f7cfb70b2b61b3","toSide":"left"},
-		{"id":"19d0e00b0855a513","fromNode":"59a38a0a2aae162c","fromSide":"left","toNode":"77fafd9b25d573c8","toSide":"right"}
+		{"id":"19d0e00b0855a513","fromNode":"59a38a0a2aae162c","fromSide":"left","toNode":"77fafd9b25d573c8","toSide":"right"},
+		{"id":"bba0af3b5ca1f175","fromNode":"77fafd9b25d573c8","fromSide":"bottom","toNode":"46f74b565008feb7","toSide":"top"},
+		{"id":"f3a45247f62101fe","fromNode":"9e4204b0d768546a","fromSide":"left","toNode":"5b8a13ff782dcbb6","toSide":"right"},
+		{"id":"2f3d833d6d6b0a3c","fromNode":"77fafd9b25d573c8","fromSide":"top","toNode":"9e4204b0d768546a","toSide":"bottom"},
+		{"id":"b55a4b51018e583d","fromNode":"77fafd9b25d573c8","fromSide":"left","toNode":"b1708b6b7437fdcd","toSide":"right"}
 	]
 }
