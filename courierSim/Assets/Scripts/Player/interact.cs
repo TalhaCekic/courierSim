@@ -25,6 +25,7 @@ public class interact : MonoBehaviour
     public bool isBurgerYes;
     public bool isHasPizza;
     public bool isPizzaYes;
+    public bool isSleeping;
 
     public LayerMask layers;
     public LayerMask Orderlayers;
@@ -33,7 +34,9 @@ public class interact : MonoBehaviour
     public LayerMask BurgerShop;
     public LayerMask PizzaShop;
     public LayerMask DeliveryPosition;
-    public LayerMask trash;
+    public LayerMask Trash;
+    public LayerMask Hotel;
+    public LayerMask Mechanic;
     private CapsuleCollider cap;
     private GameObject obj;
     private GameObject altObje;
@@ -242,6 +245,11 @@ public class interact : MonoBehaviour
                     }
                 }
             }
+
+            if (Physics.Raycast(ray, out hit, maxDistance, Hotel))
+            {
+                isSleeping = true;
+            }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 if (!isHasPizza || !isHasBurger)
@@ -256,7 +264,7 @@ public class interact : MonoBehaviour
                 }
             }
 
-            if (Physics.Raycast(ray, out hit, maxDistance, trash))
+            if (Physics.Raycast(ray, out hit, maxDistance, Trash))
             {
                 Destroyer();
                 //     DeleteFirstChild(hit.transform);

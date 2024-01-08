@@ -75,13 +75,17 @@ public class dayManager : MonoBehaviour
     void Update()
     {
         TimeSettings();
+        HourPrint();
+        DayOfCheck();
+        DirectionLight();
+        UpdateSunRotation();
+        UpdateLighting();
         // TR
         if (isDayOn)
         {
             //güneş için float değişkeni hesaplat
             timeOfDay += Time.deltaTime / 30 * sunRotationSpeed;
-            UpdateSunRotation();
-            UpdateLighting();
+        
 
             minuteF += Time.deltaTime * 2 * sunRotationSpeed;
             minute = Mathf.RoundToInt(minuteF);
@@ -99,9 +103,7 @@ public class dayManager : MonoBehaviour
                 isHourOn = false;
             }
 
-            DayOfCheck();
-            HourPrint();
-            DirectionLight();
+         
         }
         else
         {
@@ -121,7 +123,7 @@ public class dayManager : MonoBehaviour
             sunRotationSpeed = 0;
         }
 
-        if (hour == 17)
+        if (hour >= 17  || hour <=8)
         {
             isNightDay = true;
         }
@@ -250,6 +252,15 @@ public class dayManager : MonoBehaviour
             sunRotationSpeed = 6;
             isdayFinished = false;
             isDayOn = true;
+        }
+    }
+
+    private void SleepSystem()
+    {
+        if (interact.instance.isSleeping)
+        {
+            hour += 8;
+            hour += 8;
         }
     }
 }

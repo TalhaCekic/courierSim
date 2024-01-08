@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class test : MonoBehaviour
+public class TppCam : MonoBehaviour
 {
     public Transform target;
     public Vector3 offset = new Vector3(0f, 3f, -7f);
