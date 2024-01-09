@@ -25,12 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private float rotationY = 0;
 
     private Rigidbody rb;
-
-    public float distance = 5.0f;
-    public float rotationSpeed = 5.0f;
-    public float resetSpeed = 2.0f;
-    public Vector2 rotationLimits = new Vector2(-80f, 80f);
-
+    
     private void Start()
     {
         Camera.main.transform.SetParent(headObj.transform);

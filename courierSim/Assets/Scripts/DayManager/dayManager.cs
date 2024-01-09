@@ -15,12 +15,13 @@ public class dayManager : MonoBehaviour
 
     [SerializeField] private float sunRotationSpeed;
 
-    [Header("LightingPreset")] 
+    [Header("LightingPreset")]
     //[SerializeField] private Gradient skyColor;
-    public Material skybox1; 
-    public Material skybox2; 
+    // public Material skybox1; 
+    // public Material skybox2; 
+    [SerializeField]
+    private Gradient equatorColor;
 
-    [SerializeField] private Gradient equatorColor;
     [SerializeField] private Gradient sunColor;
 
     private float newRotation;
@@ -49,7 +50,7 @@ public class dayManager : MonoBehaviour
     public Image SleepingBg;
     private Color NewColor;
     public float sleepingUıSpeed;
-    public float sleepUI ;
+    public float sleepUI;
     private float sleepDelay;
     public bool isSleeping;
     public float delay;
@@ -90,9 +91,8 @@ public class dayManager : MonoBehaviour
 
     void Update()
     {
-        // float test = Time.deltaTime *10;
-        // RenderSettings.skybox.Lerp(skybox1, skybox2, test);
-        
+
+
         TimeSettings();
         HourPrint();
         DayOfCheck();
@@ -148,7 +148,6 @@ public class dayManager : MonoBehaviour
             isNightDay = false;
             //RenderSettings.skybox = skybox1.tintColor;
             //RenderSettings.skybox.Lerp(skybox2, skybox1, 100000);
-
         }
     }
 
@@ -220,21 +219,15 @@ public class dayManager : MonoBehaviour
             if (hour < hour + 8)
             {
                 changeTime = true;
-                // hour += 8;
-                // timeOfDay += 8;
-                 isSleeping = true;
-                // hour = Mathf.RoundToInt(timeOfDay);
+                isSleeping = true;
             }
         }
         else
         {
             changeTime = true;
-            // hour = hour + 8 - 24;
-            // timeOfDay = timeOfDay + 8 - 24;
-            // hour = Mathf.RoundToInt(timeOfDay);
-             isSleeping = true;
-             isdayFinished = true;
-             isDayOn = false;
+            isSleeping = true;
+            isdayFinished = true;
+            isDayOn = false;
         }
     }
 
@@ -271,13 +264,13 @@ public class dayManager : MonoBehaviour
                         hour = hour + 8 - 24;
                         timeOfDay = timeOfDay + 8 - 24;
                         hour = Mathf.RoundToInt(timeOfDay);
-                 
                     }
+
                     changeTime = false;
                 }
             }
         }
-        else if(!isSleeping && !changeTime)
+        else if (!isSleeping && !changeTime)
         {
             if (sleepUI > 0.1f)
             {
@@ -288,7 +281,7 @@ public class dayManager : MonoBehaviour
                 sunRotationSpeed = 1;
                 isSleeping = false;
             }
-            else if(sleepUI<0.1f)
+            else if (sleepUI < 0.1f)
             {
                 SleepingBg.gameObject.SetActive(false);
             }
@@ -309,6 +302,7 @@ public class dayManager : MonoBehaviour
             endDayCanvas.SetActive(false);
         }
     }
+
     //butona verlen devam et etkisi
     public void notEndTheDay()
     {

@@ -248,7 +248,8 @@ public class interact : MonoBehaviour
             {
                 dayManager.instance.SleepSystem();
                 Destroyer();
-            }
+            }    
+
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 if (!isHasPizza || !isHasBurger)
