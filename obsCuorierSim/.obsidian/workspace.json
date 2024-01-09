@@ -11,11 +11,14 @@
             "id": "4b8d1eb0765cf904",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "CourierSim Text.md",
-                "mode": "source",
-                "source": false
+                "file": "CourierSim Canvas.canvas",
+                "viewState": {
+                  "x": -534.4759150985246,
+                  "y": -41.412261578331794,
+                  "zoom": -0.647599934863978
+                }
               }
             }
           }
@@ -85,7 +88,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CourierSim Text.md",
+                "file": "CourierSim Canvas.canvas",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +105,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CourierSim Text.md",
+                "file": "CourierSim Canvas.canvas",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +128,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CourierSim Text.md"
+                "file": "CourierSim Canvas.canvas"
               }
             }
           }
@@ -149,11 +152,11 @@
   },
   "active": "4b8d1eb0765cf904",
   "lastOpenFiles": [
+    "CourierSim Text.md",
     "CourierSim Canvas.canvas",
     "test",
     "2024-01-01.md",
     "Başlıksız.canvas",
-    "Başlıksız 1.canvas",
-    "CourierSim Text.md"
+    "Başlıksız 1.canvas"
   ]
 }

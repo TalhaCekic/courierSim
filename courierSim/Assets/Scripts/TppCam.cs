@@ -7,6 +7,7 @@ public class TppCam : MonoBehaviour
 {
     public Transform target;
     public Vector3 offset = new Vector3(0f, 3f, -7f);
+    private Vector3 targetPosition;
 
     public float rotationSpeed = 5.0f;
     //public float followSpeed = 5.0f;
@@ -44,7 +45,7 @@ public class TppCam : MonoBehaviour
                 transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
 
                 // Aracın pozisyonunu takip etme
-                Vector3 targetPosition = target.position + target.TransformDirection(offset);
+                 targetPosition = target.position + target.TransformDirection(offset);
                 transform.position = Vector3.Lerp(transform.position, targetPosition, lerpSpeed);
                 
                 transform.LookAt(target);
@@ -55,21 +56,29 @@ public class TppCam : MonoBehaviour
             }
             else if (!isReset)
             {
-                currentX += mouseX;
-                currentY += mouseY;
-                rotation = Quaternion.Euler(currentY, currentX, 0);
-                Vector3 desiredPosition = target.position - (rotation * Vector3.forward + (rotation * offset));
-
-                transform.position = Vector3.Lerp(transform.position,  desiredPosition , 1);
-                //transform.position = desiredPosition;
-
-                transform.LookAt(target);
-                currentReset = true;
-
-                // süreyi sıfırla
-                if (mouseX < 0 || mouseX > 0 && mouseY < 0 || mouseY > 0)
+                if (interact.instance.isLook)
                 {
-                    restTime = 5;
+                    currentX += mouseX;
+                    currentY += mouseY;
+                    rotation = Quaternion.Euler(currentY, currentX, 0);
+                    Vector3 desiredPosition = target.position - (rotation * Vector3.forward + (rotation * offset));
+
+                    transform.position = Vector3.Lerp(transform.position,  desiredPosition , 1);
+
+                    transform.LookAt(target);
+                    currentReset = true;
+
+                    // süreyi sıfırla
+                    if (mouseX < 0 || mouseX > 0 && mouseY < 0 || mouseY > 0)
+                    {
+                        restTime = 5;
+                    }
+                }
+                else
+                {
+                    targetPosition = target.position + target.TransformDirection(offset);
+                    transform.position = Vector3.Lerp(transform.position, targetPosition, lerpSpeed);
+                    transform.LookAt(target);
                 }
             }
             else
@@ -82,7 +91,7 @@ public class TppCam : MonoBehaviour
 
     private void Update()
     {
-        if (interact.instance.isMotor)
+        if (interact.instance.isMotor && !interact.instance.isMechanic)
         {
             //reset hesapları
             if (currentReset)

@@ -51,6 +51,9 @@ public class interact : MonoBehaviour
     public Transform hand;
     public Transform putPosition;
 
+    public bool isMechanic;
+    public bool isLook;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -76,6 +79,7 @@ public class interact : MonoBehaviour
     void Update()
     {
         keyInteract();
+        lookingMechanic();
         // motor binince kamera eşitlemesi
         if (isMotor)
         {
@@ -109,13 +113,22 @@ public class interact : MonoBehaviour
 
     public void Interact(InputAction.CallbackContext context)
     {
-        if(dayManager.instance.isSleeping)return;
+        if (dayManager.instance.isSleeping) return;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
         if (Time.time - lastResetTime > resetDelay)
         {
-            if (isMotor)
+            if (Physics.Raycast(ray, out hit, maxDistance * 10, Mechanic))
             {
+                if (isMotor)
+                {
+                    isMechanic = true;
+                }
+            }
+
+            if (isMotor && !isMechanic)
+            {
+                print("inme");
                 obj = null;
                 isMotor = false;
                 this.transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -248,7 +261,7 @@ public class interact : MonoBehaviour
             {
                 dayManager.instance.SleepSystem();
                 Destroyer();
-            }    
+            }
 
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
@@ -273,7 +286,7 @@ public class interact : MonoBehaviour
 
     public void Interact2(InputAction.CallbackContext context)
     {
-        if(dayManager.instance.isSleeping)return;
+        if (dayManager.instance.isSleeping) return;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
@@ -348,14 +361,14 @@ public class interact : MonoBehaviour
             interactImage.color = Color.green;
         }
 
-        if (Physics.Raycast(ray, out hit, maxDistance, Hotel))
+        else if (Physics.Raycast(ray, out hit, maxDistance, Hotel))
         {
             KeyInputText.text = " Uyumak için 'E' Tuşuna Bas ";
             interactImage.color = Color.green;
             KeyInputText.color = Color.green;
         }
 
-        if (Physics.Raycast(ray, out hit, maxDistance, Mechanic))
+        else if (Physics.Raycast(ray, out hit, maxDistance, Mechanic))
         {
             KeyInputText.text = " Mekaniğe Baktırmak için 'E' Tuşuna Bas ";
             interactImage.color = Color.green;
@@ -430,6 +443,21 @@ public class interact : MonoBehaviour
             else
             {
                 KeyInputText.text = " ";
+            }
+        }
+    }
+
+    private void lookingMechanic()
+    {
+        if (isMechanic)
+        {
+            if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+            {
+                isLook = true;
+            }
+            else
+            {
+                isLook = false;
             }
         }
     }

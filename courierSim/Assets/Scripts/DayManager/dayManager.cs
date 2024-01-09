@@ -91,8 +91,6 @@ public class dayManager : MonoBehaviour
 
     void Update()
     {
-
-
         TimeSettings();
         HourPrint();
         DayOfCheck();
@@ -187,6 +185,7 @@ public class dayManager : MonoBehaviour
             sunRotationSpeed = 1;
             isdayFinished = false;
             isDayOn = true;
+            phoneMenu.instance.price+= 10;
         }
 
         if (Input.GetKey(KeyCode.Alpha2))
@@ -194,6 +193,7 @@ public class dayManager : MonoBehaviour
             sunRotationSpeed = 2;
             isdayFinished = false;
             isDayOn = true;
+            carMovement.instance.carDamageValue += 10;
         }
 
         if (Input.GetKey(KeyCode.Alpha3))
@@ -294,8 +294,6 @@ public class dayManager : MonoBehaviour
         if (isdayFinished && !isDayOn)
         {
             endDayCanvas.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
         }
         else
         {
@@ -308,7 +306,5 @@ public class dayManager : MonoBehaviour
     {
         isdayFinished = false;
         isDayOn = true;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 }

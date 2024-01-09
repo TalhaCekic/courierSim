@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 
 public class carMovement : MonoBehaviour
 {
+    public static carMovement instance;
     public float speed;
     public float Topspeed;
     public float rotationSpeed = 10;
@@ -18,6 +19,9 @@ public class carMovement : MonoBehaviour
     public Slider speedSlider;
     private ColorBlock colors;
     public bool isSkid;
+
+    public float carDamageValue;
+    public bool isVeryDamage;
 
     public enum ControlMode
     {
@@ -58,12 +62,6 @@ public class carMovement : MonoBehaviour
 
     private Rigidbody carRb;
 
-    public float distance = 5.0f; // Distance between the player and camera
-
-    // public float rotationSpeed = 5.0f; // Speed at which the camera rotates
-    public float resetSpeed = 2.0f; // Speed at which the camera resets its rotation
-    public Vector2 rotationLimits = new Vector2(-80f, 80f); // Vertical rotation limits
-
     private float currentX = 0.0f;
     private float currentY = 0.0f;
 
@@ -72,6 +70,7 @@ public class carMovement : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerOfMass;
         // carLights = GetComponent<CarLights>();
@@ -85,46 +84,6 @@ public class carMovement : MonoBehaviour
             AnimateWheels();
             WheelEffects();
             skid();
-            // if (!interact.instance.isChangeCameraPov)
-            // {
-            //     currentX += Input.GetAxis("Mouse X") * rotationSpeed / 2;
-            //     currentY -= Input.GetAxis("Mouse Y") * rotationSpeed / 2;
-            //
-            //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
-            //
-            //     Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-            //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-            //     Vector3 position = rotation * negDistance + this.transform.position;
-            //
-            //     Camera.main.transform.rotation = rotation;
-            //     Camera.main.transform.position = position;
-            //     // if (phoneMenu.instance.isMapActive)
-            //     // {
-            //     //     currentX += Input.GetAxis("Mouse X") * rotationSpeed / 2;
-            //     //     currentY -= Input.GetAxis("Mouse Y") * rotationSpeed / 2;
-            //     //
-            //     //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
-            //     //
-            //     //     Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-            //     //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-            //     //     Vector3 position = rotation * negDistance + this.transform.position;
-            //     //
-            //     //     Camera.main.transform.rotation = rotation;
-            //     //     Camera.main.transform.position = position;
-            //     // }
-            //     // else
-            //     // {
-            //     //     currentY = Mathf.Clamp(currentY, rotationLimits.x, rotationLimits.y);
-            //     //     // Calculate rotation and position
-            //     //     //Quaternion rotation = Quaternion.Euler(5, 5, 0);
-            //     //     Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-            //     //     Vector3 position =   negDistance + this.transform.position;
-            //     //     
-            //     //     //Apply rotation and position to the camera
-            //     //     Camera.main.transform.rotation = Quaternion.Euler(10,0,0);
-            //     //     Camera.main.transform.position = new Vector3(0,this.transform.position.y+5,0);
-            //     // }
-            // }
 
             speed = carRb.velocity.magnitude * 3.6f;
             speedText.text = Mathf.Round(speed) + " km/h";
@@ -145,12 +104,14 @@ public class carMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        if (interact.instance.isMotor)
+        DamageValueSystem();
+        if (interact.instance.isMotor && !interact.instance.isMechanic && carDamageValue <100)
         {
             Move();
             Steer();
             Brake();
             skid();
+            damageSystem();
         }
         else
         {
@@ -217,7 +178,7 @@ public class carMovement : MonoBehaviour
                 var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
 
-                if (steerInput != 0)
+                if (steerInput != 0 )
                 {
                     rotationAmount = wheel.wheelCollider.steerAngle * 2f;
 
@@ -229,7 +190,7 @@ public class carMovement : MonoBehaviour
                         Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y,
                             -rotationAmount / 2f), Time.deltaTime * rotationSpeed);
                 }
-                else
+                else if( !interact.instance.isMechanic)
                 {
                     Quaternion currentRotation = this.transform.rotation;
                     float zRotation = 0;
@@ -239,6 +200,8 @@ public class carMovement : MonoBehaviour
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, newRotation,
                         Time.deltaTime * rotationSpeed);
                 }
+
+       
 
                 // hıza göre direksiyon sertliği
                 float speedLimit = 40;
@@ -347,6 +310,38 @@ public class carMovement : MonoBehaviour
             {
                 //  wheel.wheelEffectObj.GetComponentInChildren<TrailRenderer>().emitting = false;
             }
+        }
+    }
+
+    private void damageSystem()
+    {
+        if (speed > 5)
+        {
+            carDamageValue += Time.deltaTime /100;
+        }
+    }
+
+    private void DamageValueSystem()
+    {
+        if (carDamageValue > 90)
+        {
+            isVeryDamage = true;
+            if (carDamageValue > 100)
+            {
+                carDamageValue = 100;
+            }
+        }
+        else
+        {
+            isVeryDamage = false;
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("ground"))
+        {
+            carDamageValue += Time.deltaTime*speed/2;
         }
     }
 }

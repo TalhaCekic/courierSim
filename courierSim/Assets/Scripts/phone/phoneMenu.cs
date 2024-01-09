@@ -105,15 +105,6 @@ public class phoneMenu : MonoBehaviour
         {
             phoneCanvas.transform.localPosition = Vector3.Lerp(phoneCanvas.transform.localPosition,
                 new Vector3(0, 0, 0), phoneLerpSpeed * Time.deltaTime);
-
-            if (isMapActive)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Confined;
-            }
         }
         else
         {
@@ -127,7 +118,6 @@ public class phoneMenu : MonoBehaviour
                 phoneCanvas.transform.localPosition = Vector3.Lerp(phoneCanvas.transform.localPosition,
                     new Vector3(0, -850, 0), phoneLerpSpeed * Time.deltaTime);
             }
-            Cursor.lockState = CursorLockMode.Locked;
         }
 
         if (isSubBar)
