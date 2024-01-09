@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering.LookDev;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 public class dayManager : MonoBehaviour
@@ -11,12 +13,12 @@ public class dayManager : MonoBehaviour
     public static dayManager instance;
     [SerializeField] private Light sun;
 
-    //[SerializeField, Range(0, 24)] private float timeOfDay;
-
     [SerializeField] private float sunRotationSpeed;
 
-    [Header("LightingPreset")] [SerializeField]
-    private Gradient skyColor;
+    [Header("LightingPreset")] 
+    //[SerializeField] private Gradient skyColor;
+    public Material skybox1; 
+    public Material skybox2; 
 
     [SerializeField] private Gradient equatorColor;
     [SerializeField] private Gradient sunColor;
@@ -82,12 +84,15 @@ public class dayManager : MonoBehaviour
     {
         float timeFraction = timeOfDay / 24;
         RenderSettings.ambientEquatorColor = equatorColor.Evaluate(timeFraction);
-        RenderSettings.ambientSkyColor = skyColor.Evaluate(timeFraction);
+        //RenderSettings.ambientSkyColor = skyColor.Evaluate(timeFraction);
         sun.color = sunColor.Evaluate(timeFraction);
     }
 
     void Update()
     {
+        // float test = Time.deltaTime *10;
+        // RenderSettings.skybox.Lerp(skybox1, skybox2, test);
+        
         TimeSettings();
         HourPrint();
         DayOfCheck();
@@ -135,10 +140,15 @@ public class dayManager : MonoBehaviour
         if (hour >= 17 || hour < 7)
         {
             isNightDay = true;
+            //RenderSettings.skybox = skybox2;
+            //RenderSettings.skybox.Lerp(skybox2, skybox1, 100);
         }
         else
         {
             isNightDay = false;
+            //RenderSettings.skybox = skybox1.tintColor;
+            //RenderSettings.skybox.Lerp(skybox2, skybox1, 100000);
+
         }
     }
 
