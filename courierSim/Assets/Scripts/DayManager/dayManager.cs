@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class dayManager : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class dayManager : MonoBehaviour
     private Quaternion endRotation;
     private bool hasRotated;
     private float rotationTime;
+    private bool changeTime;
 
     //public float Time;
     public bool isDayOn;
@@ -41,6 +43,16 @@ public class dayManager : MonoBehaviour
     public TMP_Text HourText;
     public TMP_Text MinuteText;
 
+    //sleep
+    public Image SleepingBg;
+    private Color NewColor;
+    public float sleepingUıSpeed;
+    public float sleepUI ;
+    private float sleepDelay;
+    public bool isSleeping;
+    public float delay;
+
+    public GameObject endDayCanvas;
 
     void Start()
     {
@@ -50,6 +62,8 @@ public class dayManager : MonoBehaviour
         timeOfDay = 7;
         minute = 00;
         sunRotationSpeed = 1;
+        SleepingBg.gameObject.SetActive(false);
+        endDayCanvas.SetActive(false);
     }
 
     private void UpdateSunRotation()
@@ -77,15 +91,14 @@ public class dayManager : MonoBehaviour
         TimeSettings();
         HourPrint();
         DayOfCheck();
-        DirectionLight();
         UpdateSunRotation();
         UpdateLighting();
+        SleepingUI();
+        EndTheDay();
         // TR
         if (isDayOn)
         {
-            //güneş için float değişkeni hesaplat
             timeOfDay += Time.deltaTime / 30 * sunRotationSpeed;
-        
 
             minuteF += Time.deltaTime * 2 * sunRotationSpeed;
             minute = Mathf.RoundToInt(minuteF);
@@ -102,8 +115,6 @@ public class dayManager : MonoBehaviour
                 hasRotated = false;
                 isHourOn = false;
             }
-
-         
         }
         else
         {
@@ -112,10 +123,8 @@ public class dayManager : MonoBehaviour
 
     private void DayOfCheck()
     {
-        if (hour == 24)
+        if (hour >= 24)
         {
-            isDayOn = false;
-            isdayFinished = true;
             hour = 0;
             timeOfDay = 0;
             minuteF = 0;
@@ -123,7 +132,7 @@ public class dayManager : MonoBehaviour
             sunRotationSpeed = 0;
         }
 
-        if (hour >= 17  || hour <=8)
+        if (hour >= 17 || hour < 7)
         {
             isNightDay = true;
         }
@@ -155,68 +164,6 @@ public class dayManager : MonoBehaviour
                 HourText.text = hour.ToString();
                 break;
         }
-    }
-
-    private void DirectionLight()
-    {
-        // switch (hour)
-        // {
-        //     case 7:
-        //         ChangeRotate();
-        //         break;
-        //     case 8:
-        //         ChangeRotate();
-        //         break;
-        //     case 9:
-        //         ChangeRotate();
-        //         break;
-        //     case 10:
-        //         ChangeRotate();
-        //         break;
-        //     case 11:
-        //         ChangeRotate();
-        //         break;
-        //     case 12:
-        //         ChangeRotate2();
-        //         break;
-        //     case 13:
-        //         ChangeRotate2();
-        //         break;
-        //     case 14:
-        //         ChangeRotate2();
-        //         break;
-        //     case 15:
-        //         ChangeRotate2();
-        //         break;
-        //     case 16:
-        //         ChangeRotate2();
-        //         break;
-        //     case 17:
-        //         ChangeRotate2();
-        //         break;
-        //     case 18:
-        //         directionLight2.intensity = 0;
-        //         //ChangeRotate2();
-        //         break;
-        //     // case 19:
-        //     //     ChangeRotate2();
-        //     //     break;
-        //     // case 20:
-        //     //     ChangeRotate2();
-        //     //     break;
-        //     // case 21:
-        //     //     ChangeRotate2();
-        //     //     break;
-        //     // case 22:
-        //     //     ChangeRotate2();
-        //     //     break;
-        //     // case 23:
-        //     //     ChangeRotate2();
-        //     //     break;
-        //     // case 00:
-        //     //     ChangeRotate2();
-        //     //     break;
-        // }
     }
 
     private void TimeSettings()
@@ -255,12 +202,106 @@ public class dayManager : MonoBehaviour
         }
     }
 
-    private void SleepSystem()
+    // sleeping
+    public void SleepSystem()
     {
-        if (interact.instance.isSleeping)
+        if (hour + 8 < 24)
         {
-            hour += 8;
-            hour += 8;
+            if (hour < hour + 8)
+            {
+                changeTime = true;
+                // hour += 8;
+                // timeOfDay += 8;
+                 isSleeping = true;
+                // hour = Mathf.RoundToInt(timeOfDay);
+            }
         }
+        else
+        {
+            changeTime = true;
+            // hour = hour + 8 - 24;
+            // timeOfDay = timeOfDay + 8 - 24;
+            // hour = Mathf.RoundToInt(timeOfDay);
+             isSleeping = true;
+            // isdayFinished = true;
+            // isDayOn = false;
+        }
+    }
+
+    private void SleepingUI()
+    {
+        if (isSleeping && !isdayFinished && changeTime)
+        {
+            SleepingBg.gameObject.SetActive(true);
+            sleepUI += sleepingUıSpeed * Time.deltaTime;
+            NewColor = SleepingBg.color;
+            NewColor.a = sleepUI;
+            SleepingBg.color = NewColor;
+            sunRotationSpeed = 0;
+            if (sleepUI >= 1)
+            {
+                sleepUI = 1;
+                delay += Time.deltaTime;
+                if (delay >= 2)
+                {
+                    isSleeping = false;
+                    delay = 0;
+                    if (hour + 8 < 24)
+                    {
+                        if (hour < hour + 8)
+                        {
+                            print("a");
+                            hour += 8;
+                            timeOfDay += 8;
+                            hour = Mathf.RoundToInt(timeOfDay);
+                        }
+                    }
+                    else
+                    {
+                        changeTime = true;
+                        hour = hour + 8 - 24;
+                        timeOfDay = timeOfDay + 8 - 24;
+                        hour = Mathf.RoundToInt(timeOfDay);
+                 
+                    }
+                    changeTime = false;
+                }
+            }
+        }
+        else if(!isSleeping && !changeTime)
+        {
+            if (sleepUI > 0.1f)
+            {
+                sleepUI -= sleepingUıSpeed * Time.deltaTime;
+                NewColor = SleepingBg.color;
+                NewColor.a = sleepUI;
+                SleepingBg.color = NewColor;
+                sunRotationSpeed = 1;
+                isSleeping = false;
+            }
+            else if(sleepUI<0.1f)
+            {
+                SleepingBg.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    // gün sonu
+    private void EndTheDay()
+    {
+        if (isdayFinished && !isDayOn)
+        {
+            endDayCanvas.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+    //butona verlen devam et etkisi
+    public void notEndTheDay()
+    {
+        isdayFinished = false;
+        isDayOn = true;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

@@ -25,7 +25,6 @@ public class interact : MonoBehaviour
     public bool isBurgerYes;
     public bool isHasPizza;
     public bool isPizzaYes;
-    public bool isSleeping;
 
     public LayerMask layers;
     public LayerMask Orderlayers;
@@ -110,6 +109,7 @@ public class interact : MonoBehaviour
 
     public void Interact(InputAction.CallbackContext context)
     {
+        if(dayManager.instance.isSleeping)return;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
         if (Time.time - lastResetTime > resetDelay)
@@ -150,8 +150,6 @@ public class interact : MonoBehaviour
                     {
                         Instantiate(ScribtableOrders.PizzaOrderPrefabObj, hand.position, hand.rotation, hand);
                         isHasOrder = hand.GetChild(0).gameObject;
-                        //isHasOrder.transform.localPosition = new Vector3(-0.361f, 0.099f, 0.014f);
-                        //isHasOrder.transform.localRotation = Quaternion.Euler(-30.133f, -83.883f, 141.323f);
                         isHasPizza = true;
                         isPizzaYes = true;
                     }
@@ -248,7 +246,8 @@ public class interact : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, maxDistance, Hotel))
             {
-                isSleeping = true;
+                dayManager.instance.SleepSystem();
+                Destroyer();
             }
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
@@ -267,38 +266,13 @@ public class interact : MonoBehaviour
             if (Physics.Raycast(ray, out hit, maxDistance, Trash))
             {
                 Destroyer();
-                //     DeleteFirstChild(hit.transform);
-                //     Destroy(hand.GetChild(0).gameObject);
-                //     for (int i = 0; i < orders.Length; i++)
-                //     {
-                //         if (orders[i] != null)
-                //         {
-                //             
-                //             Destroy(orders[i]);
-                //             isHasOrder = null;
-                //
-                //             orders[i] = null;
-                //             isBurgerYes = false;
-                //             isPizzaYes = false;
-                //             isHasPizza = false;
-                //             isHasBurger = false;
-                //         }
-                //     }
-                //
-                //     OrderManager.instance.isOrderStart = false;
-                //     OrderManager.instance.isOrder = false;
-                //     OrderManager.instance.isSpawn = false;
-                //     OrderManager.instance.isBurger = false;
-                //     OrderManager.instance.isPizza = false;
-                //     OrderManager.instance.isSearchingOrder = false;
-                //     OrderManager.instance.isdelivery = true;
-                // }
             }
         }
     }
 
     public void Interact2(InputAction.CallbackContext context)
     {
+        if(dayManager.instance.isSleeping)return;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
@@ -371,6 +345,20 @@ public class interact : MonoBehaviour
         if (Physics.Raycast(ray, out hit, maxDistance, layers))
         {
             interactImage.color = Color.green;
+        }
+
+        if (Physics.Raycast(ray, out hit, maxDistance, Hotel))
+        {
+            KeyInputText.text = " Uyumak için 'E' Tuşuna Bas ";
+            interactImage.color = Color.green;
+            KeyInputText.color = Color.green;
+        }
+
+        if (Physics.Raycast(ray, out hit, maxDistance, Mechanic))
+        {
+            KeyInputText.text = " Mekaniğe Baktırmak için 'E' Tuşuna Bas ";
+            interactImage.color = Color.green;
+            KeyInputText.color = Color.green;
         }
         else
         {
