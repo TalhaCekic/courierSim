@@ -223,8 +223,8 @@ public class dayManager : MonoBehaviour
             // timeOfDay = timeOfDay + 8 - 24;
             // hour = Mathf.RoundToInt(timeOfDay);
              isSleeping = true;
-            // isdayFinished = true;
-            // isDayOn = false;
+             isdayFinished = true;
+             isDayOn = false;
         }
     }
 
@@ -250,7 +250,6 @@ public class dayManager : MonoBehaviour
                     {
                         if (hour < hour + 8)
                         {
-                            print("a");
                             hour += 8;
                             timeOfDay += 8;
                             hour = Mathf.RoundToInt(timeOfDay);
@@ -294,6 +293,10 @@ public class dayManager : MonoBehaviour
             endDayCanvas.SetActive(true);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            endDayCanvas.SetActive(false);
         }
     }
     //butona verlen devam et etkisi

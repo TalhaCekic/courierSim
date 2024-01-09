@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if(dayManager.instance.isdayFinished)return;
         // araç modu ayarları
         if (!interact.instance.isMotor)
         {

@@ -56,6 +56,7 @@ public class phoneMenu : MonoBehaviour
 
     private void Update()
     {
+        if(dayManager.instance.isdayFinished)return;
         Notification();
         phone();
         priceSettings();
@@ -126,7 +127,6 @@ public class phoneMenu : MonoBehaviour
                 phoneCanvas.transform.localPosition = Vector3.Lerp(phoneCanvas.transform.localPosition,
                     new Vector3(0, -850, 0), phoneLerpSpeed * Time.deltaTime);
             }
-
             Cursor.lockState = CursorLockMode.Locked;
         }
 
