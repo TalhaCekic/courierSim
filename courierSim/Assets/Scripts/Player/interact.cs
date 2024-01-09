@@ -347,7 +347,6 @@ public class interact : MonoBehaviour
         OrderManager.instance.isdelivery = true;
     }
 
-
     // İNPUT TEXTE YAZDIRMAK İÇİN:
     private void keyInteract()
     {

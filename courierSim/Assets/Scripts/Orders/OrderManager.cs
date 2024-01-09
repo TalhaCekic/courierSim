@@ -69,6 +69,7 @@ public class OrderManager : MonoBehaviour
         }
         if(!isOrder)
         {
+            DeleteFirstChild(selectedDeliveryPosition.transform);
             Order = null;
             orderName = null;
             selectedDeliveryPosition = null;
@@ -147,5 +148,17 @@ public class OrderManager : MonoBehaviour
         }
 
         return -1; // Eğer bulunamazsa -1 döndür
+    }
+    
+    void DeleteFirstChild(Transform parent)
+    {
+        if (parent.childCount > 0)
+        {
+            Destroy(parent.GetChild(0).gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("No child object to delete.");
+        }
     }
 }
