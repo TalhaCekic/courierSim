@@ -206,8 +206,9 @@ public class interact : MonoBehaviour
                     }
                 }
             }
-
-            // motor arkasındaki kutuya gönderilen işlem
+        }
+       
+    // motor arkasındaki kutuya gönderilen işlem
             if (Physics.Raycast(ray, out hit, maxDistance, CarBoxLayer))
             {
                 if (isBoxOpen)
@@ -256,13 +257,6 @@ public class interact : MonoBehaviour
                     }
                 }
             }
-
-            if (Physics.Raycast(ray, out hit, maxDistance, Hotel))
-            {
-                dayManager.instance.SleepSystem();
-                Destroyer();
-            }
-
             else if (Physics.Raycast(ray, out hit, maxDistance, CarLayer))
             {
                 if (!isHasPizza || !isHasBurger)
@@ -276,11 +270,14 @@ public class interact : MonoBehaviour
                     isMotor = !isMotor;
                 }
             }
-
-            if (Physics.Raycast(ray, out hit, maxDistance, Trash))
-            {
-                Destroyer();
-            }
+        if (Physics.Raycast(ray, out hit, maxDistance, Hotel))
+        {
+            dayManager.instance.SleepSystem();
+            Destroyer();
+        }
+        if (Physics.Raycast(ray, out hit, maxDistance, Trash))
+        {
+            Destroyer();
         }
     }
 
@@ -347,7 +344,7 @@ public class interact : MonoBehaviour
         OrderManager.instance.isdelivery = true;
     }
 
-    // İNPUT TEXTE YAZDIRMAK İÇİN:
+// İNPUT TEXTE YAZDIRMAK İÇİN:
     private void keyInteract()
     {
         // imleç renkleri ayarı

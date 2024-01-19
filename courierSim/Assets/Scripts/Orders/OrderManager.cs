@@ -69,7 +69,7 @@ public class OrderManager : MonoBehaviour
         }
         if(!isOrder)
         {
-            DeleteFirstChild(selectedDeliveryPosition.transform);
+//DeleteFirstChild(selectedDeliveryPosition.transform);
             Order = null;
             orderName = null;
             selectedDeliveryPosition = null;
