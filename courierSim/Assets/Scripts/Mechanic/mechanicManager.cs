@@ -29,7 +29,7 @@ public class mechanicManager : MonoBehaviour
             EnterRepairPos();
         }
         //text yazdırma
-        DamagePayText.text = DamagePay.ToString();
+        DamagePayText.text = " $  " + ""+ DamagePay.ToString();
         DamageText.text = "%" + damageValue.ToString();
     }
 
