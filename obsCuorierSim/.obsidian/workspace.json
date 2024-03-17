@@ -15,8 +15,8 @@
               "state": {
                 "file": "CourierSim Canvas.canvas",
                 "viewState": {
-                  "x": -599.7837834286083,
-                  "y": -7.318675350914191,
+                  "x": -476.0255513048119,
+                  "y": -247.08098007301493,
                   "zoom": -0.647599934863978
                 }
               }
@@ -150,7 +150,7 @@
       "command-palette:Komut paletini aç": false
     }
   },
-  "active": "4b8d1eb0765cf904",
+  "active": "514e5e39aec41a1e",
   "lastOpenFiles": [
     "CourierSim Text.md",
     "CourierSim Canvas.canvas",
